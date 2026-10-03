@@ -214,6 +214,22 @@ Vercel 권한(이 세션 토큰): 환경변수 목록 조회 403, Production 환
 - 검증: 세 저장소 각 39/39(10절 항목 + 문자 성공·거절·HTTP 오류·알림 예외·중복·발신번호 오류·우선순위·서명 검증). 브라우저 번들에는 안내문의 환경변수 이름만 있고 발송 코드·비밀값은 없다.
 - 활성화 전 조건: 발신번호 사전 등록, 처리방침에 발송 위탁 대행사 명시(현재 문구는 수탁자 이름이 없다), 운영 영구 DB 연결.
 
+## 11. 운영 배포 기록 (2026-10-03, 사용자 승인)
+
+사용자 지시("운영배포승인한다")로 세 저장소 main을 QA 끝으로 빠른 병합(fast-forward)하고 운영 배포를 만들었다. 저장소 push로는 Vercel 배포가 자동 생성되지 않아(06:03 UTC 이후 동일), Vercel API로 main 커밋을 production 배포했다.
+
+| 사이트 | main = 배포 커밋 | 새 운영 배포 | 되돌리기 기준(직전 운영) |
+|---|---|---|---|
+| A | d807154 | dpl_EpTWdHae75G4WoRvLcN6YCQvKUvW | dpl_6f3UFMz62pLthxPHFToJgWbkrYzX / 17e25a8 |
+| B | c52e8fb | dpl_3tXNvgQJYzaH9Kh4UFRU5konBtyq | dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD / 798649d |
+| C | 0580a06 | dpl_57zNFjdjJrKA8PSnKCpREoipj1WM | dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq / 2cc291b |
+
+- 배포 전 로컬 운영 모드 점검: 세 사이트 `/`, `/register`, `/privacy`, `/event/apt` 200, `/admin`은 로그인으로 이동. DB 없을 때 접수번호 없이 "지금은 접수를 저장할 수 없습니다" 표시.
+- 배포 후: 세 운영 배포 READY, 운영 도메인 연결, 신청 화면 200, 대표번호·`tel:`·noindex 유지.
+- 세 빌드 로그 모두 `[migrate] DATABASE_URL not set`. 즉 운영에 영구 DB가 아직 없다. 지금 운영 신청 화면은 저장하지 않고 안내만 한다. 고객 접수는 대표번호 전화로만 받는다.
+- 이전 운영본 메모리에 있었을 수 있는 접수는 이 배포로 트래픽이 끊겨 사실상 접근할 수 없다. 존재 여부는 여전히 미확인이다.
+- 환경변수를 넣은 뒤에는 재배포가 필요하다. Vercel API 배포는 이 세션에서 동작했다. 빌드 로그의 `[migrate] applied ...` 줄로 DB 연결과 테이블 생성을 확인한다.
+
 ## 새 세션 시작용 지시문
 
 청라 아크원 3사이트 인수인계는 `ARKONE_3SITES_HANDOVER.md`다. QA 브랜치 `qa/mobile-header-fit`의 코드 커밋은 A 757715e, B 5fba776, C 7175265이다. 그 위는 이 문서만 있는 커밋이다. main 병합과 운영 배포는 하지 마라. 화면 재검수, 운영 접수, 실제 알림 발송, 비밀값 출력은 하지 마라. 남은 일은 사이트별 영구 DB 연결과 `KAKAO_ALERT_RECIPIENT` Sensitive 등록(사용자 조작)이다. 알림 예외 분리와 env 전용 수신 경로는 코드 커밋에 있다. 10절을 먼저 읽어라. 번호는 비공개 메모에만 있고 저장소에 넣지 마라. 대표번호와 검색 설정은 유지하라. 복구 기준은 A dpl_6f3UFMz62pLthxPHFToJgWbkrYzX, B dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD, C dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq다.
