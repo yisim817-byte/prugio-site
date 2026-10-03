@@ -8,6 +8,7 @@ export function AptEventPopup() {
   const [open, setOpen] = useState(false);
   const [hideToday, setHideToday] = useState(false);
   const closeBtn = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const hideTodayRef = useRef(false);
   hideTodayRef.current = hideToday;
@@ -29,7 +30,28 @@ export function AptEventPopup() {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") close();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const root = dialogRef.current;
+      if (!root) return;
+      const items = [...root.querySelectorAll<HTMLElement>("button, a[href], input, select, textarea")].filter(
+        (el) => !el.hasAttribute("disabled"),
+      );
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !root.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !root.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
     }
     document.addEventListener("keydown", onKey);
     return () => {
@@ -58,7 +80,7 @@ export function AptEventPopup() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-ink/70 p-4" role="dialog" aria-modal="true" aria-labelledby="apt-event-pop-title">
+    <div ref={dialogRef} className="fixed inset-0 z-50 grid place-items-center bg-ink/70 p-4" role="dialog" aria-modal="true" aria-labelledby="apt-event-pop-title">
       <button type="button" className="absolute inset-0" aria-label="닫기" onClick={close} />
       <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto bg-paper">
         <div className="flex items-center justify-between bg-forest px-5 py-4 text-paper">
