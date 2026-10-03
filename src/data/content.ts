@@ -122,7 +122,7 @@ export const PREMIUM = [
   ["01", "총 2,911가구 푸르지오 브랜드타운", "최고 49층, 총 2,911가구(청라 피크원 푸르지오 포함)로 청라를 대표하는 대규모 브랜드타운", img("/resources/img/sub/premium_01_img_1.v4.jpg")],
   ["02", "국제업무단지의 센트럴 라이프", "청라의 중심으로 완성되는 국제업무단지의 특별한 주거 가치", img("/resources/img/sub/premium_02_img_1.v4.jpg")],
   ["03", "오션 · 시티뷰 조망 특화", "오션 · 시티뷰를 동시에 누리는 2면 또는 3면 개방구조 (일부 세대)", img("/resources/img/sub/premium_03_img_1.v4.jpg")],
-  ["04", "높은 희소가치", "2017년 이후 10년 만의 분양가상한제 공급 아파트라는 문안. 500세대 이상 대단지 기준. 분양가 숫자는 공식 페이지에 없음", img("/resources/img/sub/premium_04_img_1.v4.jpg")],
+  ["04", "높은 희소가치", "2017년 이후 10년 만의 분양가상한제 공급 아파트. 500세대 이상 대단지 기준.", img("/resources/img/sub/premium_04_img_1.v4.jpg")],
   ["05", "멀티 라이프 플랫폼", "팬트리 2개소 이상(일부 타입 제외). 멀티 발코니(OT)", img("/resources/img/sub/premium_05_img_1.v4.jpg")],
 ];
 

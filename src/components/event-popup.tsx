@@ -9,6 +9,8 @@ export function AptEventPopup() {
   const [hideToday, setHideToday] = useState(false);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
+  const hideTodayRef = useRef(false);
+  hideTodayRef.current = hideToday;
 
   useEffect(() => {
     try {
@@ -35,10 +37,10 @@ export function AptEventPopup() {
       document.removeEventListener("keydown", onKey);
       returnFocus.current?.focus();
     };
-  }, [open, hideToday]);
+  }, [open]);
 
   function close() {
-    if (hideToday) {
+    if (hideTodayRef.current) {
       try {
         localStorage.setItem(HIDE_DAY, new Date().toISOString().slice(0, 10));
       } catch {

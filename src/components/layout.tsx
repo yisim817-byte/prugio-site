@@ -125,7 +125,6 @@ export function Footer() {
           <div className="flex flex-wrap gap-4 pt-2 text-ink">
             <Link to="/privacy" className="underline">개인정보처리방침</Link>
             <Link to="/register" className="underline">관심고객등록</Link>
-            <Link to="/admin" search={{ receipt: "" }} className="underline">접수 관리</Link>
           </div>
         </div>
       </div>
