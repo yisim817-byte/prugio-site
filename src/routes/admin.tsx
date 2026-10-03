@@ -30,9 +30,11 @@ type Lead = {
 
 type Snap = {
   role: string;
-  missingKakao: string[];
+  alert: { recipient: boolean; channel: "kakao" | "sms" | null; missingKakao: string[]; missingSms: string[] };
   leads: Lead[];
 };
+
+const CHANNEL = { kakao: "카카오 알림톡", sms: "문자(SMS·LMS)" };
 
 const STATUS: Record<string, string> = {
   pending: "대기",
@@ -96,14 +98,14 @@ function Page() {
             <section className="mt-8 border border-line p-4 text-sm leading-6">
               <h2 className="font-medium">카카오 알림</h2>
               <p className="mt-2">
-                수신번호는 이 사이트 서버 환경변수 KAKAO_ALERT_RECIPIENT로만 정합니다. 이 화면이나 DB 값으로는 바뀌지 않고, 신청 화면에도 나오지 않습니다. 현재 {snap.missingKakao.includes("KAKAO_ALERT_RECIPIENT") ? "미설정" : "설정됨"}
+                수신번호는 이 사이트 서버 환경변수 KAKAO_ALERT_RECIPIENT로만 정합니다. 이 화면이나 DB 값으로는 바뀌지 않고, 신청 화면에도 나오지 않습니다. 현재 {snap.alert.recipient ? "설정됨" : "미설정"}
               </p>
-              {snap.missingKakao.length ? (
-                <p className="mt-2">
-                  연결되지 않은 서버 비밀값: {snap.missingKakao.join(", ")}. 승인된 알림톡 채널, 그 채널의 템플릿 코드, 수신번호를 넣는 발송 API의 주소와 인증값이 필요합니다. 없으면 발송하지 않으며, 다른 번호나 문자로 바꾸지 않습니다.
-                </p>
+              {snap.alert.recipient && snap.alert.channel ? (
+                <p className="mt-2">발송 경로: {CHANNEL[snap.alert.channel]}. API 접수와 휴대전화 수신은 별개입니다.</p>
               ) : (
-                <p className="mt-2">비밀값은 있습니다. API 접수와 휴대전화 수신은 별개입니다.</p>
+                <p className="mt-2">
+                  발송하지 않습니다. 카카오 알림톡({snap.alert.missingKakao.join(", ") || "준비됨"}) 또는 문자({snap.alert.missingSms.join(", ") || "준비됨"}) 중 한 묶음과 수신번호가 서버에 있어야 합니다. 알림톡이 준비되면 알림톡을, 아니면 문자를 씁니다. 다른 번호로 바꾸지 않습니다.
+                </p>
               )}
               {snap.role === "owner" ? (
                 <div className="mt-4 flex flex-wrap gap-2">

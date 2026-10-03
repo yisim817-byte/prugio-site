@@ -202,6 +202,18 @@ Vercel 권한(이 세션 토큰): 환경변수 목록 조회 403, Production 환
 - 관리 화면 로그인은 Grok 인증 중개(OAuth) 방식이다. Vercel에 `GROK_AUTH_CLIENT_ID`, `GROK_AUTH_CLIENT_SECRET`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`이 없으면 운영 도메인에서 로그인이 되지 않을 수 있다. DB 연결 뒤 접수는 저장되지만 관리 화면으로 못 볼 수 있다. 그때는 DB 콘솔에서 읽는다.
 - `bootstrapOwner`는 그 사이트 DB에서 처음 로그인한 계정을 owner로 만든다. DB 연결 직후 담당자가 먼저 로그인해 owner를 잡아야 한다.
 
+### 10-1. 문자 대체 경로 (2026-10-03 추가)
+
+사용자가 카카오 승인 전까지 문자 알림을 대체 수단으로 허용했다. 발송 대행사는 SOLAPI 기준으로 구현했다(문자 즉시, 같은 계정으로 알림톡 추가 가능). 실제 발송은 하지 않았다.
+
+- 경로 우선순위: 카카오 값 3개가 모두 있으면 알림톡, 없으면 SOLAPI 값 3개가 있을 때 문자(SMS·LMS 길이 자동), 둘 다 없으면 미발송.
+- 수신자는 두 경로 모두 `KAKAO_ALERT_RECIPIENT` 하나다. 없으면 어느 경로로도 보내지 않는다.
+- 환경변수 이름: `SOLAPI_API_KEY`, `SOLAPI_API_SECRET`, `SMS_SENDER`(대행사에 사전 등록된 발신번호). 값은 문서·git·채팅에 쓰지 않는다.
+- 파일: `src/lib/sms.server.ts`(서명·발송), `src/lib/kakao.server.ts`(경로 선택), 관리 화면은 현재 경로와 빠진 값 이름만 보인다.
+- 문자 거절 시 `notify_detail`에는 대행사 상태 코드만 남긴다. 번호는 남기지 않는다.
+- 검증: 세 저장소 각 39/39(10절 항목 + 문자 성공·거절·HTTP 오류·알림 예외·중복·발신번호 오류·우선순위·서명 검증). 브라우저 번들에는 안내문의 환경변수 이름만 있고 발송 코드·비밀값은 없다.
+- 활성화 전 조건: 발신번호 사전 등록, 처리방침에 발송 위탁 대행사 명시(현재 문구는 수탁자 이름이 없다), 운영 영구 DB 연결.
+
 ## 새 세션 시작용 지시문
 
 청라 아크원 3사이트 인수인계는 `ARKONE_3SITES_HANDOVER.md`다. QA 브랜치 `qa/mobile-header-fit`의 코드 커밋은 A 757715e, B 5fba776, C 7175265이다. 그 위는 이 문서만 있는 커밋이다. main 병합과 운영 배포는 하지 마라. 화면 재검수, 운영 접수, 실제 알림 발송, 비밀값 출력은 하지 마라. 남은 일은 사이트별 영구 DB 연결과 `KAKAO_ALERT_RECIPIENT` Sensitive 등록(사용자 조작)이다. 알림 예외 분리와 env 전용 수신 경로는 코드 커밋에 있다. 10절을 먼저 읽어라. 번호는 비공개 메모에만 있고 저장소에 넣지 마라. 대표번호와 검색 설정은 유지하라. 복구 기준은 A dpl_6f3UFMz62pLthxPHFToJgWbkrYzX, B dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD, C dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq다.

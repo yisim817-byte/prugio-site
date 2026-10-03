@@ -166,11 +166,11 @@ export const adminSnapshot = createServerFn({ method: "GET" })
       order by id desc
       limit 200
     `;
-    const { missingKakaoEnv } = await import("./kakao.server");
+    const { alertSetup } = await import("./kakao.server");
     return {
       ok: true as const,
       role,
-      missingKakao: missingKakaoEnv(),
+      alert: alertSetup(),
       leads,
     };
   });
