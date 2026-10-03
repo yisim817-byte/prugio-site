@@ -15,11 +15,11 @@ const SIDOS = [
 ];
 
 const STATUS: Record<string, string> = {
-  not_configured: "접수는 이 사이트에만 저장되었습니다. 카카오 발송 계정과 템플릿이 없어 알림은 나가지 않았습니다. 휴대전화 수신이 아닙니다.",
-  accepted: "발송 API가 요청을 받았다는 기록입니다. 휴대전화 수신은 확인되지 않았습니다.",
-  failed: "접수는 저장되었습니다. 알림 요청은 실패했습니다. 수신된 것이 아닙니다.",
-  skipped_duplicate: "같은 휴대전화의 기존 접수입니다. 알림을 다시 보내지 않았습니다.",
-  pending: "저장은 되었으나 알림 결과가 비어 있습니다. 수신으로 보지 않습니다.",
+  not_configured: "접수가 저장되었습니다. 알림 수신은 확인되지 않았습니다.",
+  accepted: "접수가 저장되었습니다. 알림 수신은 확인되지 않았습니다.",
+  failed: "접수가 저장되었습니다. 알림 수신은 확인되지 않았습니다.",
+  skipped_duplicate: "같은 번호로 이미 접수되어 있습니다.",
+  pending: "접수가 저장되었습니다. 알림 수신은 확인되지 않았습니다.",
 };
 
 function Page() {
@@ -63,11 +63,11 @@ function Page() {
       <SubHero en="REGISTER" title="관심고객등록" crumbs="관심고객등록" />
       <main className="mx-auto max-w-lg px-4 py-12">
         <p className="border border-line bg-paper p-4 text-sm leading-6">
-          알림 계정이 연결되기 전에는 운영 접수가 아닙니다. 공식 홈페이지의 관심고객 주소로는 보내지 않습니다. 주민등록번호는 받지 않습니다.
+          관심고객 등록이며 청약 신청이 아닙니다. 주민등록번호는 받지 않습니다.
         </p>
         {done ? (
           <div className="mt-8 space-y-4" role="status">
-            <h2 className="font-serif text-3xl">{done.duplicate ? "이미 등록된 번호" : "저장되었습니다"}</h2>
+            <h2 className="font-serif text-3xl">{done.duplicate ? "이미 등록된 번호" : "접수되었습니다"}</h2>
             <p className="text-sm leading-6">접수번호 <strong className="font-medium">{done.receiptNo}</strong></p>
             <p className="text-sm leading-6">{STATUS[done.notifyStatus] ?? STATUS.pending}</p>
             <Link to="/" className="inline-block text-sm underline">처음으로</Link>

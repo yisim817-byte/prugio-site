@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { getSql } from "@/lib/db";
+import { getSql, dbSource } from "@/lib/db";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { SITE_ID } from "@/data/content";
 
@@ -60,6 +60,14 @@ export const submitLead = createServerFn({ method: "POST" })
     const phone = digits(data.phone);
     if (!validPhone(phone)) return { ok: false as const, error: "휴대전화는 010으로 시작하는 11자리입니다." };
     if (!validBirth(data.birth6)) return { ok: false as const, error: "생년월일은 앞 6자리(YYMMDD)만 입력합니다." };
+    if (dbSource !== "neon") {
+      console.error("[leads] durable store unavailable");
+      if (process.env.VERCEL_ENV === "production") {
+        return { ok: false as const, error: "지금은 접수를 저장할 수 없습니다. 잠시 후 다시 시도해 주세요." };
+      }
+      return { ok: false as const, error: "테스트 환경입니다. 접수는 저장되지 않았고 접수번호는 발급되지 않습니다." };
+    }
+    try {
     const sql = await getSql();
     const existing = await sql<{ receipt_no: string }>`
       select receipt_no from leads where site_id = ${SITE} and phone = ${phone} limit 1
@@ -92,6 +100,10 @@ export const submitLead = createServerFn({ method: "POST" })
       where site_id = ${SITE} and receipt_no = ${receipt}
     `;
     return { ok: true as const, duplicate: false, receiptNo: receipt, notifyStatus: alert.status };
+    } catch {
+      console.error("[leads] save failed");
+      return { ok: false as const, error: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요." };
+    }
   });
 
 export const bootstrapOwner = createServerFn({ method: "POST" })
