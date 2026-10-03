@@ -57,7 +57,7 @@ function Home() {
           <p className="text-xs tracking-[0.22em] text-muted">OVERVIEW</p>
           <h2 className="mt-3 font-serif text-4xl">단 하나의 절대적 명작</h2>
           <p className="mt-6 leading-7 text-muted">
-            공식 메인에 표시된 수치입니다. 건축면적 약 12,278㎡, 연면적 약 424,558㎡, 주차 3,124대, 1,855세대. 2,911가구는 B1과 M5를 합친 카피입니다.
+            건축면적 약 12,278㎡, 연면적 약 424,558㎡, 주차 3,124대, 1,855세대.
           </p>
           <Link to="/overview" className="mt-8 inline-block text-sm underline">사업개요 보기</Link>
         </div>
