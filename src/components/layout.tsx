@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL, img } from "@/data/content";
 import { SEO_ORIGIN, SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
 import { IMAGE_SIZES } from "@/data/image-sizes";
+import { GUIDES, R2_ROLE, R2_UPDATED } from "@/data/r2";
 
 export function Photo({
   src,
@@ -225,10 +226,15 @@ export function pageHead(title: string, path?: string) {
         : []),
     ],
     links: url ? [{ rel: "canonical", href: url }] : [],
-    scripts:
-      seo && url && path
+    scripts: [
+      ...(seo && url && path
         ? [{ type: "application/ld+json", children: JSON.stringify(pageJsonLd(full, description, url, path, seo.crumb)) }]
-        : [],
+        : []),
+      // 2단계: 화면의 「자주 확인하는 질문」과 글자가 같은 FAQPage
+      ...(seo && path && R2_ROLE[path]
+        ? [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(R2_ROLE[path].faq)) }]
+        : []),
+    ],
   };
 }
 
@@ -240,6 +246,7 @@ function pageJsonLd(name: string, description: string, url: string, path: string
     description,
     url,
     inLanguage: "ko-KR",
+    ...(R2_ROLE[path] ? { dateModified: R2_UPDATED } : {}),
   };
   if (path === "/") return { "@context": "https://schema.org", "@graph": [page] };
   return {
@@ -253,6 +260,62 @@ function pageJsonLd(name: string, description: string, url: string, path: string
           { "@type": "ListItem", position: 1, name: SEO_PAGES["/"]?.crumb ?? "청라 아크원 푸르지오", item: SEO_ORIGIN },
           { "@type": "ListItem", position: 2, name: crumb, item: url },
         ],
+      },
+    ],
+  };
+}
+
+function faqJsonLd(faq: [string, string][]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map(([q, a]) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+}
+
+/** /guide/<slug> 안내 페이지 head: index,follow · canonical · Article + BreadcrumbList */
+export function guideHead(slug: string) {
+  const g = GUIDES[slug];
+  if (!g) return { meta: [{ title: "청라 아크원 푸르지오" }, { name: "robots", content: "noindex, nofollow" }] };
+  const url = `${SEO_ORIGIN}/guide/${slug}`;
+  return {
+    meta: [
+      { title: g.title },
+      { name: "description", content: g.description },
+      { name: "robots", content: "index,follow" },
+    ],
+    links: [{ rel: "canonical", href: url }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Article",
+              "@id": `${url}#article`,
+              headline: g.question,
+              description: g.description,
+              url,
+              inLanguage: "ko-KR",
+              dateModified: R2_UPDATED,
+              datePublished: R2_UPDATED,
+              mainEntityOfPage: url,
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: SEO_PAGES["/"]?.crumb ?? "청라 아크원 푸르지오", item: SEO_ORIGIN },
+                { "@type": "ListItem", position: 2, name: g.related.label, item: `${SEO_ORIGIN}${g.related.href === "/" ? "" : g.related.href}` },
+                { "@type": "ListItem", position: 3, name: g.question, item: url },
+              ],
+            },
+          ],
+        }),
       },
     ],
   };

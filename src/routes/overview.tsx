@@ -1,3 +1,4 @@
+import { RoleExtra } from "@/components/r2";
 import { createFileRoute } from "@tanstack/react-router";
 import { Photo, Shell, SourceNote, SubHero, pageHead, QuickAnswer } from "@/components/layout";
 import { OVERVIEW_ROWS, img } from "@/data/content";
@@ -31,6 +32,7 @@ function Page() {
         <Photo src={img("/resources/img/sub/overview_apt_img.v4.jpg")} alt="단지 이미지" className="w-full object-cover" />
       </article>
       <SourceNote />
+      <RoleExtra path="/overview" />
     </Shell>
   );
 }

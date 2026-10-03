@@ -25,6 +25,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as VideoRouteImport } from './routes/video'
 import { Route as EventAptRouteImport } from './routes/event.apt'
+import { Route as GuideSlugRouteImport } from './routes/guide.$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -107,6 +108,11 @@ const EventAptRoute = EventAptRouteImport.update({
   path: '/event/apt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuideSlugRoute = GuideSlugRouteImport.update({
+  id: '/guide/$slug',
+  path: '/guide/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/video': typeof VideoRoute
   '/event/apt': typeof EventAptRoute
+  '/guide/$slug': typeof GuideSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/video': typeof VideoRoute
   '/event/apt': typeof EventAptRoute
+  '/guide/$slug': typeof GuideSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/video': typeof VideoRoute
   '/event/apt': typeof EventAptRoute
+  '/guide/$slug': typeof GuideSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/video'
     | '/event/apt'
+    | '/guide/$slug'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/video'
     | '/event/apt'
+    | '/guide/$slug'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/video'
     | '/event/apt'
+    | '/guide/$slug'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   VideoRoute: typeof VideoRoute
   EventAptRoute: typeof EventAptRoute
+  GuideSlugRoute: typeof GuideSlugRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -365,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventAptRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guide/$slug': {
+      id: '/guide/$slug'
+      path: '/guide/$slug'
+      fullPath: '/guide/$slug'
+      preLoaderRoute: typeof GuideSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   VideoRoute: VideoRoute,
   EventAptRoute: EventAptRoute,
+  GuideSlugRoute: GuideSlugRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

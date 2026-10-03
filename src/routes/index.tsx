@@ -1,3 +1,4 @@
+import { RoleExtra } from "@/components/r2";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Photo, Shell, pageHead, QuickAnswer } from "@/components/layout";
 import { AptEventPopup } from "@/components/event-popup";
@@ -125,6 +126,7 @@ function Home() {
           <Link to="/contact" className="grid h-12 place-items-center bg-forest px-6 text-sm text-paper">위치 보기</Link>
         </div>
       </section>
+      <RoleExtra path="/" />
     </Shell>
   );
 }
