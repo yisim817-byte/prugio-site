@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSql, dbSource } from "@/lib/db";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { SITE_ID } from "@/data/content";
+import { LOGIN_ID_PATTERN, PASSWORD_MAX, passwordProblem } from "@/lib/staff-login";
 
 const SITE = SITE_ID;
 
@@ -46,12 +47,27 @@ function receiptNo() {
   return `AC${y}${m}${day}-${n}`;
 }
 
-async function roleOf(userId: string) {
+type Access = { role: "owner" | "staff"; loginId: string; mustChange: boolean };
+
+// Only operator-issued logins (login_id set) open the admin screen. Rows left by
+// the retired first-sign-in bootstrap have no login_id and grant nothing.
+async function accessOf(userId: string): Promise<Access | null> {
   const sql = await getSql();
-  const rows = await sql<{ role: string }>`
-    select role from site_admins where site_id = ${SITE} and user_id = ${userId} limit 1
+  const rows = await sql<{ role: string; login_id: string; must_change_password: boolean }>`
+    select role, login_id, must_change_password
+    from site_admins
+    where site_id = ${SITE} and user_id = ${userId} and login_id is not null
+    limit 1
   `;
-  return rows[0]?.role ?? null;
+  const row = rows[0];
+  if (!row || (row.role !== "owner" && row.role !== "staff")) return null;
+  return { role: row.role, loginId: row.login_id, mustChange: Boolean(row.must_change_password) };
+}
+
+/** Access that may see leads: a valid login whose temporary password was replaced. */
+async function readyAccess(userId: string): Promise<Access | null> {
+  const access = await accessOf(userId);
+  return access && !access.mustChange ? access : null;
 }
 
 export const submitLead = createServerFn({ method: "POST" })
@@ -127,24 +143,101 @@ export const submitLead = createServerFn({ method: "POST" })
     return { ok: true as const, duplicate: false, receiptNo: receipt, notifyStatus };
   });
 
-export const bootstrapOwner = createServerFn({ method: "POST" })
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1).max(PASSWORD_MAX),
+  newPassword: z.string().min(1).max(PASSWORD_MAX),
+});
+
+// Replace the signed-in user's own password (also clears must_change_password).
+// Every session of this user is revoked afterwards, so the client signs in again.
+export const changeOwnPassword = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .handler(async ({ context }) => {
+  .validator((raw: unknown) => changePasswordSchema.parse(raw))
+  .handler(async ({ context, data }) => {
+    const access = await accessOf(context.userId);
+    if (!access) return { ok: false as const, error: "이 사이트의 관리 권한이 없습니다." };
+    const problem = passwordProblem(data.newPassword, access.loginId);
+    if (problem) return { ok: false as const, error: problem };
+    if (data.newPassword === data.currentPassword) {
+      return { ok: false as const, error: "지금 비밀번호와 다른 비밀번호를 정해 주세요." };
+    }
     const sql = await getSql();
-    await sql`
-      insert into site_admins (site_id, user_id, role)
-      select ${SITE}, ${context.userId}, 'owner'
-      where not exists (select 1 from site_admins where site_id = ${SITE})
+    const rows = await sql<{ password: string | null }>`
+      select "password" from "account"
+      where "userId" = ${context.userId} and "providerId" = 'credential'
+      limit 1
     `;
-    const role = await roleOf(context.userId);
-    return { role };
+    const hash = rows[0]?.password;
+    const { hashPassword, verifyPassword } = await import("better-auth/crypto");
+    if (!hash || !(await verifyPassword({ hash, password: data.currentPassword }))) {
+      return { ok: false as const, error: "지금 비밀번호가 맞지 않습니다." };
+    }
+    const next = await hashPassword(data.newPassword);
+    await sql`
+      update "account" set "password" = ${next}, "updatedAt" = now()
+      where "userId" = ${context.userId} and "providerId" = 'credential'
+    `;
+    await sql`
+      update site_admins set must_change_password = false
+      where site_id = ${SITE} and user_id = ${context.userId}
+    `;
+    await sql`delete from "session" where "userId" = ${context.userId}`;
+    return { ok: true as const };
+  });
+
+const resetSchema = z.object({ loginId: z.string().trim().toLowerCase().regex(LOGIN_ID_PATTERN) });
+
+function tempPassword(randomInt: (max: number) => number) {
+  const letters = "abcdefghjkmnpqrstuvwxyz";
+  const digits = "23456789";
+  const all = letters + digits;
+  for (;;) {
+    let out = "";
+    for (let i = 0; i < 12; i++) out += all[randomInt(all.length)];
+    if (/[a-z]/.test(out) && /\d/.test(out)) return out;
+  }
+}
+
+// Owner-only: give a staff login a new temporary password (shown once) and force
+// a change at its next sign-in. The staff member's sessions are revoked.
+export const resetStaffPassword = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator((raw: unknown) => resetSchema.parse(raw))
+  .handler(async ({ context, data }) => {
+    const access = await readyAccess(context.userId);
+    if (access?.role !== "owner") return { ok: false as const, error: "운영자만 초기화합니다." };
+    const sql = await getSql();
+    const targets = await sql<{ user_id: string }>`
+      select user_id from site_admins
+      where site_id = ${SITE} and login_id = ${data.loginId} and role = 'staff'
+      limit 1
+    `;
+    const target = targets[0];
+    if (!target) return { ok: false as const, error: "이 사이트의 직원 아이디가 아닙니다." };
+    const { randomInt } = await import("node:crypto");
+    const { hashPassword } = await import("better-auth/crypto");
+    const temp = tempPassword((max) => randomInt(max));
+    const hash = await hashPassword(temp);
+    await sql`
+      update "account" set "password" = ${hash}, "updatedAt" = now()
+      where "userId" = ${target.user_id} and "providerId" = 'credential'
+    `;
+    await sql`
+      update site_admins set must_change_password = true
+      where site_id = ${SITE} and user_id = ${target.user_id}
+    `;
+    await sql`delete from "session" where "userId" = ${target.user_id}`;
+    return { ok: true as const, loginId: data.loginId, tempPassword: temp };
   });
 
 export const adminSnapshot = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    const role = await roleOf(context.userId);
-    if (!role) return { ok: false as const, error: "forbidden" as const };
+    const access = await accessOf(context.userId);
+    if (!access) return { ok: false as const, error: "forbidden" as const };
+    if (access.mustChange) {
+      return { ok: false as const, error: "must_change_password" as const, loginId: access.loginId };
+    }
     const sql = await getSql();
     const leads = await sql<{
       receipt_no: string;
@@ -166,12 +259,23 @@ export const adminSnapshot = createServerFn({ method: "GET" })
       order by id desc
       limit 200
     `;
+    const accounts =
+      access.role === "owner"
+        ? await sql<{ login_id: string; role: string; must_change_password: boolean }>`
+            select login_id, role, must_change_password
+            from site_admins
+            where site_id = ${SITE} and login_id is not null
+            order by role, login_id
+          `
+        : [];
     const { alertSetup } = await import("./kakao.server");
     return {
       ok: true as const,
-      role,
+      role: access.role,
+      loginId: access.loginId,
       alert: alertSetup(),
       leads,
+      accounts,
     };
   });
 
@@ -181,8 +285,8 @@ export const retryNotify = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((raw: unknown) => receiptSchema.parse(raw))
   .handler(async ({ context, data }) => {
-    const role = await roleOf(context.userId);
-    if (!role) return { ok: false as const, error: "forbidden" };
+    const access = await readyAccess(context.userId);
+    if (!access) return { ok: false as const, error: "forbidden" };
     const sql = await getSql();
     const rows = await sql<{
       receipt_no: string;
@@ -218,8 +322,8 @@ export const deleteLead = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((raw: unknown) => receiptSchema.parse(raw))
   .handler(async ({ context, data }) => {
-    const role = await roleOf(context.userId);
-    if (role !== "owner") return { ok: false as const, error: "운영자만 삭제합니다." };
+    const access = await readyAccess(context.userId);
+    if (access?.role !== "owner") return { ok: false as const, error: "운영자만 삭제합니다." };
     const sql = await getSql();
     await sql`delete from leads where site_id = ${SITE} and receipt_no = ${data.receiptNo}`;
     return { ok: true as const };

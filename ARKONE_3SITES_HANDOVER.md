@@ -217,3 +217,17 @@ Vercel 권한(이 세션 토큰): 환경변수 목록 조회 403, Production 환
 ## 새 세션 시작용 지시문
 
 청라 아크원 3사이트 인수인계는 `ARKONE_3SITES_HANDOVER.md`다. QA 브랜치 `qa/mobile-header-fit`의 코드 커밋은 A 757715e, B 5fba776, C 7175265이다. 그 위는 이 문서만 있는 커밋이다. main 병합과 운영 배포는 하지 마라. 화면 재검수, 운영 접수, 실제 알림 발송, 비밀값 출력은 하지 마라. 남은 일은 사이트별 영구 DB 연결과 `KAKAO_ALERT_RECIPIENT` Sensitive 등록(사용자 조작)이다. 알림 예외 분리와 env 전용 수신 경로는 코드 커밋에 있다. 10절을 먼저 읽어라. 번호는 비공개 메모에만 있고 저장소에 넣지 마라. 대표번호와 검색 설정은 유지하라. 복구 기준은 A dpl_6f3UFMz62pLthxPHFToJgWbkrYzX, B dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD, C dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq다.
+
+## 12. 아이디·비밀번호 관리자 로그인 + 텔레그램 무료 알림 (2026-10-03)
+
+- 관리 화면 로그인을 Grok 계정 연동(Google/X)에서 **운영자 발급 아이디·비밀번호**로 바꿨다. Grok 연동은 `OAUTH_SIGN_IN_ENABLED = false`로 끈다(운영에서는 원래 콜백이 localhost로 잡혀 완료되지 않았다).
+- 공개 가입 금지(`disableSignUp`). 계정은 빌드 때 `scripts/seed-admins.mjs`가 `ADMIN_ACCOUNTS`(Sensitive, Production. `{id, role, hash}` 배열, 평문 비밀번호 아님)에서 **없는 것만** 만든다. 이미 있는 계정은 절대 바꾸지 않는다 → 직원이 바꾼 비밀번호는 재배포해도 유지된다.
+- 아이디는 `login.invalid` 가상 메일(`arkone1@login.invalid`)로 저장한다. 메일 발송에 쓰지 않는다.
+- 첫 로그인(`must_change_password = true`)이면 접수 목록 대신 비밀번호 변경 화면만 보인다. 변경하면 그 사용자의 세션을 모두 끊고 새 비밀번호로 다시 로그인한다.
+- 비밀번호: 10자 이상, 영문+숫자, 아이디 포함 금지. 로그인 시도 5분에 10회 제한(DB `rateLimit` 표, 서버리스 인스턴스 공통).
+- 권한: `site_admins.login_id`가 있는 행만 권한이 있다. 예전 "처음 로그인한 사람이 owner" 방식(`bootstrapOwner`)은 지웠고, 그때 생겼을 수 있는 행(login_id 없음)은 지우지 않고 무시한다. 빌드 로그에 그 행 수만 찍는다.
+- 운영자(owner): 접수 목록·CSV·삭제·계정 목록·직원 비밀번호 초기화(임시 비밀번호 1회 표시, 다음 로그인 때 변경 강제). 직원(staff): 자기 사이트 접수 목록·알림 재시도·자기 비밀번호 변경.
+- `BETTER_AUTH_SECRET`(Sensitive, Production) 필요. 없으면 인스턴스마다 임시 키를 만들어 로그인이 수시로 풀린다.
+- 마이그레이션 `0004_staff_login.sql`: `site_admins.login_id`, `must_change_password`, `"rateLimit"` 표.
+- 알림: `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID`가 있으면 텔레그램(무료)을 먼저 쓴다. 본문은 사이트명·접수번호·시각·관리화면 링크뿐(고객 이름·전화 없음). 실패하면 문자 경로가 준비된 경우 문자로 보낸다. `TELEGRAM_API_BASE`는 로컬 시험 전용(운영에서는 무시).
+- 검증: 로컬 실제 Postgres + 브라우저 E2E 22/22(사이트별): 가입 차단, 오답 거부, 첫 로그인 변경 강제, 변경 후 임시 비번 무효, 직원 권한 제한, 운영자 초기화, login_id 없는 행 무권한, seed 재실행 무덮어쓰기, 로그인 429, 텔레그램 본문에 이름·전화 없음. `npm test` 결과는 수정 전과 같다(178 통과, 기존 템플릿 테스트 17 실패는 그대로).
