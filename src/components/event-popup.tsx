@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
 const HIDE_DAY = "arkone-staff-apt-event-day";
@@ -7,6 +7,8 @@ const SEEN = "arkone-staff-apt-event-seen";
 export function AptEventPopup() {
   const [open, setOpen] = useState(false);
   const [hideToday, setHideToday] = useState(false);
+  const closeBtn = useRef<HTMLButtonElement>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     try {
@@ -20,6 +22,8 @@ export function AptEventPopup() {
 
   useEffect(() => {
     if (!open) return;
+    returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeBtn.current?.focus();
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     function onKey(event: KeyboardEvent) {
@@ -29,6 +33,7 @@ export function AptEventPopup() {
     return () => {
       document.body.style.overflow = prev;
       document.removeEventListener("keydown", onKey);
+      returnFocus.current?.focus();
     };
   }, [open, hideToday]);
 
@@ -56,7 +61,7 @@ export function AptEventPopup() {
       <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto bg-paper">
         <div className="flex items-center justify-between bg-forest px-5 py-4 text-paper">
           <p className="text-xs tracking-[0.18em]">CHEONGNA ARK-ONE PRUGIO</p>
-          <button type="button" className="grid h-11 w-11 place-items-center border border-paper/40 text-lg" aria-label="닫기" onClick={close}>
+          <button ref={closeBtn} type="button" className="grid h-11 w-11 place-items-center border border-paper/40 text-lg" aria-label="닫기" onClick={close}>
             ×
           </button>
         </div>

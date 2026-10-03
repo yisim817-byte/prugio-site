@@ -38,12 +38,12 @@ function Header() {
   const home = useRouterState({ select: (s) => s.location.pathname === "/" });
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
-      <div className="flex items-center gap-4 px-4 py-3 lg:px-5">
+      <div className="flex items-center gap-2 px-3 py-3 min-[430px]:gap-4 min-[430px]:px-4 lg:px-5">
         <Link to="/" className="shrink-0" aria-label="청라 아크원 푸르지오 홈">
           <Photo
             src={img("/resources/img/common/logotype.svg")}
             alt="PRUGIO"
-            className="h-6 w-auto"
+            className="h-5 w-auto max-w-[84px] object-contain object-left min-[430px]:h-6 min-[430px]:max-w-none"
           />
         </Link>
         <nav className="hidden min-w-0 flex-1 items-center justify-end gap-5 lg:flex" aria-label="주요 메뉴">
@@ -70,7 +70,7 @@ function Header() {
           title="문의"
         >
           <span className="mr-2 align-middle font-sans text-sm text-muted">문의</span>
-          <span className={`align-middle font-serif ${home ? "text-[1.75rem] leading-none" : "text-base"}`}>
+          <span className={`align-middle font-serif leading-none ${home ? "text-[1.15rem] min-[400px]:text-[1.3rem] min-[430px]:text-[1.75rem]" : "text-base"}`}>
             {PROJECT_PHONE_DISPLAY}
           </span>
         </a>
@@ -100,7 +100,7 @@ function Header() {
               ))}
             </div>
           ))}
-          <a href={PROJECT_PHONE_TEL} className={`mt-4 block text-right font-serif text-forest ${home ? "text-[2.25rem] leading-none" : "text-lg"}`}>
+          <a href={PROJECT_PHONE_TEL} className={`mt-4 block text-right font-serif leading-none text-forest ${home ? "text-[1.75rem] min-[430px]:text-[2.25rem]" : "text-lg"}`}>
             <span className="mr-2 align-middle font-sans text-sm text-muted">문의</span>
             <span className="align-middle">{PROJECT_PHONE_DISPLAY}</span>
           </a>
