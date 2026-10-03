@@ -34,7 +34,12 @@ export async function sendStaffAlert(input: AlertInput): Promise<AlertResult> {
   if (missing.length) {
     return { status: "not_configured", detail: `missing ${missing.join(",")}` };
   }
-  const recipient = await staffRecipient();
+  let recipient: string | null;
+  try {
+    recipient = await staffRecipient();
+  } catch {
+    return { status: "failed", detail: "notify exception" };
+  }
   if (!recipient) {
     return { status: "not_configured", detail: "no site recipient" };
   }

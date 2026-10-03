@@ -67,43 +67,64 @@ export const submitLead = createServerFn({ method: "POST" })
       }
       return { ok: false as const, error: "테스트 환경입니다. 접수는 저장되지 않았고 접수번호는 발급되지 않습니다." };
     }
+    let sql;
+    let receipt = "";
     try {
-    const sql = await getSql();
-    const existing = await sql<{ receipt_no: string }>`
-      select receipt_no from leads where site_id = ${SITE} and phone = ${phone} limit 1
-    `;
-    if (existing[0]) {
-      return {
-        ok: true as const,
-        duplicate: true,
-        receiptNo: existing[0].receipt_no,
-        notifyStatus: "skipped_duplicate",
-      };
-    }
-    let receipt = receiptNo();
-    for (let i = 0; i < 4; i++) {
-      const clash = await sql<{ id: number }>`select id from leads where receipt_no = ${receipt} limit 1`;
-      if (!clash[0]) break;
+      sql = await getSql();
+      const existing = await sql<{ receipt_no: string }>`
+        select receipt_no from leads where site_id = ${SITE} and phone = ${phone} limit 1
+      `;
+      if (existing[0]) {
+        return {
+          ok: true as const,
+          duplicate: true,
+          receiptNo: existing[0].receipt_no,
+          notifyStatus: "skipped_duplicate",
+        };
+      }
       receipt = receiptNo();
-    }
-    const entry = entryPath(data.entry);
-    await sql`
-      insert into leads (site_id, receipt_no, name, phone, birth6, sido, sigungu, dong, entry_path, notify_status)
-      values (${SITE}, ${receipt}, ${data.name}, ${phone}, ${data.birth6}, ${data.sido}, ${data.sigungu}, ${data.dong}, ${entry}, 'pending')
-    `;
-    const { sendStaffAlert } = await import("./kakao.server");
-    const createdAt = new Date().toISOString();
-    const alert = await sendStaffAlert({ receiptNo: receipt, createdAt, name: data.name, phone });
-    await sql`
-      update leads
-      set notify_status = ${alert.status}, notify_detail = ${alert.detail}, notify_at = now()
-      where site_id = ${SITE} and receipt_no = ${receipt}
-    `;
-    return { ok: true as const, duplicate: false, receiptNo: receipt, notifyStatus: alert.status };
+      for (let i = 0; i < 4; i++) {
+        const clash = await sql<{ id: number }>`select id from leads where receipt_no = ${receipt} limit 1`;
+        if (!clash[0]) break;
+        receipt = receiptNo();
+      }
+      const entry = entryPath(data.entry);
+      await sql`
+        insert into leads (site_id, receipt_no, name, phone, birth6, sido, sigungu, dong, entry_path, notify_status)
+        values (${SITE}, ${receipt}, ${data.name}, ${phone}, ${data.birth6}, ${data.sido}, ${data.sigungu}, ${data.dong}, ${entry}, 'pending')
+      `;
     } catch {
       console.error("[leads] save failed");
       return { ok: false as const, error: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요." };
     }
+    let notifyStatus: "accepted" | "failed" | "not_configured" = "failed";
+    try {
+      const { sendStaffAlert } = await import("./kakao.server");
+      const createdAt = new Date().toISOString();
+      const alert = await sendStaffAlert({ receiptNo: receipt, createdAt, name: data.name, phone });
+      notifyStatus = alert.status;
+      try {
+        await sql`
+          update leads
+          set notify_status = ${alert.status}, notify_detail = ${alert.detail}, notify_at = now()
+          where site_id = ${SITE} and receipt_no = ${receipt}
+        `;
+      } catch {
+        console.error("[leads] notify status update failed", receipt);
+      }
+    } catch {
+      console.error("[leads] notify failed after save", receipt);
+      try {
+        await sql`
+          update leads
+          set notify_status = 'failed', notify_detail = 'notify exception', notify_at = now()
+          where site_id = ${SITE} and receipt_no = ${receipt}
+        `;
+      } catch {
+        console.error("[leads] notify status update failed", receipt);
+      }
+    }
+    return { ok: true as const, duplicate: false, receiptNo: receipt, notifyStatus };
   });
 
 export const bootstrapOwner = createServerFn({ method: "POST" })
