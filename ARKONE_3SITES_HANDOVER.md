@@ -28,9 +28,10 @@
 | 프로젝트 ID | prj_0L5VgLNeZviO14d0S2iWCOLSxGVK | prj_R9EQQJnJ2BHfRR7mMO4FZOW0DoMi | prj_V1Trelpd7nvmTmfUcoENAn7aWSWC |
 | 상담 대표번호 | 1666-4250 | 1666-6799 | 1533-9014 |
 | 이전 보고 QA | d3d0f0c | 40fa1b2 | 00a6aa2 |
-| 실제 QA HEAD | 93820a6 | 784ce17 | c5efa00 |
-| QA HEAD 의미 | 저장 성공 후 알림 예외여도 접수 성공 유지 | 동일 | 동일 |
-| 원격 QA | origin/qa/mobile-header-fit 에 93820a6 확인 | 로컬이 origin과 일치 | 로컬이 origin과 일치 |
+| 실제 코드 HEAD | 93820a6 | 784ce17 | c5efa00 |
+| 코드 HEAD 의미 | 저장 성공 후 알림 예외여도 접수 성공 유지 | 동일 | 동일 |
+| 인수인계 문서 커밋 | 코드 커밋 위. 이 파일만. 첫 커밋 76a9b37. 문장 교정이 더 있으면 그것도 문서만 | 첫 커밋 07f0be8. 이후도 문서만 | 첫 커밋 5ed7d53. 이후도 문서만 |
+| 원격 QA | origin/qa/mobile-header-fit 에 푸시함 | 푸시함 | 푸시함 |
 | 운영 배포 | dpl_6f3UFMz62pLthxPHFToJgWbkrYzX / 17e25a8 | dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD / 798649d | dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq / 2cc291b |
 | A 복구 기준 | dpl_DcYgy92NNGnoFeYjdbbWdrVyiqTc / 4c23888 | 해당 없음 | 해당 없음 |
 | 운영 도메인 | www.아크원푸르지오청라.site | www.푸르지오청라.site | 푸르지오.site |
@@ -163,4 +164,4 @@ QA의 차단(8aab7c5 / 65820cf / 0f0df05): `dbSource !== neon` 이고 `VERCEL_EN
 
 ## 새 세션 시작용 지시문
 
-청라 아크원 3사이트 인수인계는 `ARKONE_3SITES_HANDOVER.md`다. QA 브랜치 `qa/mobile-header-fit` HEAD는 A 93820a6, B 784ce17, C c5efa00다. main 병합과 운영 배포는 하지 마라. 화면 재검수, 운영 접수, 실제 알림 발송, 비밀값 출력은 하지 마라. 남은 일은 기존 접수 보존 확인 후 사이트별 영구 DB 연결이다. 알림 예외 분리는 QA에 이미 있다. 카카오 수신번호는 사용자가 지정했으나 서버 미반영이다. 번호는 비공개 메모에만 있고 저장소에 넣지 마라. 대표번호와 검색 설정은 유지하라. 복구 기준은 A dpl_6f3UFMz62pLthxPHFToJgWbkrYzX, B dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD, C dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq다.
+청라 아크원 3사이트 인수인계는 `ARKONE_3SITES_HANDOVER.md`다. QA 브랜치 `qa/mobile-header-fit`의 코드 커밋은 A 93820a6, B 784ce17, C c5efa00이다. 그 위는 이 문서만 있는 커밋이다. main 병합과 운영 배포는 하지 마라. 화면 재검수, 운영 접수, 실제 알림 발송, 비밀값 출력은 하지 마라. 남은 일은 기존 접수 보존 확인 후 사이트별 영구 DB 연결이다. 알림 예외 분리는 코드 커밋에 이미 있다. 카카오 수신번호는 사용자가 지정했으나 서버 미반영이다. 번호는 비공개 메모에만 있고 저장소에 넣지 마라. 대표번호와 검색 설정은 유지하라. 복구 기준은 A dpl_6f3UFMz62pLthxPHFToJgWbkrYzX, B dpl_4G3aTUQUzkz1Z3wgR8vFqeduhJjD, C dpl_8GEQqd6Fjs8jVrCXf76Nkvxey9zq다.
