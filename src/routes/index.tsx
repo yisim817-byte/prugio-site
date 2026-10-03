@@ -1,3 +1,4 @@
+import { RoleExtra } from "@/components/r2";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Photo, Shell, pageHead, QuickAnswer } from "@/components/layout";
 import { AptEventPopup } from "@/components/event-popup";
@@ -59,7 +60,7 @@ function Home() {
           <p className="text-xs tracking-[0.22em] text-muted">OVERVIEW</p>
           <h2 className="mt-3 font-serif text-4xl">단 하나의 절대적 명작</h2>
           <p className="mt-6 leading-7 text-muted">
-            건축면적 약 12,278㎡, 연면적 약 424,558㎡, 주차 3,124대, 1,855세대.
+            건축면적 약 12,278㎡, 연면적 약 424,558㎡, 주차 3,124대, 1,855세대·실.
           </p>
           <Link to="/overview" className="mt-8 inline-block text-sm underline">사업개요 보기</Link>
         </div>
@@ -125,6 +126,7 @@ function Home() {
           <Link to="/contact" className="grid h-12 place-items-center bg-forest px-6 text-sm text-paper">위치 보기</Link>
         </div>
       </section>
+      <RoleExtra path="/" />
     </Shell>
   );
 }
