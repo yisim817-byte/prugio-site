@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Photo, Shell, SourceNote, SubHero, pageHead } from "@/components/layout";
+import { Photo, Shell, SourceNote, SubHero, pageHead, QuickAnswer } from "@/components/layout";
 import { HISTORY, img } from "@/data/content";
 
 export const Route = createFileRoute("/brand")({
-  head: () => pageHead("히스토리"),
+  head: () => pageHead("히스토리", "/brand"),
   component: Page,
 });
 
@@ -11,6 +11,7 @@ function Page() {
   return (
     <Shell>
       <SubHero en="HISTORY" title="히스토리" crumbs="사업안내 / 히스토리" />
+      <QuickAnswer path="/brand" />
       <article className="mx-auto max-w-6xl px-4 py-16">
         <Photo src={img("/resources/img/sub/brand_content_img.v4.jpg")} alt="청라를 잇는 교량과 도심 야경" className="max-h-[640px] w-full object-cover" />
         <h2 className="mt-10 font-serif text-3xl">총 2,911가구 (B1 & M5 블록)</h2>

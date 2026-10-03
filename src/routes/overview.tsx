@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Photo, Shell, SourceNote, SubHero, pageHead } from "@/components/layout";
+import { Photo, Shell, SourceNote, SubHero, pageHead, QuickAnswer } from "@/components/layout";
 import { OVERVIEW_ROWS, img } from "@/data/content";
 
 export const Route = createFileRoute("/overview")({
-  head: () => pageHead("사업개요"),
+  head: () => pageHead("사업개요", "/overview"),
   component: Page,
 });
 
@@ -11,6 +11,7 @@ function Page() {
   return (
     <Shell>
       <SubHero en="OVERVIEW" title="사업개요" crumbs="사업안내 / 사업개요" />
+      <QuickAnswer path="/overview" />
       <article className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_280px]">
         <div>
           <p className="font-serif text-3xl leading-snug">압도적인 스케일, 독보적인 프리미엄</p>

@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Photo, Shell, pageHead } from "@/components/layout";
+import { Photo, Shell, pageHead, QuickAnswer } from "@/components/layout";
 import { AptEventPopup } from "@/components/event-popup";
 import { HISTORY, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL, img } from "@/data/content";
 
 export const Route = createFileRoute("/")({
-  head: () => pageHead("청라 아크원 푸르지오"),
+  head: () => pageHead("청라 아크원 푸르지오", "/"),
   component: Home,
 });
 
@@ -51,6 +51,8 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <QuickAnswer path="/" />
 
       <section id="overview" className="mx-auto grid max-w-6xl gap-10 px-4 py-20 md:grid-cols-2">
         <div>

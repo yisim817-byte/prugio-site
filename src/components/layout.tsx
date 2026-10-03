@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL, img } from "@/data/content";
+import { SEO_ORIGIN, SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
 
 export function Photo({
   src,
@@ -178,17 +179,80 @@ const PAGE_DESCRIPTION: Record<string, string> = {
   "관리자 로그인": "운영자 로그인.",
 };
 
-export function pageHead(title: string) {
+/**
+ * path를 넘기면 canonical(자기참조)과 og:url이 붙는다.
+ * path가 SEO_PAGES(역할 페이지)에 있으면 index,follow + 전용 title·description + JSON-LD.
+ * 그 밖의 페이지는 기존대로 noindex, nofollow.
+ */
+export function pageHead(title: string, path?: string) {
+  const seo = path ? SEO_PAGES[path] : undefined;
+  const url = path === undefined ? undefined : path === "/" ? SEO_ORIGIN : `${SEO_ORIGIN}${path}`;
+  const full = seo?.title ?? `${title} | 청라 아크원 푸르지오`;
+  const description =
+    seo?.description ??
+    PAGE_DESCRIPTION[title] ??
+    "청라 아크원 푸르지오 사업개요, 입지, 평면 및 분양 관련 안내. 상담과 이벤트 적용 조건을 확인하세요.";
   return {
     meta: [
-      { title: `${title} | 청라 아크원 푸르지오` },
+      { title: full },
+      { name: "description", content: description },
+      { name: "robots", content: seo ? "index,follow" : "noindex, nofollow" },
+      ...(url
+        ? [
+            { property: "og:title", content: full },
+            { property: "og:url", content: url },
+            { property: "og:type", content: "website" },
+          ]
+        : []),
+    ],
+    links: url ? [{ rel: "canonical", href: url }] : [],
+    scripts:
+      seo && url && path
+        ? [{ type: "application/ld+json", children: JSON.stringify(pageJsonLd(full, description, url, path, seo.crumb)) }]
+        : [],
+  };
+}
+
+function pageJsonLd(name: string, description: string, url: string, path: string, crumb: string) {
+  const page = {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    name,
+    description,
+    url,
+    inLanguage: "ko-KR",
+  };
+  if (path === "/") return { "@context": "https://schema.org", "@graph": [page] };
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      { ...page, breadcrumb: { "@id": `${url}#breadcrumb` } },
       {
-        name: "description",
-        content:
-          PAGE_DESCRIPTION[title] ??
-          "청라 아크원 푸르지오 사업개요, 입지, 평면 및 분양 관련 안내. 상담과 이벤트 적용 조건을 확인하세요.",
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SEO_PAGES["/"]?.crumb ?? "청라 아크원 푸르지오", item: SEO_ORIGIN },
+          { "@type": "ListItem", position: 2, name: crumb, item: url },
+        ],
       },
-      { name: "robots", content: "noindex, nofollow" },
     ],
   };
+}
+
+/** 역할 페이지의 「한눈에 보기」 직답 문단. 역할 페이지가 아니면 아무것도 그리지 않는다. */
+export function QuickAnswer({ path }: { path: string }) {
+  const seo = SEO_PAGES[path];
+  if (!seo) return null;
+  return (
+    <section aria-labelledby="quick-answer-title" className="border-b border-line">
+      <div className="mx-auto max-w-6xl px-4 py-12">
+        <p className="text-xs tracking-[0.22em] text-muted">SUMMARY</p>
+        <h2 id="quick-answer-title" className="mt-3 font-serif text-2xl md:text-3xl">
+          한눈에 보기
+        </h2>
+        <p className="mt-5 max-w-3xl break-keep leading-7">{seo.answer}</p>
+        <p className="mt-4 text-sm leading-6 text-muted">{SEO_SOURCE_LINE}</p>
+      </div>
+    </section>
+  );
 }
