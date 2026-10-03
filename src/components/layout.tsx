@@ -3,15 +3,19 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL, img } from "@/data/content";
 import { SEO_ORIGIN, SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
+import { IMAGE_SIZES } from "@/data/image-sizes";
 
 export function Photo({
   src,
   alt,
   className = "",
+  eager = false,
 }: {
   src: string;
   alt: string;
   className?: string;
+  /** 첫 화면(Hero·SubHero·헤더 로고) 이미지는 지연 로딩하지 않는다. */
+  eager?: boolean;
 }) {
   const [ok, setOk] = useState(true);
   if (!ok) {
@@ -21,7 +25,20 @@ export function Photo({
       </div>
     );
   }
-  return <img src={src} alt={alt} className={className} onError={() => setOk(false)} />;
+  // Hero·SubHero·헤더 로고(eager)는 속성을 바꾸지 않는다. 그 외 이미지만 크기·지연 로딩 지정.
+  const size = eager ? undefined : IMAGE_SIZES[src];
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      width={size?.[0]}
+      height={size?.[1]}
+      loading={eager ? undefined : "lazy"}
+      decoding={eager ? undefined : "async"}
+      onError={() => setOk(false)}
+    />
+  );
 }
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -42,6 +59,7 @@ function Header() {
       <div className="flex items-center gap-2 px-3 py-3 min-[430px]:gap-4 min-[430px]:px-4 lg:px-5">
         <Link to="/" className="shrink-0" aria-label="청라 아크원 푸르지오 홈">
           <Photo
+            eager
             src={img("/resources/img/common/logotype.svg")}
             alt="PRUGIO"
             className="h-5 w-auto max-w-[84px] object-contain object-left min-[430px]:h-6 min-[430px]:max-w-none"
@@ -137,6 +155,7 @@ export function SubHero({ en, title, crumbs }: { en: string; title: string; crum
   return (
     <section className="relative overflow-hidden border-b border-line">
       <Photo
+        eager
         src={img("/resources/img/common/sub_visual_img.v4.jpg")}
         alt=""
         className="absolute inset-0 h-full w-full object-cover"

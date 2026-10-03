@@ -31,7 +31,7 @@ function Home() {
       </nav>
 
       <section id="hero" className="relative grid min-h-[88vh] place-items-center overflow-hidden bg-forest text-paper">
-        <Photo src={img("/resources/img/pages/main/hero_bg.v4.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <Photo eager src={img("/resources/img/pages/main/hero_bg.v4.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-ink/40" />
         <div className="relative px-6 text-center">
           <p className="text-xs tracking-[0.35em]">CHEONG NA ARK-ONE PRUGIO</p>
@@ -71,7 +71,7 @@ function Home() {
           <div>
             <p className="text-xs tracking-[0.22em]">LOCATION</p>
             <h2 className="mt-3 font-serif text-4xl">CENTRAL LOCATION</h2>
-            <p className="mt-6 leading-7 text-paper/80">7호선 국제업무단지역(예정), GTX-D·E(계획), 청라하늘대교 개통. 일정은 예정·계획이며 변경될 수 있습니다.</p>
+            <p className="mt-6 leading-7 text-paper/80">7호선 국제업무단지역(예정 · 개통 시기 미정), GTX-D·E(계획 단계 · 확정 아님), 청라하늘대교 개통. 일정은 예정·계획이며 변경될 수 있습니다.</p>
             <Link to="/location" className="mt-8 inline-block border border-paper px-5 py-3 text-sm">입지환경</Link>
           </div>
           <Photo src={img("/resources/img/sub/location_map_img.v4.jpg")} alt="입지 안내 지도" className="h-[360px] w-full object-cover" />
