@@ -13,10 +13,6 @@ create table if not exists notify_settings (
   updated_by text
 );
 
-insert into notify_settings (site_id, phone)
-values ('arkone-cheongna-staff', '01093860881')
-on conflict (site_id) do nothing;
-
 create table if not exists notify_recipient_log (
   id serial primary key,
   site_id text not null,

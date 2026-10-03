@@ -4,7 +4,7 @@ import { RedirectToSignIn } from "@/lib/auth/gates";
 import { signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { Shell, pageHead } from "@/components/layout";
-import { adminSnapshot, bootstrapOwner, deleteLead, retryNotify, updateNotifyPhone } from "@/lib/leads.functions";
+import { adminSnapshot, bootstrapOwner, deleteLead, retryNotify } from "@/lib/leads.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => pageHead("접수 관리"),
@@ -28,14 +28,10 @@ type Lead = {
   notify_detail: string | null;
 };
 
-type Log = { old_phone: string | null; new_phone: string; actor_id: string; created_at: string };
-
 type Snap = {
   role: string;
-  notifyPhone: string;
   missingKakao: string[];
   leads: Lead[];
-  recipientLog: Log[];
 };
 
 const STATUS: Record<string, string> = {
@@ -52,7 +48,6 @@ function Page() {
   const [snap, setSnap] = useState<Snap | null>(null);
   const [blocked, setBlocked] = useState(false);
   const [note, setNote] = useState("");
-  const [phone, setPhone] = useState("");
 
   async function load() {
     await bootstrapOwner();
@@ -64,7 +59,6 @@ function Page() {
     }
     setBlocked(false);
     setSnap(result);
-    setPhone(result.notifyPhone);
   }
 
   useEffect(() => {
@@ -101,7 +95,9 @@ function Page() {
           <>
             <section className="mt-8 border border-line p-4 text-sm leading-6">
               <h2 className="font-medium">카카오 알림</h2>
-              <p className="mt-2">수신번호는 서버 설정입니다. 신청 화면에는 나오지 않습니다. 현재 {formatPhone(snap.notifyPhone)}</p>
+              <p className="mt-2">
+                수신번호는 이 사이트 서버 환경변수 KAKAO_ALERT_RECIPIENT로만 정합니다. 이 화면이나 DB 값으로는 바뀌지 않고, 신청 화면에도 나오지 않습니다. 현재 {snap.missingKakao.includes("KAKAO_ALERT_RECIPIENT") ? "미설정" : "설정됨"}
+              </p>
               {snap.missingKakao.length ? (
                 <p className="mt-2">
                   연결되지 않은 서버 비밀값: {snap.missingKakao.join(", ")}. 승인된 알림톡 채널, 그 채널의 템플릿 코드, 수신번호를 넣는 발송 API의 주소와 인증값이 필요합니다. 없으면 발송하지 않으며, 다른 번호나 문자로 바꾸지 않습니다.
@@ -110,28 +106,9 @@ function Page() {
                 <p className="mt-2">비밀값은 있습니다. API 접수와 휴대전화 수신은 별개입니다.</p>
               )}
               {snap.role === "owner" ? (
-                <form
-                  className="mt-4 flex flex-wrap gap-2"
-                  onSubmit={async (event) => {
-                    event.preventDefault();
-                    const result = await updateNotifyPhone({ data: { phone } });
-                    setNote(result.ok ? "이 사이트의 수신번호만 바뀌었습니다." : result.error);
-                    if (result.ok) await load();
-                  }}
-                >
-                  <input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-11 border border-line px-3" inputMode="numeric" aria-label="알림 수신번호" />
+                <div className="mt-4 flex flex-wrap gap-2">
                   <button type="button" className="h-11 border border-line px-4" onClick={() => downloadCsv(snap.leads)}>CSV</button>
-                  <button type="submit" className="h-11 bg-forest px-4 text-paper">수신번호 저장</button>
-                </form>
-              ) : null}
-              {snap.role === "owner" && snap.recipientLog.length ? (
-                <ul className="mt-4 space-y-1 text-muted">
-                  {snap.recipientLog.map((row) => (
-                    <li key={row.created_at + row.new_phone}>
-                      {row.created_at} · {formatPhone(row.old_phone ?? "")} → {formatPhone(row.new_phone)}
-                    </li>
-                  ))}
-                </ul>
+                </div>
               ) : null}
             </section>
             <ul className="mt-6 divide-y divide-line border-y border-line">

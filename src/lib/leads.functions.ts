@@ -146,9 +146,6 @@ export const adminSnapshot = createServerFn({ method: "GET" })
     const role = await roleOf(context.userId);
     if (!role) return { ok: false as const, error: "forbidden" as const };
     const sql = await getSql();
-    const settings = await sql<{ phone: string }>`
-      select phone from notify_settings where site_id = ${SITE} limit 1
-    `;
     const leads = await sql<{
       receipt_no: string;
       name: string;
@@ -170,48 +167,12 @@ export const adminSnapshot = createServerFn({ method: "GET" })
       limit 200
     `;
     const { missingKakaoEnv } = await import("./kakao.server");
-    const log = role === "owner"
-      ? await sql<{ old_phone: string | null; new_phone: string; actor_id: string; created_at: string }>`
-          select old_phone, new_phone, actor_id, created_at::text as created_at
-          from notify_recipient_log
-          where site_id = ${SITE}
-          order by id desc
-          limit 20
-        `
-      : [];
     return {
       ok: true as const,
       role,
-      notifyPhone: settings[0]?.phone ?? "",
       missingKakao: missingKakaoEnv(),
       leads,
-      recipientLog: log,
     };
-  });
-
-const phoneSchema = z.object({ phone: z.string() });
-
-export const updateNotifyPhone = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
-  .validator((raw: unknown) => phoneSchema.parse(raw))
-  .handler(async ({ context, data }) => {
-    const role = await roleOf(context.userId);
-    if (role !== "owner") return { ok: false as const, error: "운영자만 수신번호를 바꿉니다." };
-    const phone = digits(data.phone);
-    if (!validPhone(phone)) return { ok: false as const, error: "010으로 시작하는 11자리만 가능합니다." };
-    const sql = await getSql();
-    const prev = await sql<{ phone: string }>`select phone from notify_settings where site_id = ${SITE}`;
-    await sql`
-      insert into notify_recipient_log (site_id, old_phone, new_phone, actor_id)
-      values (${SITE}, ${prev[0]?.phone ?? null}, ${phone}, ${context.userId})
-    `;
-    await sql`
-      insert into notify_settings (site_id, phone, updated_at, updated_by)
-      values (${SITE}, ${phone}, now(), ${context.userId})
-      on conflict (site_id) do update
-      set phone = excluded.phone, updated_at = now(), updated_by = excluded.updated_by
-    `;
-    return { ok: true as const, phone };
   });
 
 const receiptSchema = z.object({ receiptNo: z.string().trim().min(4).max(40) });
