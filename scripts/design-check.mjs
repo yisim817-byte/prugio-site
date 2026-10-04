@@ -15,6 +15,7 @@
  *          --only, --widths 로 범위를 줄인 부분 검사는 통과해도 "design-check passed"를 찍지 않는다.
  */
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 const ROUTES = [
@@ -66,6 +67,32 @@ const BANNED = [
   "완판 임박",
 ];
 const findBanned = (text) => BANNED.filter((w) => text.includes(w));
+
+/** 등록 이름은 「사전고객등록」 하나다. 예전 이름의 어떤 꼴(관심고객등록, 관심고객 등록, 관심고객)도 남기지 않는다. */
+const OLD_REGISTER_WORD = "관심고객";
+
+/** 소스 파일에서 낱말이 남은 자리를 「경로:줄」로 돌려준다. 화면에 그려지지 않는 문자열까지 본다. */
+function sourceResidue(root, word) {
+  const hits = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (/\.(tsx?|jsx?|mjs|json|html|css|md|txt)$/.test(entry.name)) {
+        fs.readFileSync(full, "utf8")
+          .split("\n")
+          .forEach((line, i) => {
+            if (line.includes(word)) hits.push(`${path.relative(root, full)}:${i + 1}`);
+          });
+      }
+    }
+  };
+  for (const dir of ["src", "public"]) {
+    const full = path.join(root, dir);
+    if (fs.existsSync(full)) walk(full);
+  }
+  return hits;
+}
 
 /**
  * 7호선을 언급한 문장: 「개통 시기 미정」이 있어야 하고, 개통·준공 시점으로 읽히는 연도를 쓰면 안 된다.
@@ -441,6 +468,22 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
       fail("서체 링크: 예전 서체 링크가 남아 있다");
   }
 
+  // 1-2. 소스에 예전 등록 이름이 남아 있지 않은가 (화면에 안 나오는 알림 문구, 대체 글, 쓰지 않는 구성요소 포함)
+  if (!fs.existsSync(path.join(process.cwd(), "src"))) {
+    fail("저장소 루트에서 실행한다 (src 폴더를 찾지 못해 소스 문구 검사를 못 했다)");
+  } else {
+    for (const hit of sourceResidue(process.cwd(), OLD_REGISTER_WORD))
+      fail(`소스에 「${OLD_REGISTER_WORD}」 표기가 남아 있다: ${hit}`);
+  }
+
+  // 1-3. 관리자 화면이 그대로 열리는가 (로그인 화면과 접수 관리 화면)
+  const login = await get(base, "/login");
+  if (login.status !== 200 || !login.body.includes('type="password"'))
+    fail(`/login: 관리자 로그인 화면이 열리지 않는다 (응답 ${login.status})`);
+  const admin = await get(base, "/admin?receipt=");
+  if (admin.status !== 200 || !admin.body.includes("접수 관리"))
+    fail(`/admin: 접수 관리 화면이 열리지 않는다 (응답 ${admin.status})`);
+
   // 2. 화면 검사
   const allRoutes = await routesFor(base);
   const routes = onlyRoutes.length ? allRoutes.filter((r) => onlyRoutes.includes(r)) : allRoutes;
@@ -518,8 +561,8 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
         if (!wantBar && r.bar && r.bar.shown) fail(`${where}: 하단 바가 보이면 안 되는 화면이다`);
 
         for (const w of findBanned(r.bodyText)) fail(`${where}: 금지 표현 「${w}」`);
-        if (route !== "/privacy" && r.bodyText.includes("관심고객등록"))
-          fail(`${where}: 「관심고객등록」 표기가 남아 있다`);
+        if (r.bodyText.includes(OLD_REGISTER_WORD))
+          fail(`${where}: 「${OLD_REGISTER_WORD}」 표기가 남아 있다 (「사전고객」으로 통일한다)`);
         for (const block of r.line7) {
           for (const s of sentencesWith(block, "7호선")) {
             line7Seen.add(s);
@@ -628,6 +671,13 @@ function selftest() {
     bad.push("금지 표현을 잡지 못한다");
   if (findBanned("일정은 사업주체 사정에 따라 변경될 수 있습니다.").length)
     bad.push("정상 문장을 금지 표현으로 본다");
+  const probe = fs.mkdtempSync(path.join(os.tmpdir(), "design-check-"));
+  fs.mkdirSync(path.join(probe, "src"));
+  fs.writeFileSync(path.join(probe, "src", "alert.ts"), 'export const t = "새 관심고객 접수";\n');
+  fs.writeFileSync(path.join(probe, "src", "ok.ts"), 'export const t = "사전고객등록";\n');
+  if (sourceResidue(probe, OLD_REGISTER_WORD).join() !== path.join("src", "alert.ts") + ":1")
+    bad.push("소스에 남은 예전 등록 이름을 잡지 못한다");
+  fs.rmSync(probe, { recursive: true, force: true });
   if (line7Ok("서울 7호선 청라연장선 2030년 개통 예정")) bad.push("7호선 개통 연도를 잡지 못한다");
   if (line7Ok("7호선 국제업무단지역(예정)"))
     bad.push("7호선 「개통 시기 미정」 누락을 잡지 못한다");
