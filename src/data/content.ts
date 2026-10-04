@@ -54,7 +54,7 @@ export const NAV: NavItem[] = [
       { label: "홍보영상", href: "/video" },
     ],
   },
-  { label: "관심고객등록", en: "REGISTER", href: "/register" },
+  { label: "사전고객등록", en: "REGISTER", href: "/register" },
 ];
 
 export const OVERVIEW_ROWS: [string, string][] = [

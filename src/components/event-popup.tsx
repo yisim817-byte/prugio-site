@@ -95,7 +95,7 @@ export function AptEventPopup() {
             아파트 사전고객등록 이벤트
           </h2>
           <p className="font-serif text-4xl text-forest">백화점 상품권 30만원</p>
-          <p className="text-sm tracking-wide text-sand">롯데 · 현대 · 신세계 중 선택</p>
+          <p className="text-sm tracking-wide text-bronze">롯데 · 현대 · 신세계 중 선택</p>
           <p className="border border-line bg-paper p-4 text-sm leading-6">
             사전고객등록 후 청약 당첨 및 MGM 인정조건을 충족하고 계약하신 고객 대상
           </p>

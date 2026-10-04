@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Nb } from "@/components/chrome";
 import { Shell, SubHero, pageHead } from "@/components/layout";
+import { REGISTER_LABEL } from "@/data/labels";
 import { submitLead } from "@/lib/leads.functions";
 
 export const Route = createFileRoute("/register")({
-  head: () => pageHead("관심고객등록"),
+  head: () => pageHead(REGISTER_LABEL),
   component: Page,
 });
 
@@ -60,17 +62,18 @@ function Page() {
 
   return (
     <Shell>
-      <SubHero en="REGISTER" title="관심고객등록" crumbs="관심고객등록" />
-      <main className="mx-auto max-w-lg px-4 py-12">
-        <p className="border border-line bg-paper p-4 text-sm leading-6">
-          관심고객 등록이며 청약 신청이 아닙니다. 주민등록번호는 받지 않습니다.
+      <SubHero en="REGISTER" title={REGISTER_LABEL} crumbs={REGISTER_LABEL} />
+      <main className="ak-wrap ak-page">
+        <div className="max-w-lg">
+        <p className="border-y border-line py-4 leading-7">
+          {REGISTER_LABEL}이며 청약 신청이 아닙니다. 주민등록번호는 받지 않습니다.
         </p>
         {done ? (
           <div className="mt-8 space-y-4" role="status">
-            <h2 className="font-serif text-3xl">{done.duplicate ? "이미 등록된 번호" : "접수되었습니다"}</h2>
+            <h2 className="ak-h2">{done.duplicate ? "이미 등록된 번호" : "접수되었습니다"}</h2>
             <p className="text-sm leading-6">접수번호 <strong className="font-medium">{done.receiptNo}</strong></p>
             <p className="text-sm leading-6">{STATUS[done.notifyStatus] ?? STATUS.pending}</p>
-            <Link to="/" className="inline-block text-sm underline">처음으로</Link>
+            <Link to="/" className="ak-link">처음으로</Link>
           </div>
         ) : (
           <form className="mt-8 space-y-5" onSubmit={onSubmit} noValidate>
@@ -97,22 +100,23 @@ function Page() {
             <label className="flex items-start gap-3 text-sm leading-6">
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-5 w-5" />
               <span>
-                개인정보 수집·이용에 동의합니다. 처리자는 HUMANE 운영자이고, 항목은 성명·휴대전화·생년월일 앞 6자리·시군구동이며, 운영자가 삭제할 때까지 보유합니다.{" "}
+                <Nb>개인정보 수집·이용에 동의합니다. 처리자는 HUMANE 운영자이고, 항목은 성명·휴대전화·생년월일 앞 6자리·시군구동이며, 운영자가 삭제할 때까지 보유합니다.</Nb>{" "}
                 <Link to="/privacy" className="underline">처리방침</Link>
               </span>
             </label>
-            {error ? <p className="text-sm text-forest" role="alert">{error}</p> : null}
-            <button type="submit" disabled={pending} className="h-12 w-full bg-forest text-sm text-paper disabled:opacity-60">
+            {error ? <p className="text-sm text-error" role="alert">{error}</p> : null}
+            <button type="submit" disabled={pending} className="ak-btn ak-btn--primary ak-btn--block disabled:opacity-60">
               {pending ? "저장 중" : "등록"}
             </button>
           </form>
         )}
+        </div>
       </main>
     </Shell>
   );
 }
 
-const inputClass = "h-12 w-full border border-line bg-paper px-3 text-base";
+const inputClass = "h-12 w-full rounded-[2px] border border-muted bg-paper px-3 text-base";
 
 function Field({ label, hint, error, children }: { label: string; hint?: string; error: string; children: React.ReactNode }) {
   return (
@@ -120,7 +124,7 @@ function Field({ label, hint, error, children }: { label: string; hint?: string;
       <span className="font-medium">{label}</span>
       {hint ? <span className="mt-1 block text-muted">{hint}</span> : null}
       <span className="mt-2 block">{children}</span>
-      {error ? <span className="mt-1 block text-forest">{error}</span> : null}
+      {error ? <span className="mt-1 block text-error">{error}</span> : null}
     </label>
   );
 }

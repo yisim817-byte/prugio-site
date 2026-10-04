@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Nb } from "@/components/chrome";
 import { Photo, Shell, SourceNote, SubHero, pageHead } from "@/components/layout";
 import { img } from "@/data/content";
 
@@ -28,24 +29,32 @@ function Page() {
   return (
     <Shell>
       <SubHero en="INFORMATION" title="변경된 청약제도" crumbs="청약안내 / 변경된 청약제도" />
-      <article className="mx-auto max-w-6xl px-4 py-12">
-        <p className="text-sm leading-6 text-muted">
-          입주자모집공고와 청약홈이 우선합니다.
-        </p>
-        <Photo
-          src={img("/resources/img/sub/01_변경된_청약제도.v4.jpg")}
-          alt="변경된 청약제도 안내"
-          className="mt-8 w-full"
-        />
-        <h2 className="mt-12 font-serif text-2xl">주요 내용</h2>
-        <ul className="mt-6 space-y-3 text-sm leading-6">
-          {TIPS.map((tip) => (
-            <li key={tip} className="border-t border-line pt-3">{tip}</li>
-          ))}
-        </ul>
-        <p className="mt-8 text-sm leading-6 text-muted">
-          오류가 있으면 관계 법령이 우선하고, 자격 미숙지와 착오 신청의 책임은 청약자 본인에게 있습니다.
-        </p>
+      <article className="ak-wrap ak-page">
+        <div className="ak-cols">
+          <div>
+            <h2 className="ak-h2">주요 내용</h2>
+            <p className="ak-lead">입주자모집공고와 청약홈이 우선합니다.</p>
+          </div>
+          <div>
+            <ul className="ak-list">
+              {TIPS.map((tip) => (
+                <li key={tip}>
+                  <Nb>{tip}</Nb>
+                </li>
+              ))}
+            </ul>
+            <p className="ak-note">
+              오류가 있으면 관계 법령이 우선하고, 자격 미숙지와 착오 신청의 책임은 청약자 본인에게 있습니다.
+            </p>
+            {/* 세로로 긴 공식 안내 이미지는 본문 뒤에 접어 둔다 */}
+            <details className="ak-details">
+              <summary>공식 안내 이미지 보기</summary>
+              <div className="ak-details__body">
+                <Photo src={img("/resources/img/sub/01_변경된_청약제도.v4.jpg")} alt="변경된 청약제도 안내" className="w-full" />
+              </div>
+            </details>
+          </div>
+        </div>
       </article>
       <SourceNote />
     </Shell>
