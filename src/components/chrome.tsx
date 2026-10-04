@@ -133,6 +133,7 @@ export function Footer() {
           <div className="ak-ft__links">
             <Link to="/privacy">개인정보처리방침</Link>
             <Link to="/register">{REGISTER_LABEL}</Link>
+            <Link to="/login" rel="nofollow">관리자 로그인</Link>
           </div>
         </div>
       </div>
