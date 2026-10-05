@@ -20,9 +20,8 @@ const MAIN = "/resources/img/pages/main/";
 const asset = (file: string) => img(MAIN + file);
 const common = (file: string) => img("/resources/img/common/" + file);
 
-/** 공식 홍보영상(유튜브 영상 번호). 공식과 같은 방식(유튜브 창)으로 연다. 썸네일도 공식과 같은 유튜브 썸네일이다. */
+/** 공식 홍보영상(유튜브 영상 번호). 공식과 같은 방식(유튜브 창)으로 연다. 카드의 썸네일은 styles.css 의 .om-hero__video_play 가 같은 영상의 유튜브 썸네일을 깐다. */
 const YOUTUBE_ID = "_wAuOJSTLek";
-const YOUTUBE_THUMB = `https://img.youtube.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
 
 /** 공식 히스토리 연표. 7호선 칸만 연도 자리를 「시기 미정」으로 둔다(프로젝트 고정 규칙). */
 const HISTORY_EVENTS: { key: string; year: string; tbd?: boolean; file: string; alt: string; captions: [string, string][] }[] = [
@@ -120,6 +119,7 @@ function useChromeVars(root: React.RefObject<HTMLDivElement | null>) {
       el.style.setProperty("--om-util", `${util?.offsetHeight ?? 0}px`);
       el.style.setProperty("--om-hd", `${hd?.offsetHeight ?? 0}px`);
       el.style.setProperty("--om-vh", `${window.innerHeight}px`);
+      el.style.setProperty("--om-scale", String(document.documentElement.clientWidth / 1920));
     };
     sync();
     window.addEventListener("resize", sync);
@@ -425,7 +425,17 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    if (!window.matchMedia(REDUCED).matches) setIntro(true);
+    if (!window.matchMedia(REDUCED).matches) {
+      setIntro(true);
+      document.documentElement.setAttribute("data-om-intro", "1");
+    }
+  }, []);
+
+  // 인트로가 끝나면 알린다(이벤트 팝업은 이 뒤에 연다). 인트로가 없으면 바로 끝난 것으로 본다.
+  const endIntro = useCallback(() => {
+    setIntro(false);
+    document.documentElement.removeAttribute("data-om-intro");
+    window.dispatchEvent(new CustomEvent("om:intro-done"));
   }, []);
 
   const stage = mounted && pc && !reduced; // PC 장면 전환 모드
@@ -489,7 +499,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       data-official-main=""
       className={`om${stage ? " om--stage" : ""}${flow ? " om--flow" : ""}${intro ? " om--intro" : ""}`}
     >
-      {intro ? <Intro onDone={() => setIntro(false)} /> : null}
+      {intro ? <Intro onDone={endIntro} /> : null}
 
       {stage ? (
         <nav className="om-nav" aria-label="메인 구간 바로가기">
@@ -512,7 +522,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       ) : null}
 
       {/* ── 1·2 히어로: 영상, 아크원이란? ───────────────────────────── */}
-      <section id="hero" className={`om-hero${active("hero")}`} data-step={heroStep} aria-labelledby="om-hero-title">
+      <section id="hero" className={`om-s om-hero${active("hero")}`} data-step={heroStep} aria-labelledby="om-hero-title">
         <div className="om-hero__stage">
           <div className="om-hero__viewport">
             <div className="om-hero__background" aria-hidden="true">
@@ -551,7 +561,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                     <b>청라 아크원</b> <br className="om-m-only" />
                     홍보영상
                   </span>
-                  <span className="om-hero__video_play" style={{ backgroundImage: `url("${YOUTUBE_THUMB}")` }} aria-hidden="true">
+                  <span className="om-hero__video_play" aria-hidden="true">
                     <img src={asset("ico_yt.svg")} alt="" />
                   </span>
                 </button>
@@ -608,7 +618,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* ── 3·4 사업개요 ───────────────────────────────────────────── */}
-      <section id="overview" className={`om-overview${active("overview")}`} data-step={step("overview")} aria-labelledby="om-overview-title">
+      <section id="overview" className={`om-s om-overview${active("overview")}`} data-step={step("overview")} aria-labelledby="om-overview-title">
         <div className="om-overview__stage">
           <div className="om-overview__background" aria-hidden="true">
             <img src={asset("overview_bg.v4.jpg")} alt="" loading="lazy" />
@@ -674,7 +684,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* ── 5·6 입지 ───────────────────────────────────────────────── */}
-      <section id="location" className={`om-location${active("location")}`} data-step={step("location")} aria-labelledby="om-location-title">
+      <section id="location" className={`om-s om-location${active("location")}`} data-step={step("location")} aria-labelledby="om-location-title">
         <div className="om-location__inner">
           <div className="om-location__area om-location__area-visual">
             <p className="om-location__tagline" aria-label="ABSOLUTE REMARKABLE" lang="en">
@@ -733,7 +743,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* ── 7·8 히스토리 ───────────────────────────────────────────── */}
-      <section id="history" className={`om-history${active("history")}`} data-step={step("history")} aria-labelledby="om-history-title">
+      <section id="history" className={`om-s om-history${active("history")}`} data-step={step("history")} aria-labelledby="om-history-title">
         <div className="om-history__timeline" data-history-timeline="">
           <div className="om-history__viewport">
             <div className="om-history__track" data-history-track="">
@@ -819,7 +829,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* ── 9·10·11 프리미엄 ───────────────────────────────────────── */}
-      <section id="premium" className={`om-premium${active("premium")}`} data-step={step("premium")} aria-labelledby="om-premium-title">
+      <section id="premium" className={`om-s om-premium${active("premium")}`} data-step={step("premium")} aria-labelledby="om-premium-title">
         <h2 id="om-premium-title" className="om-blind">
           ARK-ONE PREMIUM
         </h2>
@@ -926,7 +936,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* ── 12·13·14·15 브랜드 ─────────────────────────────────────── */}
-      <section id="brand" className={`om-brand${active("brand")}`} data-step={step("brand")} aria-labelledby="om-brand-title">
+      <section id="brand" className={`om-s om-brand${active("brand")}`} data-step={step("brand")} aria-labelledby="om-brand-title">
         <h2 id="om-brand-title" className="om-blind">
           BRAND THE NATURAL NOBILITY
         </h2>
@@ -1020,7 +1030,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* ── 16 오시는 길 ──────────────────────────────────────────── */}
-      <section id="contact" className={`om-contact${active("contact")}`} data-step={step("contact")} aria-labelledby="om-contact-title">
+      <section id="contact" className={`om-s om-contact${active("contact")}`} data-step={step("contact")} aria-labelledby="om-contact-title">
         <div className="om-contact__background" aria-hidden="true">
           <img src={asset("contact_bg.v4.jpg")} alt="" loading="lazy" decoding="async" />
           <span className="om-contact__background_dim" />

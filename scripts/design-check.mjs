@@ -174,6 +174,23 @@ function brokenImageProblems(images) {
   return images.filter((i) => i.naturalWidth === 0).map((i) => i.src);
 }
 
+/** 검색용 묶음(#site-info)의 등록 버튼: 글자색과 배경색이 구분돼야 한다(대비 3:1 이상). 문제면 사유, 아니면 null. */
+function siteButtonProblem(btn) {
+  if (!btn) return "#site-info 에 ak-btn--primary 버튼이 없다";
+  const ratio = contrast(btn.fg, btn.bg);
+  if (ratio < 3) return `#site-info 등록 버튼의 글자색이 배경색과 구분되지 않는다 (대비 ${ratio.toFixed(2)}:1, 글자 ${btn.fg.join(",")} / 배경 ${btn.bg.join(",")})`;
+  return null;
+}
+
+/** 휴대폰 히어로의 홍보영상 버튼·SCROLL 표시가 모바일 하단 바(ak-mbar)에 가려지면 사유, 아니면 null. */
+function heroBarProblem(m) {
+  if (!m || !m.bar) return null;
+  const out = [];
+  if (m.video && m.video.bottom > m.bar.top + 0.5) out.push(`홍보영상 버튼(아래 ${Math.round(m.video.bottom)})이 하단 바(위 ${Math.round(m.bar.top)})에 가려진다`);
+  if (m.scroll && m.scroll.bottom > m.bar.top + 0.5) out.push(`SCROLL 표시(아래 ${Math.round(m.scroll.bottom)})가 하단 바(위 ${Math.round(m.bar.top)})에 가려진다`);
+  return out.length ? out.join(", ") : null;
+}
+
 /** 공식 문의 번호·외부 예약 주소가 남은 자리를 돌려준다(없으면 빈 배열). */
 function officialResidue(html) {
   const hits = [];
@@ -515,6 +532,7 @@ function inspect(noticeText) {
     line7.push(box.innerText.replace(/\s+/g, " ").trim());
   }
 
+  const siteBtn = document.querySelector("#site-info .ak-btn--primary");
   const util = document.querySelector(".ak-util");
   const bar = document.querySelector(".ak-mbar");
   const barStyle = bar ? getComputedStyle(bar) : null;
@@ -535,6 +553,12 @@ function inspect(noticeText) {
         }
       : null,
     bodyText: document.body.innerText,
+    siteBtn: siteBtn
+      ? {
+          fg: rgba(getComputedStyle(siteBtn).color).slice(0, 3).map(Math.round),
+          bg: rgba(getComputedStyle(siteBtn).backgroundColor).slice(0, 3).map(Math.round),
+        }
+      : null,
     texts,
     line7,
     fontSans: getComputedStyle(document.body).fontFamily,
@@ -725,6 +749,25 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths, offi
             await wait(200);
           });
         }
+        if (route === "/" && !state && width <= 390) {
+          // 휴대폰 첫 화면(스크롤 0)에서 히어로의 홍보영상 버튼·SCROLL 이 하단 바 위에 온전히 보이는가
+          const phoneHeight = width <= 360 ? 740 : 844;
+          await page.setViewportSize({ width, height: phoneHeight });
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.waitForTimeout(250);
+          const m = await page.evaluate(() => {
+            const box = (sel) => {
+              const el = document.querySelector(sel);
+              if (!el) return null;
+              const r = el.getBoundingClientRect();
+              return r.width && r.height ? { top: r.top, bottom: r.bottom } : null;
+            };
+            return { video: box(".om-hero__video_trigger"), scroll: box(".om-hero__scroll"), bar: box(".ak-mbar") };
+          });
+          const problem = heroBarProblem(m);
+          if (problem) fail(`${where} (${width}×${phoneHeight}): ${problem}`);
+          await page.setViewportSize({ width, height: 900 });
+        }
         // 전체 높이를 한 화면으로 펼쳐야 글자 뒤 배경을 정확히 읽는다
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
         await page.setViewportSize({ width, height: Math.min(Math.max(height, 900), 16000) });
@@ -790,6 +833,8 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths, offi
           }
         }
         if (route === "/") {
+          const btnProblem = siteButtonProblem(r.siteBtn);
+          if (btnProblem) fail(`${where}: ${btnProblem}`);
           for (const t of r.texts) {
             if (!t.inDialog && !t.inOfficial && isCapsLabel(t.text))
               fail(`${where}: 영문 대문자 라벨 「${t.text}」`);
@@ -938,6 +983,18 @@ function selftest() {
     officialNameProblems(["pages/main/premium_visual_img_04.v4.jpg", "pages/main/brand_bg_m.v4.jpg"]).length !== 2
   )
     bad.push("공식 메인의 71개 목록 밖 파일 이름을 잡지 못한다");
+  if (
+    siteButtonProblem({ fg: [26, 25, 22], bg: [28, 58, 50] }) === null ||
+    siteButtonProblem(null) === null ||
+    siteButtonProblem({ fg: [246, 243, 238], bg: [28, 58, 50] }) !== null
+  )
+    bad.push("#site-info 등록 버튼의 글자색·배경색 구분 실패를 잡지 못한다");
+  if (
+    heroBarProblem({ video: { top: 766, bottom: 816 }, scroll: { top: 769, bottom: 828 }, bar: { top: 783, bottom: 844 } }) === null ||
+    heroBarProblem({ video: { top: 700, bottom: 750 }, scroll: { top: 720, bottom: 775 }, bar: { top: 783, bottom: 844 } }) !== null ||
+    heroBarProblem({ video: { top: 766, bottom: 816 }, scroll: null, bar: null }) !== null
+  )
+    bad.push("휴대폰 홍보영상 버튼·SCROLL 과 하단 바의 겹침을 잡지 못한다");
   if (
     brokenImageProblems([
       { src: "main/premium_visual_img_04.v4.jpg", naturalWidth: 0 },

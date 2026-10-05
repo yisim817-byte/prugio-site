@@ -20,7 +20,26 @@ export function AptEventPopup() {
     } catch {
       /* 저장을 못 해도 팝업은 연다 */
     }
-    setOpen(true);
+    // 홈의 인트로(공식 메인 복제)가 도는 동안에는 열지 않고, 끝난 뒤에 연다. 인트로가 없으면(「동작 줄이기」 등) 바로 연다.
+    const introAhead =
+      Boolean(document.querySelector("[data-official-main]")) &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!introAhead) {
+      setOpen(true);
+      return;
+    }
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      setOpen(true);
+    };
+    window.addEventListener("om:intro-done", show, { once: true });
+    const fallback = window.setTimeout(show, 9000);
+    return () => {
+      window.removeEventListener("om:intro-done", show);
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   useEffect(() => {
