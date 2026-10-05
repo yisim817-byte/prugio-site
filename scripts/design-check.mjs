@@ -8,6 +8,7 @@
  *   node scripts/design-check.mjs capture [--base URL] [--out design-baseline.json]
  *   node scripts/design-check.mjs verify  [--base URL] [--baseline design-baseline.json] [--shots DIR]
  *   node scripts/design-check.mjs verify  --only /,/premium --widths 1280,390   (고치는 중에 쓰는 부분 검사)
+ *   node scripts/design-check.mjs verify  --official-assets 폴더   (공식 서버 요청을 그 폴더의 파일로 바꿔 넣고 깨진 이미지를 검사)
  *
  * capture: 디자인을 고치기 전(main)의 검색 설정·전화 링크·직답 문단을 기록한다.
  * verify : 고친 뒤 화면이 그 기록과 같은지, 그리고 디자인 규격(가로 넘침, 문구 규칙, 글자 대비)을 지키는지 검사한다.
@@ -78,6 +79,100 @@ const OFFICIAL_EXEMPT = ["홈의 영문 대문자 라벨", "h1 서체(Hahmlet) �
 /** 홈에 남아 있으면 안 되는 공식 문의 번호와 외부 예약 주소(3절 2번). */
 const OFFICIAL_PHONE = /1833[-\s.]?3872/;
 const OFFICIAL_BOOKING = /here-customer/i;
+
+/**
+ * 홈이 부를 수 있는 공식 서버 파일(작업지시서 3의 6절). 2026-10-05 공식 메인이 쓰는 71개(official-assets/_status.txt).
+ * /resources/img/ 뒤의 경로다. 목록에 없는 이름을 부르면 실패다(없어진 파일을 불러 깨진 이미지가 보이는 것을 막는다).
+ */
+const OFFICIAL_FILES = new Set([
+  "common/ico_kko_map.svg",
+  "common/ico_naver.svg",
+  "common/logo_daewoo.svg",
+  "common/logotype.svg",
+  "common/popup_closeBtn.v4.png",
+  "pages/main/brand_bg.v4.jpg",
+  "pages/main/brand_bg_02.v4.jpg",
+  "pages/main/brand_bg_03.v4.jpg",
+  "pages/main/brand_img_01.v4.jpg",
+  "pages/main/brand_img_02.v4.jpg",
+  "pages/main/brand_img_03.v4.jpg",
+  "pages/main/brand_img_logo.v4.png",
+  "pages/main/brand_logo.svg",
+  "pages/main/brand_video.mp4",
+  "pages/main/brand_visual_img.v4.jpg",
+  "pages/main/contact_bg.v4.jpg",
+  "pages/main/contact_map_01.v4.png",
+  "pages/main/contact_map_02.v4.png",
+  "pages/main/hero_bg.v4.jpg",
+  "pages/main/hero_bg_m.v4.jpg",
+  "pages/main/hero_brand_img.v4.png",
+  "pages/main/hero_circle_01.svg",
+  "pages/main/hero_circle_register.svg",
+  "pages/main/hero_circle_text.svg",
+  "pages/main/hero_video_3.mp4",
+  "pages/main/hero_video_m_2.mp4",
+  "pages/main/history_arrow.svg",
+  "pages/main/history_climax.v4.png",
+  "pages/main/history_event_bg_01.jpg",
+  "pages/main/history_event_bg_02.jpg",
+  "pages/main/history_img_01.v4.jpg",
+  "pages/main/history_img_02.v4.jpg",
+  "pages/main/history_img_03.v4.jpg",
+  "pages/main/history_img_2026.v4.jpg",
+  "pages/main/history_img_2028.v4.jpg",
+  "pages/main/history_img_2029.v4.jpg",
+  "pages/main/history_img_2030.v4.jpg",
+  "pages/main/history_img_2031.v4.jpg",
+  "pages/main/history_img_ark_one.v4.jpg",
+  "pages/main/history_logo.svg",
+  "pages/main/histroy_bg_img_01.svg",
+  "pages/main/histroy_bg_img_02.svg",
+  "pages/main/ico_star.svg",
+  "pages/main/ico_yt.svg",
+  "pages/main/intro_mask_left.svg",
+  "pages/main/intro_mask_right.svg",
+  "pages/main/intro_video_2.mp4",
+  "pages/main/location_bubble.v4.png",
+  "pages/main/location_bubble_m.v4.png",
+  "pages/main/location_img.v4.png",
+  "pages/main/location_map.v4.png",
+  "pages/main/overview_bg.v4.jpg",
+  "pages/main/overview_ico_star.svg",
+  "pages/main/premium_bg.v4.jpg",
+  "pages/main/premium_conf_03.v4.png",
+  "pages/main/premium_img_01.v4.jpg",
+  "pages/main/premium_img_02.v4.jpg",
+  "pages/main/premium_img_03.v4.jpg",
+  "pages/main/premium_img_left_01.v4.jpg",
+  "pages/main/premium_img_left_02.v4.jpg",
+  "pages/main/premium_img_left_03.v4.jpg",
+  "pages/main/premium_poster.v4.jpg",
+  "pages/main/premium_poster_02.v4.jpg",
+  "pages/main/premium_poster_03.v4.jpg",
+  "pages/main/premium_right_img_01.v4.jpg",
+  "pages/main/premium_video_01.mp4",
+  "pages/main/premium_video_02.mp4",
+  "pages/main/premium_video_03.mp4",
+  "pages/main/premium_visual_img_01.v4.jpg",
+  "pages/main/premium_visual_img_02.v4.jpg",
+  "pages/main/premium_visual_img_03.v4.jpg",
+]);
+const OFFICIAL_URL = /https?:\/\/(?:www\.)?arkone-prugio\.com\/resources\/img\/([^\s"'()<>\\]+)/g;
+
+/** 글(HTML, CSS)에서 부르는 공식 서버 파일의 경로(/resources/img/ 뒤)를 중복 없이 돌려준다. */
+function officialNames(text) {
+  return [...new Set([...text.matchAll(OFFICIAL_URL)].map((m) => decodeURIComponent(m[1])))].sort();
+}
+
+/** 공식 메인이 쓰는 71개 목록 밖의 이름을 돌려준다(없으면 빈 배열). */
+function officialNameProblems(names) {
+  return names.filter((n) => !OFFICIAL_FILES.has(n));
+}
+
+/** 그려지지 않은 이미지(naturalWidth 0)의 주소를 돌려준다(없으면 빈 배열). */
+function brokenImageProblems(images) {
+  return images.filter((i) => i.naturalWidth === 0).map((i) => i.src);
+}
 
 /** 공식 문의 번호·외부 예약 주소가 남은 자리를 돌려준다(없으면 빈 배열). */
 function officialResidue(html) {
@@ -464,8 +559,9 @@ function inspect(noticeText) {
   };
 }
 
-async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
+async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths, officialAssets) {
   const fails = [];
+  if (officialAssets && !fs.existsSync(officialAssets)) throw new Error(`--official-assets 폴더가 없다: ${officialAssets}`);
   const notes = [];
   const fail = (m) => fails.push(m);
 
@@ -526,9 +622,17 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
   }
 
   // 1-4. 홈에 공식 문의 번호·외부 예약 주소가 없는가, 모든 화면 푸터에 관리자 로그인 링크가 있는가, 로그인 폼이 post 인가
+  // 1-5. 홈이 부르는 공식 서버 파일 이름이 모두 공식 메인의 71개 안에 있는가 (HTML과 스타일시트를 함께 본다)
+  const officialSeenNames = new Set();
   if (fs.existsSync(baselinePath)) {
     const home = await get(base, "/");
     for (const hit of officialResidue(home.body)) fail(`/: 홈에 ${hit}가 남아 있다`);
+    let text = home.body;
+    for (const href of readHead(home.body).stylesheets) {
+      if (!href.startsWith("/")) continue;
+      text += `\n${(await get(base, href)).body}`;
+    }
+    for (const n of officialNames(text)) officialSeenNames.add(n);
   }
 
   // 1-3. 관리자 화면이 그대로 열리는가 (로그인 화면과 접수 관리 화면)
@@ -578,6 +682,19 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
           });
         }
         const errors = [];
+        if (route === "/") {
+          // 공식 서버 파일: 요청한 이름을 모으고, --official-assets 폴더가 있으면 그 파일로 바꿔 넣는다
+          await page.route(/^https?:\/\/(www\.)?arkone-prugio\.com\/resources\/img\//, (r) => {
+            const rel = decodeURIComponent(new URL(r.request().url()).pathname.replace(/^\/resources\/img\//, ""));
+            officialSeenNames.add(rel);
+            if (!officialAssets) return r.continue().catch(() => r.abort());
+            const file = path.join(officialAssets, rel);
+            if (!fs.existsSync(file)) return r.fulfill({ status: 404, body: "" });
+            const ext = path.extname(file).slice(1).toLowerCase();
+            const type = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", svg: "image/svg+xml", mp4: "video/mp4" }[ext];
+            return r.fulfill({ path: file, contentType: type ?? "application/octet-stream" });
+          });
+        }
         page.on("pageerror", (error) => errors.push(error.message.split("\n")[0]));
         page.on("console", (msg) => {
           if (msg.type() === "error" && /hydrat/i.test(msg.text()))
@@ -595,10 +712,56 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
           await page.waitForTimeout(700);
         }
         for (const message of errors) fail(`${where}: 화면 오류 ${message.slice(0, 120)}`);
+        if (route === "/" && !state) {
+          // 지연 로딩 이미지는 화면에 가까워져야 받기 시작한다. 한 번 끝까지 내려갔다가 맨 위로 돌아온다.
+          await page.evaluate(async () => {
+            const step = Math.max(400, Math.floor(window.innerHeight * 0.8));
+            const wait = (ms) => new Promise((done) => setTimeout(done, ms));
+            for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+              window.scrollTo(0, y);
+              await wait(40);
+            }
+            window.scrollTo(0, 0);
+            await wait(200);
+          });
+        }
         // 전체 높이를 한 화면으로 펼쳐야 글자 뒤 배경을 정확히 읽는다
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
         await page.setViewportSize({ width, height: Math.min(Math.max(height, 900), 16000) });
         await page.waitForTimeout(150);
+        if (route === "/") {
+          // 깨진 이미지: 홈의 복제 구간 이미지가 모두 받아져 그려졌는가(naturalWidth 0 이 0개)
+          // 그려지는 이미지(display:none 이 아닌 것)가 모두 받아질 때까지 기다린다. 10초가 넘으면 그 상태로 본다.
+          await page
+            .evaluate(() =>
+              Promise.race([
+                Promise.all(
+                  [...document.querySelectorAll("[data-official-main] img")]
+                    .filter((i) => i.getClientRects().length > 0 && !i.complete)
+                    .map(
+                      (i) =>
+                        new Promise((done) => {
+                          i.addEventListener("load", done, { once: true });
+                          i.addEventListener("error", done, { once: true });
+                        }),
+                    ),
+                ),
+                new Promise((done) => setTimeout(done, 10000)),
+              ]),
+            )
+            .catch(() => {});
+          // 받기가 끝난(complete) 이미지만 본다. 팝업이 열려 화면이 잠긴 상태에서는 아래쪽 지연 로딩 이미지가 아직 시작되지 않는다.
+          const images = await page.evaluate(() =>
+            [...document.querySelectorAll("[data-official-main] img")]
+              .filter((i) => i.getClientRects().length > 0 && i.complete)
+              .map((i) => ({
+                src: (i.currentSrc || i.getAttribute("src") || "").split("/").slice(-2).join("/"),
+                naturalWidth: i.naturalWidth,
+              })),
+          );
+          for (const src of brokenImageProblems(images)) fail(`${where}: 깨진 이미지 ${src}`);
+          if (!state && !images.length) fail(`${where}: 홈의 복제 구간에서 받기가 끝난 이미지를 하나도 찾지 못했다`);
+        }
         const r = await page.evaluate(inspect, NOTICE);
         checked++;
 
@@ -662,6 +825,12 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
     await context.close();
   }
   if (!line7Seen.size) notes.push("7호선을 언급한 문장을 하나도 찾지 못했다");
+  const names = [...officialSeenNames].sort();
+  for (const n of officialNameProblems(names)) fail(`/: 공식 메인의 71개 목록에 없는 공식 서버 파일을 부른다: ${n}`);
+  notes.push(
+    `홈이 부르는 공식 서버 파일 ${names.length}개(목록 71개 안), 목록 밖 ${officialNameProblems(names).length}개` +
+      (officialAssets ? ` (공식 요청은 ${officialAssets} 의 파일로 바꿔 넣고 깨진 이미지를 검사했다)` : " (공식 요청은 실제 서버로 보냈다)"),
+  );
   if (officialSeen)
     notes.push(`홈의 복제 구간(${OFFICIAL_MARK}) 안에서 제외한 표기 규칙: ${OFFICIAL_EXEMPT.join(", ")}. 금지 표현·「관심고객」·7호선·전화 링크·검색 설정·가로 넘침·h1 1개는 제외하지 않았다`);
 
@@ -757,6 +926,25 @@ function selftest() {
     readHead('<html><body><form></form></body></html>').formPost !== false
   )
     bad.push("푸터 관리자 로그인 링크·로그인 폼 method 를 읽지 못한다");
+  if (
+    OFFICIAL_FILES.size !== 71 ||
+    officialNames(
+      '<img src="https://arkone-prugio.com/resources/img/pages/main/hero_bg.v4.jpg"> .x{background:url(https://www.arkone-prugio.com/resources/img/common/ico_naver.svg)}',
+    ).join() !== "common/ico_naver.svg,pages/main/hero_bg.v4.jpg"
+  )
+    bad.push("홈이 부르는 공식 서버 파일 이름을 읽지 못한다");
+  if (
+    officialNameProblems(["pages/main/hero_bg.v4.jpg", "common/ico_naver.svg"]).length ||
+    officialNameProblems(["pages/main/premium_visual_img_04.v4.jpg", "pages/main/brand_bg_m.v4.jpg"]).length !== 2
+  )
+    bad.push("공식 메인의 71개 목록 밖 파일 이름을 잡지 못한다");
+  if (
+    brokenImageProblems([
+      { src: "main/premium_visual_img_04.v4.jpg", naturalWidth: 0 },
+      { src: "main/hero_bg.v4.jpg", naturalWidth: 1920 },
+    ]).join() !== "main/premium_visual_img_04.v4.jpg"
+  )
+    bad.push("깨진 이미지(naturalWidth 0)를 잡지 못한다");
   fs.rmSync(probe, { recursive: true, force: true });
   if (line7Ok("서울 7호선 청라연장선 2030년 개통 예정")) bad.push("7호선 개통 연도를 잡지 못한다");
   if (line7Ok("7호선 국제업무단지역(예정)"))
@@ -825,10 +1013,11 @@ async function main() {
       option("shots", ""),
       list("only"),
       list("widths").map(Number),
+      option("official-assets", ""),
     );
   } else {
     console.error(
-      "사용법: node scripts/design-check.mjs <selftest|capture|verify> [--base URL] [--out 파일] [--baseline 파일] [--shots 폴더] [--only 경로,경로] [--widths 폭,폭]",
+      "사용법: node scripts/design-check.mjs <selftest|capture|verify> [--base URL] [--out 파일] [--baseline 파일] [--shots 폴더] [--only 경로,경로] [--widths 폭,폭] [--official-assets 폴더]",
     );
     process.exit(2);
   }
