@@ -7,7 +7,7 @@ export const Route = createFileRoute("/video")({
   component: Page,
 });
 
-const YT = "_wAuOJSTLek";
+const YT = "OPf_5C5WaJY";
 
 function Page() {
   const [play, setPlay] = useState(false);

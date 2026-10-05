@@ -21,7 +21,7 @@ const asset = (file: string) => img(MAIN + file);
 const common = (file: string) => img("/resources/img/common/" + file);
 
 /** 공식 홍보영상(유튜브 영상 번호). 공식과 같은 방식(유튜브 창)으로 연다. 카드의 썸네일은 styles.css 의 .om-hero__video_play 가 같은 영상의 유튜브 썸네일을 깐다. */
-const YOUTUBE_ID = "_wAuOJSTLek";
+const YOUTUBE_ID = "OPf_5C5WaJY";
 
 /** 공식 히스토리 연표. 7호선 칸만 연도 자리를 「시기 미정」으로 둔다(프로젝트 고정 규칙). */
 const HISTORY_EVENTS: { key: string; year: string; tbd?: boolean; file: string; alt: string; captions: [string, string][] }[] = [
