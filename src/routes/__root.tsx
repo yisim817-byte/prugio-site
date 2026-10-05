@@ -30,7 +30,9 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css",
+        href: "https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2.0.5/fonts/static/woff2/SUIT.css",
+        integrity: "sha384-mMsv9ePXdDSZ5/ow3/9MfU9yh0kB3kl9FhTuYEPbeOmoJWs1mpXtQ2AlPvHVDLqs",
+        crossOrigin: "anonymous",
       },
     ],
   }),
