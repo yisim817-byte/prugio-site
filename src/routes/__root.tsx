@@ -22,11 +22,15 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://cdn.jsdelivr.net", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Hahmlet:wght@300;400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Hahmlet:wght@300;400;500&family=Aboreto&display=swap",
       },
       {
         rel: "stylesheet",
         href: "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css",
       },
     ],
   }),

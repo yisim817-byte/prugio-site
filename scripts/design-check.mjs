@@ -71,6 +71,35 @@ const findBanned = (text) => BANNED.filter((w) => text.includes(w));
 /** 등록 이름은 「사전고객등록」 하나다. 예전 이름의 어떤 꼴(관심고객등록, 관심고객 등록, 관심고객)도 남기지 않는다. */
 const OLD_REGISTER_WORD = "관심고객";
 
+/** 홈의 복제 구간을 감싸는 표시(작업지시서 2). 이 안에서는 공식 문구 때문에 걸리는 표기 규칙 일부를 제외한다. */
+const OFFICIAL_MARK = "data-official-main";
+/** 복제 구간 안에서 제외하는 표기 규칙. 보고서에 그대로 적는다. */
+const OFFICIAL_EXEMPT = ["홈의 영문 대문자 라벨", "h1 서체(Hahmlet) 지정"];
+/** 홈에 남아 있으면 안 되는 공식 문의 번호와 외부 예약 주소(3절 2번). */
+const OFFICIAL_PHONE = /1833[-\s.]?3872/;
+const OFFICIAL_BOOKING = /here-customer/i;
+
+/** 공식 문의 번호·외부 예약 주소가 남은 자리를 돌려준다(없으면 빈 배열). */
+function officialResidue(html) {
+  const hits = [];
+  if (OFFICIAL_PHONE.test(html)) hits.push("공식 문의 번호");
+  if (OFFICIAL_BOOKING.test(html)) hits.push("외부 예약 주소(here-customer)");
+  return hits;
+}
+
+/** 히어로 영상 규칙: video 가 있고 muted·playsinline 이 붙어 있으며 정지컷 주소에 hero_bg 가 있어야 한다. */
+function heroProblems(hero) {
+  const out = [];
+  if (!hero) return ["히어로(#hero)가 없다"];
+  if (!hero.video) out.push("히어로에 video 가 없다");
+  else {
+    if (!hero.muted) out.push("히어로 video 에 muted 가 없다");
+    if (!hero.playsinline) out.push("히어로 video 에 playsinline 이 없다");
+  }
+  if (!hero.bg) out.push("히어로 정지컷 주소에 hero_bg 가 없다");
+  return out;
+}
+
 /** 소스 파일에서 낱말이 남은 자리를 「경로:줄」로 돌려준다. 화면에 그려지지 않는 문자열까지 본다. */
 function sourceResidue(root, word) {
   const hits = [];
@@ -185,6 +214,9 @@ function readHead(html) {
     answer: qa ? stripTags(qa[2]) : null,
     answerSource: qa ? stripTags(qa[3]) : null,
     stylesheets: links.filter((l) => l.rel === "stylesheet").map((l) => l.href),
+    loginLink: /<a\b[^>]*href="\/login"[^>]*>/.test(html),
+    formPost: /<form\b[^>]*\bmethod="post"/i.test(html),
+    body: html,
   };
 }
 
@@ -371,6 +403,7 @@ function inspect(noticeText) {
       large: size >= 24 || (size >= 18.66 && weight >= 700),
       unknown,
       inDialog: Boolean(el.closest('[role="dialog"]')),
+      inOfficial: Boolean(el.closest("[data-official-main]")),
     });
   }
 
@@ -410,6 +443,21 @@ function inspect(noticeText) {
     texts,
     line7,
     fontSans: getComputedStyle(document.body).fontFamily,
+    h1InOfficial: Boolean(document.querySelector("h1")?.closest("[data-official-main]")),
+    hero: (() => {
+      const hero = document.getElementById("hero");
+      if (!hero) return null;
+      const v = hero.querySelector("video");
+      const bgSrc = [
+        ...hero.querySelectorAll("img, source, video"),
+      ].map((n) => n.getAttribute("src") || n.getAttribute("srcset") || n.getAttribute("poster") || "");
+      return {
+        video: Boolean(v),
+        muted: Boolean(v && (v.muted || v.hasAttribute("muted"))),
+        playsinline: Boolean(v && v.hasAttribute("playsinline")),
+        bg: bgSrc.some((u) => u.includes("hero_bg")),
+      };
+    })(),
     fontH1: document.querySelector("h1")
       ? getComputedStyle(document.querySelector("h1")).fontFamily
       : "",
@@ -458,6 +506,7 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
       const extraTel = a.tel.filter((t) => !baseTel.includes(t));
       if (extraTel.length) fail(`${route}: 기록에 없던 전화 링크 ${extraTel.join(", ")}`);
       if (!a.tel.length) fail(`${route}: 전화 링크가 없다`);
+      if (a.status === 200 && !a.loginLink) fail(`${route}: 푸터에 관리자 로그인 링크(href="/login")가 없다`);
     }
     const home = after.pages["/"];
     if (!home.stylesheets.some((h) => h.includes("family=Hahmlet")))
@@ -476,6 +525,12 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
       fail(`소스에 「${OLD_REGISTER_WORD}」 표기가 남아 있다: ${hit}`);
   }
 
+  // 1-4. 홈에 공식 문의 번호·외부 예약 주소가 없는가, 모든 화면 푸터에 관리자 로그인 링크가 있는가, 로그인 폼이 post 인가
+  if (fs.existsSync(baselinePath)) {
+    const home = await get(base, "/");
+    for (const hit of officialResidue(home.body)) fail(`/: 홈에 ${hit}가 남아 있다`);
+  }
+
   // 1-3. 관리자 화면이 그대로 열리는가 (로그인 화면과 접수 관리 화면)
   const login = await get(base, "/login");
   if (login.status !== 200 || !login.body.includes('type="password"'))
@@ -483,6 +538,7 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
   const admin = await get(base, "/admin?receipt=");
   if (admin.status !== 200 || !admin.body.includes("접수 관리"))
     fail(`/admin: 접수 관리 화면이 열리지 않는다 (응답 ${admin.status})`);
+  if (login.status === 200 && !readHead(login.body).formPost) fail("/login: 로그인 폼에 method=\"post\" 가 없다");
 
   // 2. 화면 검사
   const allRoutes = await routesFor(base);
@@ -493,6 +549,7 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
   const browser = await launch();
   let checked = 0;
   let textCount = 0;
+  let officialSeen = false;
   const line7Seen = new Set();
   for (const width of widths) {
     const context = await browser.newContext(
@@ -571,10 +628,15 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
         }
         if (route === "/") {
           for (const t of r.texts) {
-            if (!t.inDialog && isCapsLabel(t.text))
+            if (!t.inDialog && !t.inOfficial && isCapsLabel(t.text))
               fail(`${where}: 영문 대문자 라벨 「${t.text}」`);
           }
-          if (!/Hahmlet/.test(r.fontH1)) fail(`${where}: h1 서체가 Hahmlet이 아니다 (${r.fontH1})`);
+          if (!r.h1InOfficial && !/Hahmlet/.test(r.fontH1))
+            fail(`${where}: h1 서체가 Hahmlet이 아니다 (${r.fontH1})`);
+          if (r.hero !== null) {
+            officialSeen = true;
+            for (const m of heroProblems(r.hero)) fail(`${where}: ${m}`);
+          }
           if (!/Pretendard/.test(r.fontSans))
             fail(`${where}: 본문 서체가 Pretendard가 아니다 (${r.fontSans})`);
         }
@@ -600,6 +662,8 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths) {
     await context.close();
   }
   if (!line7Seen.size) notes.push("7호선을 언급한 문장을 하나도 찾지 못했다");
+  if (officialSeen)
+    notes.push(`홈의 복제 구간(${OFFICIAL_MARK}) 안에서 제외한 표기 규칙: ${OFFICIAL_EXEMPT.join(", ")}. 금지 표현·「관심고객」·7호선·전화 링크·검색 설정·가로 넘침·h1 1개는 제외하지 않았다`);
 
   // 3. 화면 저장: 페이지 전체(하단 바는 맨 아래), 그리고 모바일 첫 화면(하단 바가 붙어 있는 모습)
   const shots = [];
@@ -677,6 +741,22 @@ function selftest() {
   fs.writeFileSync(path.join(probe, "src", "ok.ts"), 'export const t = "사전고객등록";\n');
   if (sourceResidue(probe, OLD_REGISTER_WORD).join() !== path.join("src", "alert.ts") + ":1")
     bad.push("소스에 남은 예전 등록 이름을 잡지 못한다");
+  if (officialResidue('<a href="tel:18333872">1833-3872</a>').length !== 1 || officialResidue("https://here-customer.example/x").length !== 1)
+    bad.push("홈에 남은 공식 문의 번호·외부 예약 주소를 잡지 못한다");
+  if (officialResidue('<a href="tel:16664250">1666-4250</a> /register').length)
+    bad.push("사이트 대표번호를 공식 번호로 잘못 잡는다");
+  if (
+    heroProblems({ video: true, muted: true, playsinline: true, bg: true }).length ||
+    heroProblems({ video: false, muted: false, playsinline: false, bg: true }).length !== 1 ||
+    heroProblems({ video: true, muted: false, playsinline: true, bg: false }).length !== 2 ||
+    heroProblems(null).length !== 1
+  )
+    bad.push("히어로 영상 규칙(video·muted·playsinline·hero_bg)을 제대로 잡지 못한다");
+  if (
+    readHead('<html><body><form method="post"></form><a href="/login">관리자 로그인</a></body></html>').loginLink !== true ||
+    readHead('<html><body><form></form></body></html>').formPost !== false
+  )
+    bad.push("푸터 관리자 로그인 링크·로그인 폼 method 를 읽지 못한다");
   fs.rmSync(probe, { recursive: true, force: true });
   if (line7Ok("서울 7호선 청라연장선 2030년 개통 예정")) bad.push("7호선 개통 연도를 잡지 못한다");
   if (line7Ok("7호선 국제업무단지역(예정)"))

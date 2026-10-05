@@ -1,23 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Nb, QuickAnswer } from "@/components/chrome";
-import {
-  DEPOSIT,
-  LOCATION_BLOCKS,
-  OVERVIEW_ROWS,
-  PLACES,
-  PREMIUM,
-  PROJECT_PHONE_DISPLAY,
-  PROJECT_PHONE_TEL,
-} from "@/data/content";
+import { OfficialMain } from "@/components/official-main";
+import { DEPOSIT, OVERVIEW_ROWS, PLACES, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { REGISTER_LABEL, REGISTER_NOTE } from "@/data/labels";
 import { ROLE } from "@/data/role";
-import type {
-  Chip,
-  HomeSectionKey,
-  RoleFigure,
-  RoleMain as RoleMainData,
-  SourceItem,
-} from "@/data/role-types";
+import type { Chip, RoleFigure, RoleMain as RoleMainData, SourceItem } from "@/data/role-types";
 
 /**
  * 홈 화면의 구성요소 (저장소마다 같은 파일).
@@ -128,6 +115,7 @@ export function DepositTable() {
 }
 
 /** 현장·견본주택·홍보관 목록. 값은 content.ts 의 PLACES. */
+/** 오시는 길 세 곳의 목록(역할 본문의 상태표 아래에서 쓴다). */
 function PlacesIndex() {
   return (
     <div className="ak-index">
@@ -350,17 +338,12 @@ function Figure({ figure }: { figure: RoleFigure }) {
 
 // ── 첫 화면 ──────────────────────────────────────────────────────────────────
 
-function RoleHero() {
+/** 검색용 요소 묶음의 머리: 「한눈에 보기」, 등록·전화 버튼, 역할 링크, 아치 창 도해. h1은 공식 히어로에 있다. */
+function InfoHead() {
   return (
-    <section className="ak-hero">
+    <section className="ak-hero" aria-label="한눈에 보기">
       <div className="ak-wrap ak-hero__grid">
         <div>
-          <p className="ak-hero__en" lang="en">
-            CHEONG NA ARK-ONE PRUGIO
-          </p>
-          <h1>
-            <span>{ROLE.h1[0]}</span> <span>{ROLE.h1[1]}</span>
-          </h1>
           <QuickAnswer path="/" bare />
           <div className="ak-hero__cta">
             <Link to="/register" className="ak-btn ak-btn--primary">
@@ -519,147 +502,23 @@ function RoleMain() {
   );
 }
 
-// ── 역할 본문 뒤의 공통 구간 ─────────────────────────────────────────────────
-
-const SECTION_TITLE: Record<HomeSectionKey, string> = {
-  overview: "사업개요",
-  location: "입지환경",
-  premium: "프리미엄",
-  subscription: "청약 안내",
-  contact: "오시는 길",
-  brandtown: "브랜드타운",
-};
-
-const OVERVIEW_KEYS = ["대지위치", "건축규모", "주택형", "주차"];
-
-function More({ to, label }: { to: string; label: string }) {
-  return (
-    <p className="ak-more">
-      <Link to={to} className="ak-link">
-        {label}
-      </Link>
-    </p>
-  );
-}
-
-function SectionBody({ kind }: { kind: HomeSectionKey }) {
-  if (kind === "overview") {
-    return (
-      <div>
-        <dl className="ak-kv">
-          {OVERVIEW_ROWS.filter(([k]) => OVERVIEW_KEYS.includes(k)).map(([k, v]) => (
-            <div key={k}>
-              <dt>{k}</dt>
-              <dd>
-                <Nb>{v}</Nb>
-              </dd>
-            </div>
-          ))}
-        </dl>
-        <More to="/overview" label="사업개요 보기" />
-      </div>
-    );
-  }
-  if (kind === "location") {
-    return (
-      <div>
-        <div className="ak-index">
-          {LOCATION_BLOCKS.map(([title, body]) => (
-            <div key={title} className="ak-index__row">
-              <div>
-                <p className="ak-index__t">{title}</p>
-                <p className="ak-index__d">
-                  <Nb>{body}</Nb>
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className="ak-note">일정은 예정·계획이며 변경될 수 있습니다.</p>
-        <More to="/location" label="입지환경 보기" />
-      </div>
-    );
-  }
-  if (kind === "premium") {
-    return (
-      <div>
-        <div className="ak-index">
-          {PREMIUM.map(([no, title, body]) => (
-            <div key={no} className="ak-index__row">
-              <div>
-                <p className="ak-index__t">{title}</p>
-                <p className="ak-index__d">
-                  <Nb>{body}</Nb>
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <More to="/premium" label="프리미엄 보기" />
-      </div>
-    );
-  }
-  if (kind === "subscription") {
-    return (
-      <div>
-        <SubscriptionIndex />
-        <p className="ak-note">최종 자격과 기준은 입주자모집공고와 청약홈을 따릅니다.</p>
-      </div>
-    );
-  }
-  if (kind === "contact") {
-    return (
-      <div>
-        <PlacesIndex />
-        <p className="ak-note">
-          대표번호{" "}
-          <a href={PROJECT_PHONE_TEL} className="ak-link ak-num">
-            {PROJECT_PHONE_DISPLAY}
-          </a>
-        </p>
-        <More to="/contact" label="오시는 길 보기" />
-      </div>
-    );
-  }
-  return (
-    <div>
-      <p className="ak-h3">총 2,911가구·실 (B1 & M5 블록 · 합산 규모, 단일 단지 아님)</p>
-      <p className="ak-lead">
-        청라를 대표하는 푸르지오 대규모 브랜드타운. 국제업무단지 B1 블록에 이어 M5 블록으로
-        이어집니다.
-      </p>
-      <More to="/brand" label="히스토리 보기" />
-    </div>
-  );
-}
-
-function HomeSection({ kind, tint }: { kind: HomeSectionKey; tint: boolean }) {
-  return (
-    <section className={tint ? "ak-sec ak-sec--tint" : "ak-sec"}>
-      <div className="ak-wrap ak-cols">
-        <h2 className="ak-h2">{SECTION_TITLE[kind]}</h2>
-        <SectionBody kind={kind} />
-      </div>
-    </section>
-  );
-}
-
 // ── 홈 전체 ──────────────────────────────────────────────────────────────────
 
-const TONE_CLASS = { paper: undefined, mist: "ak-zone--mist", dark: "ak-zone--dark" } as const;
+const TONE_CLASS = { paper: "ak-zone--paper", mist: "ak-zone--mist", dark: "ak-zone--dark" } as const;
 
-/** 홈 화면 본문. 역할 히어로와 띠, 역할 본문, 공통 구간 순서로 그린다. */
+/**
+ * 홈 화면 본문. 공식 메인의 7개 구간을 그대로 옮긴 OfficialMain 이 먼저 오고(작업지시서 2),
+ * 그 아래 「CONTACT US」 구간 다음·푸터 위에 검색용 요소 묶음(한눈에 보기, 역할 띠, 사이트별 안내)을 둔다.
+ * 예전 ROLE.sections 의 공통 구간(사업개요, 입지, 프리미엄, 오시는 길 등)은 복제 구간으로 대체했다.
+ */
 export function RoleHome() {
   return (
-    <>
+    <OfficialMain>
       <div className={TONE_CLASS[ROLE.tone]}>
-        <RoleHero />
+        <InfoHead />
         <RoleStrip />
       </div>
       <RoleMain />
-      {ROLE.sections.map((kind, i) => (
-        <HomeSection key={kind} kind={kind} tint={i % 2 === 0} />
-      ))}
-    </>
+    </OfficialMain>
   );
 }
