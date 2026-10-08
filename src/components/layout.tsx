@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Footer, Header, MobileBar, UtilityBar } from "@/components/chrome";
-import { SEO_ORIGIN, SEO_PAGES } from "@/data/seo";
+import { SEO_FAQS, SEO_ORIGIN, SEO_PAGES } from "@/data/seo";
 import { IMAGE_SIZES } from "@/data/image-sizes";
 
 // 헤더·푸터·상세 페이지 머리·「한눈에 보기」는 chrome.tsx 로 옮겼다. 기존 import 경로는 그대로 쓸 수 있다.
-export { Footer, QuickAnswer, SubHero } from "@/components/chrome";
+export { Footer, PageFaq, QuickAnswer, SubHero } from "@/components/chrome";
 
 export function Photo({
   src,
@@ -111,7 +111,12 @@ export function pageHead(title: string, path?: string) {
     links: url ? [{ rel: "canonical", href: url }] : [],
     scripts:
       seo && url && path
-        ? [{ type: "application/ld+json", children: JSON.stringify(pageJsonLd(full, description, url, path, seo.crumb)) }]
+        ? [
+            { type: "application/ld+json", children: JSON.stringify(pageJsonLd(full, seo.answer, url, path, seo.crumb)) },
+            ...(SEO_FAQS[path]?.length
+              ? [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(SEO_FAQS[path])) }]
+              : []),
+          ]
         : [],
   };
 }
@@ -124,6 +129,7 @@ function pageJsonLd(name: string, description: string, url: string, path: string
     description,
     url,
     inLanguage: "ko-KR",
+    dateModified: "2026-10-09",
   };
   if (path === "/") return { "@context": "https://schema.org", "@graph": [page] };
   return {
@@ -139,5 +145,17 @@ function pageJsonLd(name: string, description: string, url: string, path: string
         ],
       },
     ],
+  };
+}
+
+function faqJsonLd(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
   };
 }

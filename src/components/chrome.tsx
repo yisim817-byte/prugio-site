@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { OPERATOR_NOTICE, PROJECT_NAME, REGISTER_LABEL } from "@/data/labels";
-import { SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
+import { SEO_FAQS, SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
 
 /**
  * 모든 화면이 함께 쓰는 틀 (저장소마다 같은 파일).
@@ -177,6 +177,28 @@ export function Nb({ children }: { children: string }) {
 }
 
 /** 상세 페이지 머리. 이미지 없이 경로와 제목만 둔다. en은 예전 영문 라벨 자리로, 더 이상 그리지 않는다. */
+
+/** 역할 페이지 문답. 답은 SEO_FAQS(화면의 기존 문장)와 같다. */
+export function PageFaq({ path }: { path: string }) {
+  const items = SEO_FAQS[path];
+  if (!items?.length) return null;
+  return (
+    <section className="ak-qa-band" aria-label="문답">
+      <div className="ak-wrap">
+        <h2 className="ak-qa__h">문답</h2>
+        <dl className="ak-qa__p">
+          {items.map((item) => (
+            <div key={item.q} className="mt-4">
+              <dt className="font-medium">{item.q}</dt>
+              <dd className="mt-1">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 export function SubHero({ title, crumbs }: { en?: string; title: string; crumbs: string }) {
   return (
     <section className="ak-pagehead">

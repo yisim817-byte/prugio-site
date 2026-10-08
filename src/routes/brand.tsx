@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Photo, Shell, SourceNote, SubHero, pageHead, QuickAnswer } from "@/components/layout";
+import { Photo, Shell, SourceNote, SubHero, pageHead, PageFaq, QuickAnswer } from "@/components/layout";
 import { HISTORY, img } from "@/data/content";
 
 export const Route = createFileRoute("/brand")({
@@ -12,6 +12,7 @@ function Page() {
     <Shell>
       <SubHero en="HISTORY" title="히스토리" crumbs="사업안내 / 히스토리" />
       <QuickAnswer path="/brand" />
+      <PageFaq path="/brand" />
       <article className="ak-wrap ak-page">
         <Photo
           src={img("/resources/img/sub/brand_content_img.v4.jpg")}

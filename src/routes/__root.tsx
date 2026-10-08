@@ -18,6 +18,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
+      { rel: "preconnect", href: "https://arkone-prugio.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://cdn.jsdelivr.net", crossOrigin: "anonymous" },
       {

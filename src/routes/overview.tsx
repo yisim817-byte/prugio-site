@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nb } from "@/components/chrome";
-import { Photo, Shell, SourceNote, SubHero, pageHead, QuickAnswer } from "@/components/layout";
+import { Photo, Shell, SourceNote, SubHero, pageHead, PageFaq, QuickAnswer } from "@/components/layout";
 import { OVERVIEW_ROWS, img } from "@/data/content";
 
 export const Route = createFileRoute("/overview")({
@@ -13,9 +13,10 @@ function Page() {
     <Shell>
       <SubHero en="OVERVIEW" title="사업개요" crumbs="사업안내 / 사업개요" />
       <QuickAnswer path="/overview" />
+      <PageFaq path="/overview" />
       <article className="ak-wrap ak-page grid gap-10 md:grid-cols-[minmax(0,1fr)_280px] md:gap-16">
         <div>
-          <h2 className="ak-h2">압도적인 스케일, 독보적인 프리미엄</h2>
+          <h2 className="ak-h2">사업 규모와 구성</h2>
           <p className="ak-lead">청라에 다시없을 완벽한 주거중심</p>
           <dl className="ak-kv mt-10">
             {OVERVIEW_ROWS.map(([k, v]) => (

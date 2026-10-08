@@ -639,7 +639,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             </header>
             <article className="om-overview__panel" aria-labelledby="om-overview-panel-title">
               <h3 id="om-overview-panel-title" className="om-overview__panel_heading">
-                총 2,911가구<small>(B1 &amp; M5 블록)</small>
+                총 2,911가구<small>(B1 &amp; M5 블록 · 합산 규모, 단일 단지 아님)</small>
                 <br />
                 청라를 대표하는
                 <br />

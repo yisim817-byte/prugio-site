@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Nb, QuickAnswer } from "@/components/chrome";
+import { Nb, PageFaq, QuickAnswer } from "@/components/chrome";
 import { OfficialMain } from "@/components/official-main";
 import { DEPOSIT, OVERVIEW_ROWS, PLACES, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { REGISTER_LABEL, REGISTER_NOTE } from "@/data/labels";
@@ -345,6 +345,7 @@ function InfoHead() {
       <div className="ak-wrap ak-hero__grid">
         <div>
           <QuickAnswer path="/" bare />
+          <PageFaq path="/" />
           <div className="ak-hero__cta">
             <Link to="/register" className="ak-btn ak-btn--primary">
               {REGISTER_LABEL}
