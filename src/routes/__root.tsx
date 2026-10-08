@@ -19,8 +19,6 @@ export const Route = createRootRoute({
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
       { rel: "preconnect", href: "https://arkone-prugio.com", crossOrigin: "anonymous" },
-      { rel: "preload", as: "image", href: "https://arkone-prugio.com/resources/img/pages/main/hero_bg_m.v4.jpg", fetchPriority: "high", media: "(max-width: 1024px)" },
-      { rel: "preload", as: "image", href: "https://arkone-prugio.com/resources/img/pages/main/hero_bg.v4.jpg", fetchPriority: "high", media: "(min-width: 1025px)" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://cdn.jsdelivr.net", crossOrigin: "anonymous" },
       {
