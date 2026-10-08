@@ -621,7 +621,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       <section id="overview" className={`om-s om-overview${active("overview")}`} data-step={step("overview")} aria-labelledby="om-overview-title">
         <div className="om-overview__stage">
           <div className="om-overview__background" aria-hidden="true">
-            <img src={asset("overview_bg.v4.jpg")} alt="" loading="lazy" />
+            <img src={"/assets/opt/overview_bg.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/overview_bg.v4.jpg */} alt="" loading="lazy" />
             <span className="om-overview__dim" />
           </div>
           <div className="om-overview__content">
@@ -702,7 +702,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </span>
               ))}
             </p>
-            <img className="om-location__visual_image" src={asset("location_img.v4.png")} alt="" loading="lazy" />
+            <img className="om-location__visual_image" src={"/assets/opt/location_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/location_img.v4.png */} alt="" loading="lazy" />
             <div className="om-location__title_mask">
               <h2 id="om-location-title" className="om-location__title" lang="en">
                 ARK-ONE
@@ -902,7 +902,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             </article>
             <article className="om-premium__panel om-premium__panel-residence">
               <div className="om-premium__residence_visual">
-                <img className="om-premium__residence_image" src={asset("premium_img_left_03.v4.jpg")} alt="따뜻한 빛이 드는 주거 공간 이미지" loading="lazy" />
+                <img className="om-premium__residence_image" src={"/assets/opt/premium_img_left_03.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_img_left_03.v4.jpg */} alt="따뜻한 빛이 드는 주거 공간 이미지" loading="lazy" />
                 <div className="om-premium__residence_blur">
                   <div className="om-premium__residence_copy">
                     <h3 className="om-premium__residence_title">
@@ -922,7 +922,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
               </figure>
               <div className="om-premium__video_reel">
                 <figure className="om-premium__video om-premium__video-side">
-                  <LazyVideo src={asset("premium_video_03.mp4")} poster={asset("premium_poster_02.v4.jpg")} reduced={reduced} label="라이프스타일 영상" />
+                  <LazyVideo src={asset("premium_video_03.mp4")} poster={"/assets/opt/premium_poster_02.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
                   <figcaption className="om-premium__video_caption">이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
                 </figure>
                 <figure className="om-premium__video_echo">
@@ -956,8 +956,8 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
           <article className="om-brand__panel om-brand__panel-story">
             <img className="om-brand__panel_background" src={asset("brand_bg_02.v4.jpg")} alt="" loading="lazy" decoding="async" />
             <figure className="om-brand__story_visual">
-              <img src={asset("brand_visual_img.v4.jpg")} alt="잔잔하게 번지는 물결" loading="lazy" decoding="async" />
-              <LazyVideo className="om-brand__story_video" src={asset("brand_video.mp4")} poster={asset("brand_visual_img.v4.jpg")} reduced={reduced} label="자연을 어루만지는 손길 영상" />
+              <img src={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} alt="잔잔하게 번지는 물결" loading="lazy" decoding="async" />
+              <LazyVideo className="om-brand__story_video" src={asset("brand_video.mp4")} poster={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
               <figcaption>이미지컷</figcaption>
             </figure>
             <p className="om-brand__story_copy">
