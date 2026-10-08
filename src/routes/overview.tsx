@@ -17,7 +17,7 @@ function Page() {
       <article className="ak-wrap ak-page grid gap-10 md:grid-cols-[minmax(0,1fr)_280px] md:gap-16">
         <div>
           <h2 className="ak-h2">사업 규모와 구성</h2>
-          <p className="ak-lead">청라에 다시없을 완벽한 주거중심</p>
+          <p className="ak-lead">지하 5층~지상 49층, 6개 동, 1,855가구</p>
           <dl className="ak-kv mt-10">
             {OVERVIEW_ROWS.map(([k, v]) => (
               <div key={k}>
