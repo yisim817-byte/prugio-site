@@ -194,6 +194,7 @@ export function PageFaq({ path }: { path: string }) {
             </div>
           ))}
         </dl>
+        <p className="ak-qa__src">자료 기준 2026-10-09 · 출처 사업주체 공식 홈페이지(arkone-prugio.com)</p>
       </div>
     </section>
   );
