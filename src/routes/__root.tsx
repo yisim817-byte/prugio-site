@@ -14,6 +14,7 @@ export const Route = createRootRoute({
       { name: "google-site-verification", content: "NvrPz-qoa4YWNDb033ep9P5Bz5c6MN_L2D9MIWzqcxg" },
     ],
     links: [
+      { rel: "icon", type: "image/png", sizes: "96x96", href: "/favicon-96.png" },
       { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
       { rel: "icon", href: "/favicon.ico" },
       { rel: "stylesheet", href: appCss },
