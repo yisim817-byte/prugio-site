@@ -7,15 +7,15 @@ export const Route = createFileRoute("/video")({
   component: Page,
 });
 
-const YT = "_wAuOJSTLek";
+const YT = "OPf_5C5WaJY";
 
 function Page() {
   const [play, setPlay] = useState(false);
   return (
     <Shell>
       <SubHero en="MEDIA" title="홍보영상" crumbs="홍보센터 / 홍보영상" />
-      <article className="mx-auto max-w-4xl px-4 py-12">
-        <div className="aspect-video bg-ink">
+      <article className="ak-wrap ak-page">
+        <div className="aspect-video max-w-4xl bg-ink">
           {play ? (
             <iframe
               className="h-full w-full"

@@ -63,7 +63,7 @@ export function alertSetup() {
 
 export function telegramText(input: Pick<AlertInput, "receiptNo" | "createdAt">): string {
   return [
-    `[${SITE_LABEL}] 새 관심고객 접수`,
+    `[${SITE_LABEL}] 새 사전고객 접수`,
     `접수번호 ${input.receiptNo}`,
     input.createdAt,
     `관리화면 ${SITE_HOST}/admin?receipt=${encodeURIComponent(input.receiptNo)}`,

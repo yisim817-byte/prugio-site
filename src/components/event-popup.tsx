@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { PROJECT_PHONE_DISPLAY } from "@/data/content";
 
 const HIDE_DAY = "arkone-staff-apt-event-day";
 const SEEN = "arkone-staff-apt-event-seen";
@@ -20,7 +21,26 @@ export function AptEventPopup() {
     } catch {
       /* 저장을 못 해도 팝업은 연다 */
     }
-    setOpen(true);
+    // 홈의 인트로(공식 메인 복제)가 도는 동안에는 열지 않고, 끝난 뒤에 연다. 인트로가 없으면(「동작 줄이기」 등) 바로 연다.
+    const introAhead =
+      Boolean(document.querySelector("[data-official-main]")) &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!introAhead) {
+      setOpen(true);
+      return;
+    }
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      setOpen(true);
+    };
+    window.addEventListener("om:intro-done", show, { once: true });
+    const fallback = window.setTimeout(show, 9000);
+    return () => {
+      window.removeEventListener("om:intro-done", show);
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   useEffect(() => {
@@ -95,11 +115,11 @@ export function AptEventPopup() {
             아파트 사전고객등록 이벤트
           </h2>
           <p className="font-serif text-4xl text-forest">백화점 상품권 30만원</p>
-          <p className="text-sm tracking-wide text-sand">롯데 · 현대 · 신세계 중 선택</p>
+          <p className="text-sm tracking-wide text-bronze">롯데 · 현대 · 신세계 중 선택</p>
           <p className="border border-line bg-paper p-4 text-sm leading-6">
             사전고객등록 후 청약 당첨 및 MGM 인정조건을 충족하고 계약하신 고객 대상
           </p>
-          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다.</p>
+          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. 10월 중 OPEN 예정 · 일정 문의 {PROJECT_PHONE_DISPLAY}</p>
           <Link
             to="/event/apt"
             className="grid h-12 place-items-center bg-forest text-sm text-paper"

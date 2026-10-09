@@ -33,26 +33,27 @@ function Page() {
   return (
     <Shell>
       <SubHero en="APT EVENT" title="아파트 사전고객등록 이벤트" crumbs="아파트 이벤트" />
-      <article className="mx-auto max-w-3xl px-4 py-12">
-        <p className="text-sm tracking-[0.16em] text-forest">아파트 이벤트</p>
-        <h2 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">백화점 상품권 30만원</h2>
-        <p className="mt-3 text-sm tracking-wide">롯데 · 현대 · 신세계 중 선택</p>
-        <p className="mt-6 border border-line p-4 text-sm leading-7">
+      <article className="ak-wrap ak-page">
+        <div className="max-w-3xl">
+        <p className="text-sm font-semibold text-forest">아파트 이벤트</p>
+        <h2 className="ak-h2 mt-3">백화점 상품권 30만원</h2>
+        <p className="mt-3 text-sm">롯데 · 현대 · 신세계 중 선택</p>
+        <p className="mt-6 border-y border-line py-4 leading-7">
           사전고객등록 후 청약 당첨 및 MGM 인정조건을 충족하고 계약하신 아파트 고객 대상입니다. 등록만으로 지급되지 않습니다.
         </p>
         <p className="mt-4 text-sm font-medium leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다.</p>
 
-        <h3 className="mt-12 font-serif text-2xl">지급까지 순서</h3>
-        <ol className="mt-4 space-y-3">
+        <h3 className="ak-h3 mt-12">지급까지 순서</h3>
+        <ol className="mt-4 border-t border-ink">
           {STEPS.map((step, index) => (
-            <li key={step} className="grid grid-cols-[2.5rem_1fr] gap-3 border-t border-line py-3 text-sm leading-6">
+            <li key={step} className="grid grid-cols-[2.5rem_1fr] items-baseline gap-3 border-b border-line py-3 leading-7">
               <span className="font-serif text-xl">{index + 1}</span>
               <span>{step}</span>
             </li>
           ))}
         </ol>
 
-        <h3 className="mt-12 font-serif text-2xl">유의사항</h3>
+        <h3 className="ak-h3 mt-12">유의사항</h3>
         <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm leading-7">
           {TERMS.map((term) => (
             <li key={term}>{term}</li>
@@ -60,13 +61,14 @@ function Page() {
         </ol>
         <p className="mt-6 text-sm leading-6">
           등록 확인 및 문의{" "}
-          <a href={PROJECT_PHONE_TEL} className="font-medium text-forest">
+          <a href={PROJECT_PHONE_TEL} className="ak-link ak-num">
             {PROJECT_PHONE_DISPLAY}
           </a>
         </p>
-        <Link to="/register" className="mt-8 grid h-12 place-items-center bg-forest text-sm text-paper">
+        <Link to="/register" className="ak-btn ak-btn--primary ak-btn--block mt-8">
           사전고객등록하기
         </Link>
+        </div>
       </article>
     </Shell>
   );

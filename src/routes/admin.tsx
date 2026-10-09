@@ -276,7 +276,7 @@ function ChangePassword({ loginId, first = false }: { loginId: string; first?: b
   }
 
   return (
-    <form onSubmit={onSubmit} className={first ? "mt-8 max-w-md space-y-3 border border-ink p-5 text-sm" : "max-w-md space-y-3 text-sm"} noValidate>
+    <form method="post" onSubmit={onSubmit} className={first ? "mt-8 max-w-md space-y-3 border border-ink p-5 text-sm" : "max-w-md space-y-3 text-sm"} noValidate>
       <h2 className="font-medium">{first ? "처음 로그인 — 비밀번호를 바꿔 주세요" : "내 비밀번호 변경"}</h2>
       {first ? <p className="leading-6 text-muted">발급받은 임시 비밀번호를 새 비밀번호로 바꿔야 접수 목록이 열립니다. 바꾼 뒤에는 새 비밀번호로 다시 로그인합니다.</p> : null}
       <input type="text" name="username" autoComplete="username" value={loginId} readOnly hidden />

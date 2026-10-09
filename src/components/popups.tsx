@@ -14,9 +14,9 @@ const CARDS = [
   },
   {
     src: img("/upload/popup/20260921144204_6313.jpg"),
-    alt: "관심고객 이벤트. 기간 2026.9.30–11.29.",
+    alt: "사전고객 이벤트. 기간 2026.9.30–11.29.",
     href: "/register",
-    label: "관심고객등록",
+    label: "사전고객등록",
     phone: false,
   },
   {
