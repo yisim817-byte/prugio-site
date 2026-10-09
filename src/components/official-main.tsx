@@ -25,12 +25,12 @@ const YOUTUBE_ID = "OPf_5C5WaJY";
 
 /** 공식 히스토리 연표. 7호선 칸만 연도 자리를 「시기 미정」으로 둔다(프로젝트 고정 규칙). */
 const HISTORY_EVENTS: { key: string; year: string; tbd?: boolean; file: string; alt: string; captions: [string, string][] }[] = [
-  { key: "2026", year: "2026", file: "history_img_2026.v4.jpg", alt: "하나드림타운 조감도", captions: [["청라하늘대교", "(개통)"], ["하나드림타운", "(예정)"]] },
+  { key: "2026", year: "2026", file: "history_img_2026.v4.jpg", alt: "하나드림타운 조감도", captions: [["청라하늘대교", "(개통)"], ["하나드림타운", "(준공·개관)"]] },
   { key: "2028", year: "2028", file: "history_img_2028.v4.jpg", alt: "돔구장과 스타필드 청라 공사 현장", captions: [["돔구장&스타필드 청라", "(개장 예정)"]] },
-  { key: "2029", year: "2029", file: "history_img_2029.v4.jpg", alt: "", captions: [["서울아산청라병원", "(예정)"]] },
+  { key: "2029", year: "2029", file: "history_img_2029.v4.jpg", alt: "서울아산청라병원 조감도", captions: [["서울아산청라병원", "(예정)"]] },
   { key: "2030", year: "시기 미정", tbd: true, file: "history_img_2030.v4.jpg", alt: "7호선 국제업무단지역 예정지", captions: [["7호선 국제업무단지역", "(예정 · 개통 시기 미정)"]] },
   { key: "2031", year: "2031", file: "history_img_2031.v4.jpg", alt: "영상문화복합단지 조감도", captions: [["영상문화복합단지", "(계획)"]] },
-  { key: "ark_one", year: "2031", file: "history_img_ark_one.v4.jpg", alt: "청라 아크원 푸르지오 단지 조감도", captions: [["청라 아크원 푸르지오", "(예정)"]] },
+  { key: "ark_one", year: "공고 후", file: "history_img_ark_one.v4.jpg", alt: "청라 아크원 푸르지오 투시도", captions: [["청라 아크원 푸르지오", "(입주 시기 공고문 확인)"]] },
 ];
 
 const BRAND_CARDS = [
@@ -570,7 +570,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 <p className="om-hero__quick_item om-hero__quick_item-policy">
                   <span className="om-blind">분양가 상한제 적용단지</span>
                   <img className="om-hero__quick_orbit" src={asset("hero_circle_text.svg")} alt="" aria-hidden="true" />
-                  <img className="om-hero__quick_content" src={asset("hero_circle_01.svg")} alt="" aria-hidden="true" />
+                  <img className="om-hero__quick_content" src={asset("hero_circle_01.svg")} alt="분양가 상한제 적용단지" />
                 </p>
                 <Link to="/register" className="om-hero__quick_item om-hero__quick_item-regist" aria-label={REGISTER_LABEL}>
                   <img className="om-hero__quick_orbit" src={asset("hero_circle_text.svg")} alt="" aria-hidden="true" />
@@ -806,7 +806,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
           </div>
           <div className="om-history__promotion_collage" aria-hidden="true">
             <img className="om-history__promotion_image om-history__promotion_image-02" src={asset("history_img_02.v4.jpg")} alt="" loading="lazy" />
-            <img className="om-history__promotion_image om-history__promotion_image-ark_one" src={asset("history_img_03.v4.jpg")} alt="" loading="lazy" />
+            <img className="om-history__promotion_image om-history__promotion_image-ark_one" src={asset("history_img_03.v4.jpg")} alt="청라 아크원 푸르지오 투시도" loading="lazy" />
             <img className="om-history__promotion_image om-history__promotion_image-01" src={asset("history_img_01.v4.jpg")} alt="" loading="lazy" />
           </div>
           <img className="om-history__promotion_logo" src={asset("history_logo.svg")} alt="푸르지오" loading="lazy" />
