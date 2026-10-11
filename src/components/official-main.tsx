@@ -20,9 +20,6 @@ const MAIN = "/resources/img/pages/main/";
 const asset = (file: string) => img(MAIN + file);
 const common = (file: string) => img("/resources/img/common/" + file);
 
-/** 공식 홍보영상(유튜브 영상 번호). 공식과 같은 방식(유튜브 창)으로 연다. 카드의 썸네일은 styles.css 의 .om-hero__video_play 가 같은 영상의 유튜브 썸네일을 깐다. */
-const YOUTUBE_ID = "OPf_5C5WaJY";
-
 /** 공식 히스토리 연표. 7호선 칸만 연도 자리를 「시기 미정」으로 둔다(프로젝트 고정 규칙). */
 const HISTORY_EVENTS: { key: string; year: string; tbd?: boolean; file: string; alt: string; captions: [string, string][] }[] = [
   { key: "2026", year: "2026", file: "history_img_2026.v4.jpg", alt: "하나드림타운 조감도", captions: [["청라하늘대교", "(개통)"], ["하나드림타운", "(준공·개관)"]] },
@@ -167,30 +164,6 @@ function Intro({ onDone }: { onDone: () => void }) {
       <button type="button" className="om-intro__skip" onClick={onDone} lang="en" aria-label="인트로 건너뛰기">
         SKIP
       </button>
-    </div>
-  );
-}
-
-/** 공식 홍보영상 창. */
-function VideoModal({ onClose }: { onClose: () => void }) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-  return (
-    <div className="om-modal" role="dialog" aria-modal="true" aria-label="청라 아크원 홍보영상" onClick={onClose}>
-      <div className="om-modal__frame" onClick={(e) => e.stopPropagation()}>
-        <iframe
-          title="청라 아크원 홍보영상"
-          src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0&playsinline=1`}
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
-        <button type="button" className="om-modal__close" onClick={onClose} aria-label="닫기">
-          ×
-        </button>
-      </div>
     </div>
   );
 }
@@ -417,7 +390,6 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
   const pc = useMedia(PC, false);
   const [mounted, setMounted] = useState(false);
   const [intro, setIntro] = useState(false);
-  const [video, setVideo] = useState(false);
   const [define, setDefine] = useState(false);
   const [visual, setVisual] = useState(0);
   const root = useRef<HTMLDivElement>(null);
@@ -555,17 +527,6 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                   SCROLL
                 </span>
               </a>
-              <div className="om-hero__video_cta">
-                <button type="button" className="om-hero__video_trigger" onClick={() => setVideo(true)} aria-label="청라 아크원 홍보영상 재생">
-                  <span className="om-hero__video_label">
-                    <b>청라 아크원</b> <br className="om-m-only" />
-                    홍보영상
-                  </span>
-                  <span className="om-hero__video_play" aria-hidden="true">
-                    <img src={asset("ico_yt.svg")} alt="" />
-                  </span>
-                </button>
-              </div>
               <div className="om-hero__quick">
                 <p className="om-hero__quick_item om-hero__quick_item-policy">
                   <span className="om-blind">분양가 상한제 적용단지</span>
@@ -1067,7 +1028,6 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
         {children}
       </section>
 
-      {video ? <VideoModal onClose={() => setVideo(false)} /> : null}
     </div>
   );
 }
