@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { Shell, SubHero, pageHead } from "@/components/layout";
 
 export const Route = createFileRoute("/video")({
@@ -7,34 +6,12 @@ export const Route = createFileRoute("/video")({
   component: Page,
 });
 
-const YT = "OPf_5C5WaJY";
-
 function Page() {
-  const [play, setPlay] = useState(false);
   return (
     <Shell>
       <SubHero en="MEDIA" title="홍보영상" crumbs="홍보센터 / 홍보영상" />
       <article className="ak-wrap ak-page">
-        <div className="aspect-video max-w-4xl bg-ink">
-          {play ? (
-            <iframe
-              className="h-full w-full"
-              src={`https://www.youtube-nocookie.com/embed/${YT}?autoplay=1&rel=0&playsinline=1`}
-              title="청라 아크원 홍보영상"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <button type="button" className="relative h-full w-full" onClick={() => setPlay(true)}>
-              <img
-                src={`https://img.youtube.com/vi/${YT}/maxresdefault.jpg`}
-                alt="영상 썸네일"
-                className="h-full w-full object-cover"
-              />
-              <span className="absolute inset-0 grid place-items-center bg-ink/30 text-sm text-paper">재생</span>
-            </button>
-          )}
-        </div>
+        <p>현재 등록된 홍보영상이 없습니다.</p>
       </article>
     </Shell>
   );
