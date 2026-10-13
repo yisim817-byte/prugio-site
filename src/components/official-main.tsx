@@ -517,7 +517,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 <span className="om-hero__role">{ROLE.h1[1]}</span>
               </h1>
               <span className="om-hero__open">
-                <strong>모집공고 10.22 · GRAND OPEN 10.23</strong>예정
+                <strong>모집공고 10.22 · GRAND OPEN 10.30</strong>예정
               </span>
             </div>
             <div className="om-hero__ui">
