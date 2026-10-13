@@ -109,9 +109,25 @@ export function AptEventPopup() {
             ×
           </button>
         </div>
+        <section className="space-y-3 border-b border-line px-5 py-6" aria-labelledby="apt-event-pop-title">
+          <h2 id="apt-event-pop-title" className="font-serif text-2xl leading-snug">
+            청라 아크원 푸르지오 분양 일정 안내
+          </h2>
+          <dl className="divide-y divide-line border-y border-line text-sm leading-6">
+            <div className="flex flex-wrap justify-between gap-x-3 py-3">
+              <dt className="text-forest">입주자모집공고</dt>
+              <dd className="font-semibold">2026.10.22(목) 예정</dd>
+            </div>
+            <div className="flex flex-wrap justify-between gap-x-3 py-3">
+              <dt className="text-forest">GRAND OPEN(견본주택 오픈)</dt>
+              <dd className="font-semibold">2026.10.30(금)~11.01(일) 예정</dd>
+            </div>
+          </dl>
+          <p className="text-xs leading-5 text-ink/70">※ 일정은 사업주체 사정에 따라 변경될 수 있으며, 확정 내용은 입주자모집공고를 확인해 주시기 바랍니다.</p>
+        </section>
         <div className="space-y-4 px-5 py-6">
           <p className="text-sm text-forest">아파트 이벤트</p>
-          <h2 id="apt-event-pop-title" className="font-serif text-3xl leading-snug">
+          <h2 className="font-serif text-3xl leading-snug">
             아파트 사전고객등록 이벤트
           </h2>
           <p className="font-serif text-4xl text-forest">백화점 상품권 30만원</p>
@@ -119,7 +135,7 @@ export function AptEventPopup() {
           <p className="border border-line bg-paper p-4 text-sm leading-6">
             사전고객등록 후 청약 당첨 및 MGM 인정조건을 충족하고 계약하신 고객 대상
           </p>
-          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. <span className="whitespace-nowrap">모집공고 10.22 · GRAND OPEN 10.30 예정</span> · <span className="whitespace-nowrap">일정 문의 {PROJECT_PHONE_DISPLAY}</span></p>
+          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. <span className="whitespace-nowrap">일정 문의 {PROJECT_PHONE_DISPLAY}</span></p>
           <Link
             to="/event/apt"
             className="grid h-12 place-items-center bg-forest text-sm text-paper"
