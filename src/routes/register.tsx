@@ -97,6 +97,7 @@ function Page() {
             <Field label="동" error="">
               <input required minLength={1} maxLength={20} value={dong} onChange={(e) => setDong(e.target.value)} className={inputClass} placeholder="예: 청라동" />
             </Field>
+            <p className="border border-line bg-paper p-3 text-sm leading-6">※ 동일 현장의 다른 홈페이지·분양 채널에 중복으로 등록하신 경우, 상품권 지급이 제한될 수 있습니다.</p>
             <label className="flex items-start gap-3 text-sm leading-6">
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-5 w-5" />
               <span>
