@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Shell, SubHero, pageHead } from "@/components/layout";
 
 export const Route = createFileRoute("/video")({
-  head: () => pageHead("홍보영상", "/video"),
+  head: () => pageHead("홍보영상"),
   component: Page,
 });
 
