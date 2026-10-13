@@ -101,7 +101,7 @@ function Page() {
             <label className="flex items-start gap-3 text-sm leading-6">
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-5 w-5" />
               <span>
-                <Nb>개인정보 수집·이용에 동의합니다. 처리자는 HUMANE KOREA이고, 항목은 성명·휴대전화·생년월일 앞 6자리·시군구동이며, HUMANE KOREA가 삭제할 때까지 보유합니다.</Nb>{" "}
+                <Nb>개인정보 수집·이용에 동의합니다. 항목은 성명·휴대전화·생년월일 앞 6자리·시군구동이며, 삭제할 때까지 보유합니다.</Nb>{" "}
                 <Link to="/privacy" className="underline">처리방침</Link>
               </span>
             </label>

@@ -91,7 +91,6 @@ export function Footer() {
       <div className="ak-wrap ak-ft__in">
         <div>
           <p className="ak-ft__name">{PROJECT_NAME}</p>
-          <p>안내 사이트</p>
         </div>
         <div>
           <dl>
@@ -102,7 +101,7 @@ export function Footer() {
             <div>
               <dt>사업 주체</dt>
               <dd>
-                시행 ㈜청라스마트시티 · 시공 대우건설.
+                시행 ㈜청라스마트시티 · 시공 대우건설
               </dd>
             </div>
             <div>
@@ -112,10 +111,6 @@ export function Footer() {
                 관계기관 사정으로 변경·취소될 수 있습니다. 주소의 행정구역은 계약 전 확인이
                 필요합니다.
               </dd>
-            </div>
-            <div>
-              <dt>상표</dt>
-              <dd>PRUGIO 상표권은 대우건설에 있습니다.</dd>
             </div>
           </dl>
           <div className="ak-ft__links">
