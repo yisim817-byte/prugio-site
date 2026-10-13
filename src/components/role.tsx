@@ -512,6 +512,26 @@ const TONE_CLASS = { paper: "ak-zone--paper", mist: "ak-zone--mist", dark: "ak-z
  * 그 아래 「CONTACT US」 구간 다음·푸터 위에 검색용 요소 묶음(한눈에 보기, 역할 띠, 사이트별 안내)을 둔다.
  * 예전 ROLE.sections 의 공통 구간(사업개요, 입지, 프리미엄, 오시는 길 등)은 복제 구간으로 대체했다.
  */
+/** 사이트 담당 주제의 고유 문단 (추가 섹션). */
+function RoleStory() {
+  const story = ROLE.story;
+  if (!story) return null;
+  return (
+    <section className="ak-sec" aria-labelledby="role-story-title">
+      <div className="ak-wrap">
+        <h2 id="role-story-title" className="ak-h2">
+          {story.title}
+        </h2>
+        {story.paras.map((p) => (
+          <p key={p} className="ak-lead">
+            {p}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function RoleHome() {
   return (
     <OfficialMain>
@@ -520,6 +540,7 @@ export function RoleHome() {
         <RoleStrip />
       </div>
       <RoleMain />
+      <RoleStory />
     </OfficialMain>
   );
 }

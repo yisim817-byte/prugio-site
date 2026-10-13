@@ -445,6 +445,11 @@ export function injectGrokPwaHead(html, ctx = {}) {
     host,
     documentTitle,
   );
+  // Keep route-level og:title/description/url/type emitted by pageHead (per-page share cards).
+  const pageOg = new Map();
+  for (const m of String(html).matchAll(/<meta\b[^>]*\bproperty\s*=\s*["'](og:(?:title|description|url|type))["'][^>]*>/gi)) {
+    if (!pageOg.has(m[1].toLowerCase())) pageOg.set(m[1].toLowerCase(), m[0]);
+  }
   let next = stripShareMetaTags(html);
   if (!readGrokExtensionsEnabled()) next = stripGrokExtensionsScript(next);
 
@@ -458,7 +463,13 @@ export function injectGrokPwaHead(html, ctx = {}) {
 
   next = insertAfterHeadOpen(
     next,
-    grokOgHeadTags({ host, appName, site, documentTitle, cwd }).join(""),
+    [
+      ...grokOgHeadTags({ host, appName, site, documentTitle, cwd }).filter((tag) => {
+        const k = tag.match(/property="([^"]+)"/);
+        return !(k && pageOg.has(k[1].toLowerCase()));
+      }),
+      ...pageOg.values(),
+    ].join(""),
   );
 
   if (readGrokExtensionsEnabled() && !next.includes("/grok-app-builder/extensions.js")) {

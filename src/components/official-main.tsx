@@ -663,7 +663,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </span>
               ))}
             </p>
-            <img className="om-location__visual_image" src={"/assets/opt/location_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/location_img.v4.png */} alt="" loading="lazy" />
+            <img className="om-location__visual_image" src={"/assets/opt/location_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/location_img.v4.png */} alt="청라 아크원 푸르지오 입지환경 이미지" loading="lazy" />
             <div className="om-location__title_mask">
               <h2 id="om-location-title" className="om-location__title" lang="en">
                 ARK-ONE
@@ -692,7 +692,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </Link>
               </div>
               <figure className="om-location__map" role="img" aria-label="청라 국제도시 내 청라 아크원 푸르지오 위치">
-                <img className="om-location__map_image" src={asset("location_map.v4.png")} alt="" loading="lazy" />
+                <img className="om-location__map_image" src={asset("location_map.v4.png")} alt="청라 아크원 푸르지오 위치도" loading="lazy" />
                 <picture className="om-location__bubble">
                   <source media="(max-width: 1024px)" srcSet={asset("location_bubble_m.v4.png")} />
                   <img src={asset("location_bubble.v4.png")} alt="" loading="lazy" />
@@ -934,7 +934,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             </p>
             <div className="om-brand__story_footer" aria-label="Brand Story" lang="en">
               <span>BRAND</span>
-              <img src={asset("brand_logo.svg")} alt="" loading="lazy" decoding="async" />
+              <img src={asset("brand_logo.svg")} alt="푸르지오" loading="lazy" decoding="async" />
               <span>STORY</span>
             </div>
           </article>
@@ -943,7 +943,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
               <div className="om-brand__gallery_content">
                 <img className="om-brand__panel_background" src={asset("brand_bg_03.v4.jpg")} alt="" loading="lazy" decoding="async" />
                 <header className="om-brand__gallery_header">
-                  <img className="om-brand__gallery_emblem" src={asset("brand_logo.svg")} alt="" loading="lazy" decoding="async" />
+                  <img className="om-brand__gallery_emblem" src={asset("brand_logo.svg")} alt="푸르지오" loading="lazy" decoding="async" />
                   <p className="om-brand__gallery_brand" lang="en">
                     PRUGIO
                   </p>

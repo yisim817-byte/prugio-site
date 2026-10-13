@@ -74,4 +74,6 @@ export type Role = {
   stripSource: SourceItem[];
   main: RoleMain;
   sections: HomeSectionKey[];
+  /** 홈 고유 문단 (사이트 담당 주제). 사실 원장 값만 쓴다. */
+  story?: { title: string; paras: string[] };
 };

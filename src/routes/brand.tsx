@@ -10,7 +10,7 @@ export const Route = createFileRoute("/brand")({
 function Page() {
   return (
     <Shell>
-      <SubHero en="HISTORY" title="히스토리" crumbs="사업안내 / 히스토리" />
+      <SubHero en="HISTORY" title="청라 푸르지오 브랜드타운 2,911가구·실" crumbs="사업안내 / 히스토리" />
       <QuickAnswer path="/brand" />
       <PageFaq path="/brand" />
       <article className="ak-wrap ak-page">

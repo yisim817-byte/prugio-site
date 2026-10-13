@@ -2,6 +2,7 @@ import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-r
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
+import { SEO_ORIGIN } from "@/data/seo";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -12,6 +13,7 @@ export const Route = createRootRoute({
       { name: "robots", content: "noindex, nofollow" },
       { name: "theme-color", content: "#1c3a32" },
       { name: "google-site-verification", content: "NvrPz-qoa4YWNDb033ep9P5Bz5c6MN_L2D9MIWzqcxg" },
+      { name: "naver-site-verification", content: "cb3bb5704a089865ac157fc0f014c243fdc70c81" },
     ],
     links: [
       { rel: "icon", type: "image/png", sizes: "144x144", href: "/g-icon-144.png?v=20261009" },
@@ -35,6 +37,18 @@ export const Route = createRootRoute({
         href: "https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2.0.5/fonts/static/woff2/SUIT.css",
         integrity: "sha384-mMsv9ePXdDSZ5/ow3/9MfU9yh0kB3kl9FhTuYEPbeOmoJWs1mpXtQ2AlPvHVDLqs",
         crossOrigin: "anonymous",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "청라 아크원 푸르지오",
+          url: SEO_ORIGIN,
+          telephone: "+82-1533-9014",
+        }),
       },
     ],
   }),

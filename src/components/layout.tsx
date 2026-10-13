@@ -103,6 +103,7 @@ export function pageHead(title: string, path?: string) {
       ...(url
         ? [
             { property: "og:title", content: full },
+            { property: "og:description", content: description },
             { property: "og:url", content: url },
             { property: "og:type", content: "website" },
           ]
