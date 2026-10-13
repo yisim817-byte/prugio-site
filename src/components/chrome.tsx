@@ -96,14 +96,13 @@ export function Footer() {
         <div>
           <dl>
             <div>
-              <dt>운영·개인정보 처리자</dt>
-              <dd>HUMANE 운영자. 대표번호 {PROJECT_PHONE_DISPLAY}.</dd>
+              <dt>개인정보 처리자</dt>
+              <dd>HUMANE KOREA. 대표번호 {PROJECT_PHONE_DISPLAY}.</dd>
             </div>
             <div>
               <dt>사업 주체</dt>
               <dd>
-                시행 ㈜청라스마트시티 · 시공 대우건설. 사업주체 공개자료에 적힌 사업 주체이며, 이
-                사이트를 운영한다는 뜻이 아닙니다.
+                시행 ㈜청라스마트시티 · 시공 대우건설.
               </dd>
             </div>
             <div>
