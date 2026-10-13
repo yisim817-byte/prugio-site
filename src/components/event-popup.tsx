@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { PROJECT_PHONE_DISPLAY } from "@/data/content";
 
 const HIDE_DAY = "arkone-staff-apt-event-day";
-const SEEN = "arkone-staff-apt-event-seen";
 
 export function AptEventPopup() {
   const [open, setOpen] = useState(false);
@@ -16,7 +15,6 @@ export function AptEventPopup() {
 
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(SEEN) === "1") return;
       if (localStorage.getItem(HIDE_DAY) === new Date().toISOString().slice(0, 10)) return;
     } catch {
       /* 저장을 못 해도 팝업은 연다 */
@@ -88,11 +86,6 @@ export function AptEventPopup() {
       } catch {
         /* ignore */
       }
-    }
-    try {
-      sessionStorage.setItem(SEEN, "1");
-    } catch {
-      /* ignore */
     }
     setOpen(false);
   }
