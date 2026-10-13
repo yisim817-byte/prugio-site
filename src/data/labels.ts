@@ -9,11 +9,5 @@ export const REGISTER_LABEL = "사전고객등록";
 /** 등록 버튼 가까이에 항상 붙는 안내. */
 export const REGISTER_NOTE = "사전고객등록은 공식 청약 신청이 아닙니다.";
 
-/** 헤더 위 운영 주체 표시 줄. [0]은 굵게, [1]은 보통 굵기로 보인다. */
-export const OPERATOR_NOTICE = [
-  "분양 상담 직원이 운영하는 안내 사이트입니다.",
-  "사업주체 홈페이지가 아닙니다.",
-] as const;
-
 /** 헤더와 푸터에 쓰는 현장명. */
 export const PROJECT_NAME = "청라 아크원 푸르지오";

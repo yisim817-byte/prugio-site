@@ -2,25 +2,14 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
-import { OPERATOR_NOTICE, PROJECT_NAME, REGISTER_LABEL } from "@/data/labels";
+import { PROJECT_NAME, REGISTER_LABEL } from "@/data/labels";
 import { SEO_FAQS, SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
 
 /**
  * 모든 화면이 함께 쓰는 틀 (저장소마다 같은 파일).
- * 운영 주체 표시 줄, 헤더, 푸터, 모바일 하단 바, 상세 페이지 머리, 「한눈에 보기」.
+ * 헤더, 푸터, 모바일 하단 바, 상세 페이지 머리, 「한눈에 보기」.
  * 스타일은 src/styles.css 의 ak- 클래스에 있다.
  */
-
-/** 헤더 위 한 줄. 이 사이트의 운영 주체를 모든 화면에서 먼저 밝힌다. */
-export function UtilityBar() {
-  return (
-    <div className="ak-util" role="note" aria-label="사이트 운영 안내">
-      <p className="ak-wrap">
-        <b>{OPERATOR_NOTICE[0]}</b> <span>{OPERATOR_NOTICE[1]}</span>
-      </p>
-    </div>
-  );
-}
 
 export function Header() {
   const [open, setOpen] = useState(false);

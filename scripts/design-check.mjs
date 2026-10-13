@@ -48,7 +48,8 @@ const SHOT_ROUTES = [
   "/register",
 ];
 const NO_MOBILE_BAR = ["/register", "/login"];
-const NOTICE = "사업주체 홈페이지가 아닙니다";
+/** 헤더 위 운영 주체 표시 줄은 두지 않는다(대표 지시 2026-10-13). 이 문구가 화면에 다시 보이면 실패로 본다. */
+const REMOVED_NOTICE = ["사업주체 홈페이지가 아닙니다", "직원이 운영하는 안내 사이트"];
 
 // ── 문구 규칙 ────────────────────────────────────────────────────────────────
 const BANNED = [
@@ -396,7 +397,7 @@ async function launch() {
 }
 
 /** 화면에서 실제로 읽은 값. 문자열로 넘겨 브라우저 안에서 실행한다. */
-function inspect(noticeText) {
+function inspect(removedNotice) {
   const de = document.documentElement;
   const visible = (el) => {
     const cs = getComputedStyle(el);
@@ -533,7 +534,6 @@ function inspect(noticeText) {
   }
 
   const siteBtn = document.querySelector("#site-info .ak-btn--primary");
-  const util = document.querySelector(".ak-util");
   const bar = document.querySelector(".ak-mbar");
   const barStyle = bar ? getComputedStyle(bar) : null;
   return {
@@ -543,7 +543,7 @@ function inspect(noticeText) {
     sideScroll,
     dialog: Boolean(document.querySelector('[role="dialog"]')),
     h1: [...document.querySelectorAll("h1")].filter(visible).length,
-    notice: Boolean(util && visible(util) && util.textContent.includes(noticeText)),
+    notice: removedNotice.filter((t) => (document.body.innerText || "").includes(t)),
     bar: bar
       ? {
           shown: barStyle.display !== "none" && visible(bar),
@@ -805,7 +805,7 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths, offi
           for (const src of brokenImageProblems(images)) fail(`${where}: 깨진 이미지 ${src}`);
           if (!state && !images.length) fail(`${where}: 홈의 복제 구간에서 받기가 끝난 이미지를 하나도 찾지 못했다`);
         }
-        const r = await page.evaluate(inspect, NOTICE);
+        const r = await page.evaluate(inspect, REMOVED_NOTICE);
         checked++;
 
         if (r.scrollWidth > r.clientWidth)
@@ -815,7 +815,7 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths, offi
           fail(`${where}: 옆으로 밀어야 보이는 상자가 ${r.sideScroll}개 있다`);
         if (!state && r.dialog) fail(`${where}: 닫아 둔 팝업이 다시 열렸다`);
         if (r.h1 !== 1) fail(`${where}: h1이 ${r.h1}개다 (1개여야 한다)`);
-        if (!r.notice) fail(`${where}: 운영 주체 표시 줄이 없거나 문구가 다르다`);
+        for (const t of r.notice) fail(`${where}: 삭제한 운영 주체 문구 「${t}」가 다시 보인다`);
 
         const wantBar = width <= 640 && !NO_MOBILE_BAR.includes(route);
         if (wantBar && !(r.bar && r.bar.shown && r.bar.tel === 1 && r.bar.register === 1)) {

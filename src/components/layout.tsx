@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Footer, Header, MobileBar, UtilityBar } from "@/components/chrome";
+import { Footer, Header, MobileBar } from "@/components/chrome";
 import { SEO_FAQS, SEO_ORIGIN, SEO_PAGES } from "@/data/seo";
 import { IMAGE_SIZES } from "@/data/image-sizes";
 
@@ -45,7 +45,6 @@ export function Photo({
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper text-ink">
-      <UtilityBar />
       <Header />
       {children}
       <Footer />

@@ -19,6 +19,8 @@ import { ROLE } from "@/data/role";
 const MAIN = "/resources/img/pages/main/";
 const asset = (file: string) => img(MAIN + file);
 const common = (file: string) => img("/resources/img/common/" + file);
+/** 홈 영상은 사이트 안에 직접 보관한다(공식 서버 영상 주소가 바뀌어 끊겼다). 2026-10-13 공식 S3 최신본. */
+const media = (file: string) => "/media/official/" + file;
 
 /** 공식 히스토리 연표. 7호선 칸만 연도 자리를 「시기 미정」으로 둔다(프로젝트 고정 규칙). */
 const HISTORY_EVENTS: { key: string; year: string; tbd?: boolean; file: string; alt: string; captions: [string, string][] }[] = [
@@ -105,15 +107,13 @@ function useMedia(query: string, initial = false) {
   return on;
 }
 
-/** 사이트 틀의 실제 높이(운영 주체 표시 줄, 헤더)를 CSS 변수로 넘긴다. 히어로가 헤더 아래까지 깔리는 데 쓴다. */
+/** 사이트 틀의 실제 높이(헤더)를 CSS 변수로 넘긴다. 히어로가 헤더 아래까지 깔리는 데 쓴다. */
 function useChromeVars(root: React.RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     const sync = () => {
       const el = root.current;
       if (!el) return;
-      const util = document.querySelector<HTMLElement>(".ak-util");
       const hd = document.querySelector<HTMLElement>(".ak-hd");
-      el.style.setProperty("--om-util", `${util?.offsetHeight ?? 0}px`);
       el.style.setProperty("--om-hd", `${hd?.offsetHeight ?? 0}px`);
       el.style.setProperty("--om-vh", `${window.innerHeight}px`);
       el.style.setProperty("--om-scale", String(document.documentElement.clientWidth / 1920));
@@ -145,7 +145,7 @@ function Intro({ onDone }: { onDone: () => void }) {
       </div>
       <div className="om-intro__scene">
         <video className="om-intro__video" autoPlay muted loop playsInline preload="auto">
-          <source src={asset("intro_video_2.mp4")} type="video/mp4" />
+          <source src={media("intro_video.mp4")} type="video/mp4" />
         </video>
         <span className="om-intro__dim" />
         <div className="om-intro__copy om-intro__copy-01">
@@ -421,7 +421,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
   useEffect(() => {
     const el = heroVideo.current;
     if (!mounted || reduced || !el) return;
-    const src = asset(pc ? "hero_video_3.mp4" : "hero_video_m_2.mp4");
+    const src = media(pc ? "hero_video.mp4" : "hero_video_m.mp4");
     if (el.getAttribute("src") !== src) {
       el.src = src;
       el.preload = "auto";
@@ -848,7 +848,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 <span className="om-premium__decoration om-premium__decoration-circle_bottom" aria-hidden="true" />
                 <img className="om-premium__decoration om-premium__decoration_stripe" src={asset("premium_conf_03.v4.png")} alt="" aria-hidden="true" loading="lazy" />
                 <figure className="om-premium__media om-premium__media-main">
-                  <LazyVideo src={asset("premium_video_01.mp4")} poster={asset("premium_img_01.v4.jpg")} reduced={reduced} label="도심의 고층 건축물 영상" />
+                  <LazyVideo src={media("premium_video_01.mp4")} poster={asset("premium_img_01.v4.jpg")} reduced={reduced} label="도심의 고층 건축물 영상" />
                   <figcaption>이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
                 </figure>
                 <figure className="om-premium__media om-premium__media-street">
@@ -878,12 +878,12 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </div>
               </div>
               <figure className="om-premium__video om-premium__video-center">
-                <LazyVideo src={asset("premium_video_02.mp4")} poster={asset("premium_poster.v4.jpg")} reduced={reduced} label="주거 공간 영상" />
+                <LazyVideo src={media("premium_video_02.mp4")} poster={asset("premium_poster.v4.jpg")} reduced={reduced} label="주거 공간 영상" />
                 <figcaption className="om-premium__video_caption">이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
               </figure>
               <div className="om-premium__video_reel">
                 <figure className="om-premium__video om-premium__video-side">
-                  <LazyVideo src={asset("premium_video_03.mp4")} poster={"/assets/opt/premium_poster_02.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
+                  <LazyVideo src={media("premium_video_03.mp4")} poster={"/assets/opt/premium_poster_02.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
                   <figcaption className="om-premium__video_caption">이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
                 </figure>
                 <figure className="om-premium__video_echo">
@@ -918,7 +918,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             <img className="om-brand__panel_background" src={asset("brand_bg_02.v4.jpg")} alt="" loading="lazy" decoding="async" />
             <figure className="om-brand__story_visual">
               <img src={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} alt="잔잔하게 번지는 물결" loading="lazy" decoding="async" />
-              <LazyVideo className="om-brand__story_video" src={asset("brand_video.mp4")} poster={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
+              <LazyVideo className="om-brand__story_video" src={media("brand_video.mp4")} poster={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
               <figcaption>이미지컷</figcaption>
             </figure>
             <p className="om-brand__story_copy">
