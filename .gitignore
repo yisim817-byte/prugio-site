@@ -9,3 +9,4 @@ screenshots
 *.log
 .env
 .env.*
+.env*
