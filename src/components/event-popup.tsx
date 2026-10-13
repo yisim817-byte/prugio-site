@@ -119,7 +119,7 @@ export function AptEventPopup() {
           <p className="border border-line bg-paper p-4 text-sm leading-6">
             사전고객등록 후 청약 당첨 및 MGM 인정조건을 충족하고 계약하신 고객 대상
           </p>
-          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. 10월 중 OPEN 예정 · 일정 문의 {PROJECT_PHONE_DISPLAY}</p>
+          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. 모집공고 10.22 · GRAND OPEN 10.23 예정 · 일정 문의 {PROJECT_PHONE_DISPLAY}</p>
           <Link
             to="/event/apt"
             className="grid h-12 place-items-center bg-forest text-sm text-paper"
