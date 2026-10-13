@@ -48,7 +48,7 @@ const SHOT_ROUTES = [
   "/register",
 ];
 const NO_MOBILE_BAR = ["/register", "/login"];
-const NOTICE = "공식 홈페이지가 아닙니다";
+const NOTICE = "사업주체 홈페이지가 아닙니다";
 
 // ── 문구 규칙 ────────────────────────────────────────────────────────────────
 const BANNED = [

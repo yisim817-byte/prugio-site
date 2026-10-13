@@ -15,7 +15,7 @@ function Page() {
       <article className="ak-wrap ak-page">
         <div className="max-w-3xl space-y-8 text-[15px] leading-7">
         <p>
-          이 방침은 「청라 아크원 푸르지오」 안내 페이지의 사전고객등록에만 적용됩니다. 시행사·시공사의 공식 홈페이지가 아니고, 그 홈페이지나 외부 사전고객 폼으로 정보를 보내지 않습니다.
+          이 방침은 「청라 아크원 푸르지오」 안내 페이지의 사전고객등록에만 적용됩니다. 시행사·시공사의 홈페이지가 아니고, 그 홈페이지나 외부 사전고객 폼으로 정보를 보내지 않습니다.
         </p>
         <section>
           <h2 className="ak-h3">처리자</h2>

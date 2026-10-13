@@ -35,7 +35,7 @@ const CARDS = [
   },
   {
     src: img("/upload/popup/20260921144213_6678.jpg"),
-    alt: "유사 홈페이지 주의. 이 직원용 사이트는 공식 홈페이지가 아닙니다.",
+    alt: "유사 홈페이지 주의. 이 직원용 사이트는 사업주체 홈페이지가 아닙니다.",
     href: "/privacy",
     label: "안내 보기",
     phone: false,

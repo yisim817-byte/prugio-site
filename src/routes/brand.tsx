@@ -21,7 +21,7 @@ function Page() {
         />
         <div className="ak-cols mt-12">
           <div>
-            <h2 className="ak-h2">총 2,911가구 (B1 & M5 블록 · 합산 규모, 단일 단지 아님)</h2>
+            <h2 className="ak-h2">총 2,911세대·실 (B1 & M5 블록 · 합산 규모, 단일 단지 아님)</h2>
             <p className="ak-lead">
               청라를 대표하는 푸르지오 대규모 브랜드타운. 국제업무단지 B1 블록에 이어 M5 블록으로
               이어집니다.

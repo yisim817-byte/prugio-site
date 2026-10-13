@@ -113,7 +113,7 @@ export function Footer() {
             <div>
               <dt>사업 주체</dt>
               <dd>
-                시행 ㈜청라스마트시티 · 시공 대우건설. 공식 홈페이지에 적힌 사업 주체이며, 이
+                시행 ㈜청라스마트시티 · 시공 대우건설. 사업주체 공개자료에 적힌 사업 주체이며, 이
                 사이트를 운영한다는 뜻이 아닙니다.
               </dd>
             </div>
@@ -194,7 +194,7 @@ export function PageFaq({ path }: { path: string }) {
             </div>
           ))}
         </dl>
-        <p className="ak-qa__src">자료 기준 2026-10-09 · 출처 사업주체 공식 홈페이지(arkone-prugio.com)</p>
+        <p className="ak-qa__src">자료 기준 2026-10-09 · 출처 사업주체 공개자료(arkone-prugio.com)</p>
       </div>
     </section>
   );

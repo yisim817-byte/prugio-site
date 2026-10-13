@@ -5,7 +5,7 @@ import { REGISTER_LABEL } from "@/data/labels";
 import { ROLE } from "@/data/role";
 
 /**
- * 공식 홈페이지(arkone-prugio.com) 메인을 그대로 옮긴 홈 본문 (저장소마다 같은 파일).
+ * 사업주체 홈페이지(arkone-prugio.com) 메인을 그대로 옮긴 홈 본문 (저장소마다 같은 파일).
  *
  * 기준: 2026-10-05 공식 메인(home.html, main.v4.css, 공식 화면 캡처). 작업지시서 2의 2절·3절과 작업지시서 3.
  * - 이미지와 영상은 공식 서버의 파일을 img() 로 직접 불러온다(저장소에 복사하지 않는다). 부르는 파일 이름은
@@ -600,7 +600,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             </header>
             <article className="om-overview__panel" aria-labelledby="om-overview-panel-title">
               <h3 id="om-overview-panel-title" className="om-overview__panel_heading">
-                총 2,911가구<small>(B1 &amp; M5 블록 · 합산 규모, 단일 단지 아님)</small>
+                총 2,911세대·실<small>(B1 &amp; M5 블록 · 합산 규모, 단일 단지 아님)</small>
                 <br />
                 청라를 대표하는
                 <br />
