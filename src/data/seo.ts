@@ -7,7 +7,6 @@
  */
 export const SEO_ORIGIN = "https://xn--2w2b25ugxct7o.site";
 
-export const SEO_SOURCE_LINE = "출처: 사업주체 공개자료(arkone-prugio.com) · 기준일 2026.09.17";
 
 export type SeoPage = {
   title: string;

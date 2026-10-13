@@ -106,7 +106,6 @@ export function DepositTable() {
       </table>
       <SourceLine
         items={[
-          { k: "출처", v: "사업주체 공개자료" },
           { k: "우선 기준", v: "청약홈 예치기준금액, 입주자모집공고" },
         ]}
       />

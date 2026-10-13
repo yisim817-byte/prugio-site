@@ -1,5 +1,4 @@
 import type { Role } from "./role-types";
-import { SEO_SOURCE_LINE } from "./seo";
 
 /**
  * 이 사이트의 첫 화면 데이터 (C · 푸르지오.site · 역할: 사업개요·규모·브랜드타운).
@@ -8,7 +7,7 @@ import { SEO_SOURCE_LINE } from "./seo";
  */
 
 /** 출처 줄의 기준일은 seo.ts 의 값을 그대로 쓴다. */
-const BASE_DATE = SEO_SOURCE_LINE.match(/기준일\s*([\d.]+)/)?.[1] ?? "";
+const BASE_DATE = "2026.09.17";
 
 export const ROLE: Role = {
   tone: "dark",
@@ -39,7 +38,6 @@ export const ROLE: Role = {
     },
   ],
   stripSource: [
-    { k: "출처", v: "사업주체 공개자료" },
     { k: "기준일", v: BASE_DATE },
     { k: "안내", v: "수치는 사업주체 사정에 따라 변경될 수 있습니다." },
   ],
@@ -52,7 +50,6 @@ export const ROLE: Role = {
       { n: "987", unit: "실", title: "오피스텔", desc: "전용 105㎡ · 121㎡ · 136㎡", weight: 987 },
     ],
     source: [
-      { k: "출처", v: "사업주체 공개자료" },
       { k: "기준일", v: BASE_DATE },
       { k: "안내", v: "최종 값은 입주자모집공고를 따릅니다.", wide: true },
     ],

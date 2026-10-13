@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { PROJECT_NAME, REGISTER_LABEL } from "@/data/labels";
-import { SEO_FAQS, SEO_PAGES, SEO_SOURCE_LINE } from "@/data/seo";
+import { SEO_FAQS, SEO_PAGES } from "@/data/seo";
 
 /**
  * 모든 화면이 함께 쓰는 틀 (저장소마다 같은 파일).
@@ -177,7 +177,6 @@ export function PageFaq({ path }: { path: string }) {
             </div>
           ))}
         </dl>
-        <p className="ak-qa__src">자료 기준 2026-10-09 · 출처 사업주체 공개자료(arkone-prugio.com)</p>
       </div>
     </section>
   );
@@ -209,7 +208,6 @@ export function QuickAnswer({ path, bare = false }: { path: string; bare?: boole
       <p className="ak-qa__p">
         <Nb>{seo.answer}</Nb>
       </p>
-      <p className="ak-qa__src">{SEO_SOURCE_LINE}</p>
     </div>
   );
   if (bare) return body;

@@ -49,7 +49,6 @@ function Page() {
               </table>
               <SourceLine
                 items={[
-                  { k: "출처", v: "사업주체 공개자료" },
                   { k: "우선 기준", v: "입주자모집공고" },
                 ]}
               />
