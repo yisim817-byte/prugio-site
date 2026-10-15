@@ -27,7 +27,16 @@ type Lead = {
   entry_path: string;
   notify_status: string;
   notify_detail: string | null;
+  product: string | null;
 };
+
+// R21: 고객군 표시. 값이 없으면(R21 이전 접수) 「-」.
+function productLabel(value: string | null): string {
+  if (value === "apt") return "아파트";
+  if (value === "officetel") return "오피스텔";
+  if (value === "commercial") return "상가";
+  return "-";
+}
 
 type Account = { login_id: string; role: string; must_change_password: boolean };
 
@@ -194,7 +203,7 @@ function Page() {
                     <p>{STATUS[lead.notify_status] ?? lead.notify_status}</p>
                   </div>
                   <p className="mt-1 text-muted">
-                    {formatPhone(lead.phone)} · {lead.birth6} · {lead.sido} {lead.sigungu} {lead.dong}
+                    고객군 {productLabel(lead.product)} · {formatPhone(lead.phone)} · {lead.birth6} · {lead.sido} {lead.sigungu} {lead.dong}
                   </p>
                   <p className="mt-1 text-muted">{lead.created_at} · {lead.entry_path}{lead.notify_detail ? ` · ${lead.notify_detail}` : ""}</p>
                   <div className="mt-3 flex gap-2">
@@ -305,9 +314,9 @@ function formatPhone(value: string) {
 }
 
 function downloadCsv(leads: Lead[]) {
-  const header = ["접수번호", "성명", "휴대전화", "생년월일앞6", "시도", "시군구", "동", "등록시각", "유입", "알림상태"];
+  const header = ["접수번호", "성명", "휴대전화", "생년월일앞6", "시도", "시군구", "동", "등록시각", "유입", "알림상태", "고객군"];
   const lines = [header, ...leads.map((lead) => [
-    lead.receipt_no, lead.name, lead.phone, lead.birth6, lead.sido, lead.sigungu, lead.dong, lead.created_at, lead.entry_path, lead.notify_status,
+    lead.receipt_no, lead.name, lead.phone, lead.birth6, lead.sido, lead.sigungu, lead.dong, lead.created_at, lead.entry_path, lead.notify_status, productLabel(lead.product),
   ])];
   const csv = lines.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
   const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8" });

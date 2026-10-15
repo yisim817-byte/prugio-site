@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Nb } from "@/components/chrome";
 import { Shell, SubHero, pageHead } from "@/components/layout";
 import { REGISTER_LABEL } from "@/data/labels";
@@ -24,7 +24,25 @@ const STATUS: Record<string, string> = {
   pending: "접수가 저장되었습니다. 알림 수신은 확인되지 않았습니다.",
 };
 
+// R21 (2026-10-16): 등록 상품 선택 — 아파트·오피스텔·상가(대표 지시). 상가 수치·면적·업종은 쓰지 않는다.
+const PRODUCTS = [
+  { value: "apt", label: "아파트" },
+  { value: "officetel", label: "오피스텔" },
+  { value: "commercial", label: "상가" },
+] as const;
+type Product = (typeof PRODUCTS)[number]["value"];
+const PRODUCT_LABEL: Record<Product, string> = { apt: "아파트", officetel: "오피스텔", commercial: "상가" };
+
+function isProduct(value: string | null): value is Product {
+  return value === "apt" || value === "officetel" || value === "commercial";
+}
+
 function Page() {
+  const [product, setProduct] = useState<Product | "">("");
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("product");
+    if (isProduct(requested)) setProduct(requested);
+  }, []);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [birth6, setBirth6] = useState("");
@@ -34,11 +52,15 @@ function Page() {
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const [done, setDone] = useState<{ receiptNo: string; duplicate: boolean; notifyStatus: string } | null>(null);
+  const [done, setDone] = useState<{ receiptNo: string; duplicate: boolean; notifyStatus: string; product: Product } | null>(null);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    if (!product) {
+      setError("아파트·오피스텔·상가 중 등록하실 상품을 선택해 주세요.");
+      return;
+    }
     if (!consent) {
       setError("개인정보 수집·이용에 동의해야 등록할 수 있습니다.");
       return;
@@ -46,13 +68,13 @@ function Page() {
     setPending(true);
     try {
       const result = await submitLead({
-        data: { name, phone, birth6, sido, sigungu, dong, consent: true, entry: "/register" },
+        data: { product, name, phone, birth6, sido, sigungu, dong, consent: true, entry: "/register" },
       });
       if (!result.ok) {
         setError(result.error);
         return;
       }
-      setDone({ receiptNo: result.receiptNo, duplicate: result.duplicate, notifyStatus: result.notifyStatus });
+      setDone({ receiptNo: result.receiptNo, duplicate: result.duplicate, notifyStatus: result.notifyStatus, product });
     } catch {
       setError("저장하지 못했습니다. 입력값을 확인한 뒤 다시 시도해 주세요. 같은 번호로 다시 보내도 접수가 중복 생성되지는 않습니다.");
     } finally {
@@ -72,11 +94,24 @@ function Page() {
           <div className="mt-8 space-y-4" role="status">
             <h2 className="ak-h2">{done.duplicate ? "이미 등록된 번호" : "접수되었습니다"}</h2>
             <p className="text-sm leading-6">접수번호 <strong className="font-medium">{done.receiptNo}</strong></p>
+            <p className="text-sm leading-6">선택하신 {PRODUCT_LABEL[done.product]} 상품으로 담당자가 안내드립니다.</p>
             <p className="text-sm leading-6">{STATUS[done.notifyStatus] ?? STATUS.pending}</p>
             <Link to="/" className="ak-link">처음으로</Link>
           </div>
         ) : (
           <form className="mt-8 space-y-5" onSubmit={onSubmit} noValidate>
+            <fieldset className="block text-sm">
+              <legend className="font-medium">등록하실 상품</legend>
+              <span className="mt-1 block text-muted">아파트·오피스텔·상가 중 하나를 선택해 주세요.</span>
+              <div className="mt-2 flex flex-wrap gap-x-6 gap-y-3">
+                {PRODUCTS.map((item) => (
+                  <label key={item.value} className="flex items-center gap-2 text-sm leading-6">
+                    <input type="radio" name="product" value={item.value} required checked={product === item.value} onChange={() => setProduct(item.value)} className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
             <Field label="성명" error={name.trim().length > 0 && name.trim().length < 2 ? "두 글자 이상" : ""}>
               <input required minLength={2} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} className={inputClass} autoComplete="name" />
             </Field>
@@ -101,7 +136,7 @@ function Page() {
             <label className="flex items-start gap-3 text-sm leading-6">
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-5 w-5" />
               <span>
-                <Nb>개인정보 수집·이용에 동의합니다. 항목은 성명·휴대전화·생년월일 앞 6자리·시군구동이며, 삭제할 때까지 보유합니다.</Nb>{" "}
+                <Nb>개인정보 수집·이용에 동의합니다. 항목은 관심 상품·성명·휴대전화·생년월일 앞 6자리·시군구동이며, 삭제할 때까지 보유합니다.</Nb>{" "}
                 <Link to="/privacy" className="underline">처리방침</Link>
               </span>
             </label>

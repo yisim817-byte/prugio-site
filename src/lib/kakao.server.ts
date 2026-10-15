@@ -10,7 +10,16 @@ export type AlertInput = {
   createdAt: string;
   name: string;
   phone: string;
+  /** R21: 등록 상품(apt/officetel/commercial). 기존 행은 null. */
+  product?: string | null;
 };
+
+export function productLabel(value: string | null | undefined): string {
+  if (value === "apt") return "아파트";
+  if (value === "officetel") return "오피스텔";
+  if (value === "commercial") return "상가";
+  return "미선택";
+}
 
 export type AlertResult = {
   status: "accepted" | "failed" | "not_configured";
@@ -61,10 +70,11 @@ export function alertSetup() {
   };
 }
 
-export function telegramText(input: Pick<AlertInput, "receiptNo" | "createdAt">): string {
+export function telegramText(input: Pick<AlertInput, "receiptNo" | "createdAt" | "product">): string {
   return [
     `[${SITE_LABEL}] 새 사전고객 접수`,
     `접수번호 ${input.receiptNo}`,
+    `고객군 ${productLabel(input.product)}`,
     input.createdAt,
     `관리화면 ${SITE_HOST}/admin?receipt=${encodeURIComponent(input.receiptNo)}`,
   ].join("\n");
@@ -116,7 +126,9 @@ export async function sendStaffAlert(input: AlertInput): Promise<AlertResult> {
     `상세 ${SITE_HOST}/admin?receipt=${encodeURIComponent(input.receiptNo)}`,
   ].join("\n");
   if (channel === "sms") {
-    const sms = await sendSms(recipient, text);
+    // R21: 문자에는 고객군 한 줄 추가. 알림톡(아래)은 승인 템플릿과 맞춰야 하므로 본문을 바꾸지 않는다.
+    const smsText = [text.split("\n")[0], text.split("\n")[1], `고객군 ${productLabel(input.product)}`, ...text.split("\n").slice(2)].join("\n");
+    const sms = await sendSms(recipient, smsText);
     return { status: sms.ok ? "accepted" : "failed", detail: `${telegramDetail}${sms.detail}` };
   }
   const endpoint = process.env.KAKAO_ALIMTALK_ENDPOINT!.trim();
