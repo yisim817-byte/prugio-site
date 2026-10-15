@@ -92,6 +92,8 @@ export const submitLead = createServerFn({ method: "POST" })
         select receipt_no from leads where site_id = ${SITE} and phone = ${phone} limit 1
       `;
       if (existing[0]) {
+        // R21: 같은 번호 재접수 시 등록 상품만 최신 값으로 갱신(나머지 항목·접수번호 불변)
+        await sql`update leads set product = ${data.product} where site_id = ${SITE} and phone = ${phone}`;
         return {
           ok: true as const,
           duplicate: true,
@@ -108,7 +110,7 @@ export const submitLead = createServerFn({ method: "POST" })
       const entry = entryPath(data.entry);
       await sql`
         insert into leads (site_id, receipt_no, name, phone, birth6, sido, sigungu, dong, entry_path, notify_status, product)
-        values (${SITE}, ${receipt}, ${data.name}, ${phone}, ${data.birth6}, ${data.sido}, ${data.sigungu}, ${data.dong}, ${entry}, 'pending')
+        values (${SITE}, ${receipt}, ${data.name}, ${phone}, ${data.birth6}, ${data.sido}, ${data.sigungu}, ${data.dong}, ${entry}, 'pending', ${data.product})
       `;
     } catch {
       console.error("[leads] save failed");
@@ -118,7 +120,7 @@ export const submitLead = createServerFn({ method: "POST" })
     try {
       const { sendStaffAlert } = await import("./kakao.server");
       const createdAt = new Date().toISOString();
-      const alert = await sendStaffAlert({ receiptNo: receipt, createdAt, name: data.name, phone });
+      const alert = await sendStaffAlert({ receiptNo: receipt, createdAt, name: data.name, phone, product: data.product });
       notifyStatus = alert.status;
       try {
         await sql`
@@ -252,9 +254,10 @@ export const adminSnapshot = createServerFn({ method: "GET" })
       entry_path: string;
       notify_status: string;
       notify_detail: string | null;
+      product: string | null;
     }>`
       select receipt_no, name, phone, birth6, sido, sigungu, dong,
-             created_at::text as created_at, entry_path, notify_status, notify_detail
+             created_at::text as created_at, entry_path, notify_status, notify_detail, product
       from leads
       where site_id = ${SITE}
       order by id desc
@@ -295,8 +298,9 @@ export const retryNotify = createServerFn({ method: "POST" })
       phone: string;
       created_at: string;
       notify_status: string;
+      product: string | null;
     }>`
-      select receipt_no, name, phone, created_at::text as created_at, notify_status
+      select receipt_no, name, phone, created_at::text as created_at, notify_status, product
       from leads
       where site_id = ${SITE} and receipt_no = ${data.receiptNo}
       limit 1
@@ -310,6 +314,7 @@ export const retryNotify = createServerFn({ method: "POST" })
       createdAt: lead.created_at,
       name: lead.name,
       phone: lead.phone,
+      product: lead.product,
     });
     await sql`
       update leads
