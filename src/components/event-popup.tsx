@@ -109,7 +109,7 @@ export function AptEventPopup() {
           <p className="font-serif text-4xl text-forest">백화점 상품권 30만원</p>
           <p className="text-sm tracking-wide text-bronze">롯데 · 현대 · 신세계 중 선택</p>
           <p className="border border-line bg-paper p-4 text-sm leading-6">
-            사전고객등록 후 청약 당첨 및 MGM 인정조건을 충족하고 계약하신 고객 대상
+            사전고객등록 후 청약 당첨 및 지급 조건을 충족하고 계약하신 고객 대상
           </p>
           <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. <span className="whitespace-nowrap">모집공고 10.22 · GRAND OPEN 10.30 예정</span> · <span className="whitespace-nowrap">일정 문의 {PROJECT_PHONE_DISPLAY}</span></p>
           <p className="text-sm leading-6">※ 동일 현장의 다른 홈페이지·분양 채널에 중복으로 등록하신 경우, 상품권 지급이 제한될 수 있습니다.</p>
