@@ -20,9 +20,8 @@ export function AptEventPopup() {
       /* 저장을 못 해도 팝업은 연다 */
     }
     // 홈의 인트로(공식 메인 복제)가 도는 동안에는 열지 않고, 끝난 뒤에 연다. 인트로가 없으면(「동작 줄이기」 등) 바로 연다.
-    const introAhead =
-      Boolean(document.querySelector("[data-official-main]")) &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // 인트로 영상을 내렸으므로(2026-10-15) 기다리지 않는다.
+    const introAhead = false;
     if (!introAhead) {
       setOpen(true);
       return;

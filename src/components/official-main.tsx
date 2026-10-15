@@ -144,9 +144,6 @@ function Intro({ onDone }: { onDone: () => void }) {
         </span>
       </div>
       <div className="om-intro__scene">
-        <video className="om-intro__video" autoPlay muted loop playsInline preload="auto">
-          <source src={media("intro_video.mp4")} type="video/mp4" />
-        </video>
         <span className="om-intro__dim" />
         <div className="om-intro__copy om-intro__copy-01">
           <p className="om-intro__phrase">청라의 정점을 빛내는</p>
@@ -168,43 +165,18 @@ function Intro({ onDone }: { onDone: () => void }) {
   );
 }
 
-/** 구간이 보일 때만 영상을 받아 재생한다. 「동작 줄이기」면 포스터만 둔다. */
+/** 프리미엄·브랜드 영상 내림(대표 지시 2026-10-15): 영상 자리에는 포스터 사진만 둔다. 영상 파일을 받지 않는다. */
 function LazyVideo({
-  src,
   poster,
   className,
-  reduced,
   label,
 }: {
-  src: string;
   poster: string;
   className?: string;
-  reduced: boolean;
+  reduced?: boolean;
   label: string;
 }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || reduced) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            if (el.preload === "none") el.preload = "auto";
-            el.play().catch(() => {});
-          } else el.pause();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [reduced]);
-  return (
-    <video ref={ref} className={className} poster={poster} muted loop playsInline preload="none" aria-label={label}>
-      <source src={src} type="video/mp4" />
-    </video>
-  );
+  return <video className={className} poster={poster} muted playsInline preload="none" aria-label={label} />;
 }
 
 function sectionEl(id: SectionId) {
@@ -397,10 +369,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    if (!window.matchMedia(REDUCED).matches) {
-      setIntro(true);
-      document.documentElement.setAttribute("data-om-intro", "1");
-    }
+    // 인트로 영상 내림(대표 지시 2026-10-15): 인트로 화면을 띄우지 않는다. 히어로 영상은 그대로 둔다.
   }, []);
 
   // 인트로가 끝나면 알린다(이벤트 팝업은 이 뒤에 연다). 인트로가 없으면 바로 끝난 것으로 본다.
@@ -848,7 +817,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 <span className="om-premium__decoration om-premium__decoration-circle_bottom" aria-hidden="true" />
                 <img className="om-premium__decoration om-premium__decoration_stripe" src={asset("premium_conf_03.v4.png")} alt="" aria-hidden="true" loading="lazy" />
                 <figure className="om-premium__media om-premium__media-main">
-                  <LazyVideo src={media("premium_video_01.mp4")} poster={asset("premium_img_01.v4.jpg")} reduced={reduced} label="도심의 고층 건축물 영상" />
+                  <LazyVideo poster={asset("premium_img_01.v4.jpg")} reduced={reduced} label="도심의 고층 건축물 영상" />
                   <figcaption>이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
                 </figure>
                 <figure className="om-premium__media om-premium__media-street">
@@ -878,12 +847,12 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </div>
               </div>
               <figure className="om-premium__video om-premium__video-center">
-                <LazyVideo src={media("premium_video_02.mp4")} poster={asset("premium_poster.v4.jpg")} reduced={reduced} label="주거 공간 영상" />
+                <LazyVideo poster={asset("premium_poster.v4.jpg")} reduced={reduced} label="주거 공간 영상" />
                 <figcaption className="om-premium__video_caption">이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
               </figure>
               <div className="om-premium__video_reel">
                 <figure className="om-premium__video om-premium__video-side">
-                  <LazyVideo src={media("premium_video_03.mp4")} poster={"/assets/opt/premium_poster_02.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
+                  <LazyVideo poster={"/assets/opt/premium_poster_02.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
                   <figcaption className="om-premium__video_caption">이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
                 </figure>
                 <figure className="om-premium__video_echo">
@@ -918,7 +887,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             <img className="om-brand__panel_background" src={asset("brand_bg_02.v4.jpg")} alt="" loading="lazy" decoding="async" />
             <figure className="om-brand__story_visual">
               <img src={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} alt="잔잔하게 번지는 물결" loading="lazy" decoding="async" />
-              <LazyVideo className="om-brand__story_video" src={media("brand_video.mp4")} poster={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
+              <LazyVideo className="om-brand__story_video" poster={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
               <figcaption>이미지컷</figcaption>
             </figure>
             <p className="om-brand__story_copy">
