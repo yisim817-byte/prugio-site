@@ -25,6 +25,7 @@ const STATUS: Record<string, string> = {
 };
 
 function Page() {
+  const [product, setProduct] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [birth6, setBirth6] = useState("");

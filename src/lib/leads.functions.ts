@@ -8,6 +8,7 @@ import { LOGIN_ID_PATTERN, PASSWORD_MAX, passwordProblem } from "@/lib/staff-log
 const SITE = SITE_ID;
 
 const leadSchema = z.object({
+  product: z.enum(["apt","officetel","commercial"]),
   name: z.string().trim().min(2).max(20),
   phone: z.string().trim(),
   birth6: z.string().trim(),
@@ -106,7 +107,7 @@ export const submitLead = createServerFn({ method: "POST" })
       }
       const entry = entryPath(data.entry);
       await sql`
-        insert into leads (site_id, receipt_no, name, phone, birth6, sido, sigungu, dong, entry_path, notify_status)
+        insert into leads (site_id, receipt_no, name, phone, birth6, sido, sigungu, dong, entry_path, notify_status, product)
         values (${SITE}, ${receipt}, ${data.name}, ${phone}, ${data.birth6}, ${data.sido}, ${data.sigungu}, ${data.dong}, ${entry}, 'pending')
       `;
     } catch {
