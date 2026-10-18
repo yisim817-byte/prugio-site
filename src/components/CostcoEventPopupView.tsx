@@ -1,5 +1,5 @@
 // @ts-nocheck
-// 코스트코 선착순 1,000명 이벤트 팝업 v2 — 기존 팝업과 겹치지 않게 (PC 나란히 / 휴대폰 차례로)
+// 코스트코 선착순 1,000명 이벤트 팝업 v3 — 광고 전용(등록 버튼 없음) · 등록 1회로 두 이벤트 함께 인정 안내 · PC 나란히 / 휴대폰 차례로
 import { useEffect } from "react";
 
   /* 코스트코 선착순 1,000명 이벤트 팝업 v2 — 기존 팝업과 겹치지 않게 배치
@@ -38,13 +38,15 @@ import { useEffect } from "react";
     + ".costco-pop__title{margin:0;color:#E2B565;font-weight:700;font-size:44px;line-height:1.1;letter-spacing:-.03em}"
     + ".costco-pop__benefit{margin:6px 0 0;font-size:22px;line-height:1.3;font-weight:700;color:#fff}"
     + ".costco-pop__target{margin:6px 0 0;font-size:15px;line-height:1.4;color:#fff}"
+    + ".costco-pop__both{margin:12px 0 0;padding:10px 12px;border:1px solid #E2B565;border-radius:10px;background:rgba(226,181,101,.12);color:#F7DE9E;font-size:15px;line-height:1.45;text-align:center}"
+    + ".costco-pop__both b{color:#fff;font-weight:700}"
     + ".costco-pop__go,.costco-pop__tel{display:flex;align-items:center;justify-content:center;width:100%;text-decoration:none;border-radius:8px}"
     + ".costco-pop__go{margin-top:12px;height:48px;background:#E2B565;color:#032B20;font-weight:700;font-size:16px;border:0}"
-    + ".costco-pop__tel{margin-top:8px;height:44px;background:transparent;color:#fff;border:1px solid #B5853A;font-size:15px}"
+    + ".costco-pop__tel{margin-top:10px;height:44px;background:transparent;color:#fff;border:1px solid #B5853A;font-size:15px}"
     + ".costco-pop__note{margin:4px 0 0;color:rgba(255,255,255,.75);font-size:12px;line-height:1.35}"
     + ".costco-pop__foot{display:flex;justify-content:space-between;gap:8px;margin-top:8px}"
     + ".costco-pop__foot button{background:transparent;border:0;color:rgba(255,255,255,.9);font:inherit;font-size:13px;min-height:36px;padding:0;cursor:pointer}"
-    + "@media(max-width:767px){.costco-pop__title{font-size:36px}.costco-pop__benefit{font-size:19px}.costco-pop__target{font-size:14px}.costco-pop__note{font-size:11.5px}.costco-pop__panel{padding:12px 14px 8px}}"
+    + "@media(max-width:767px){.costco-pop__both{font-size:14px}.costco-pop__title{font-size:36px}.costco-pop__benefit{font-size:19px}.costco-pop__target{font-size:14px}.costco-pop__note{font-size:11.5px}.costco-pop__panel{padding:12px 14px 8px}}"
     + "@keyframes costcoIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}"
     + "@media(prefers-reduced-motion:reduce){.costco-pop__panel{animation:none}}";
 
@@ -58,9 +60,11 @@ import { useEffect } from "react";
     function existingOpen() {
       var el = existingEl();
       if (!el) return false;
-      if (el.tagName === "DIALOG") return !!el.open;
+      if (el.tagName === "DIALOG" && !el.open) return false;
       var cs = window.getComputedStyle(el);
-      return !(cs.display === "none" || cs.visibility === "hidden" || cs.opacity === "0");
+      if (cs.display === "none" || cs.visibility === "hidden" || cs.opacity === "0") return false;
+      var c = (el.tagName === "DIALOG" ? el : (document.querySelector(cfg.card) || el)).getBoundingClientRect();
+      return c.width > 0 && c.height > 0 && c.bottom > 0 && c.right > 0 && c.top < window.innerHeight && c.left < window.innerWidth;
     }
     function cardEl() {
       var ex = existingEl();
@@ -92,7 +96,7 @@ import { useEffect } from "react";
         + '<h2 id="costco-pop-title" class="costco-pop__title">선착순 1,000명</h2>'
         + '<p class="costco-pop__benefit">코스트코 1년 회원권 증정</p>'
         + '<p class="costco-pop__target">홈페이지 사전고객등록 후 청약하신 고객 · 청약 당첨 여부와 관계없이</p>'
-        + '<a class="costco-pop__go" href="' + REGISTER + '">사전고객등록하기</a>'
+        + '<p class="costco-pop__both">사전고객등록 <b>한 번</b>이면<br>백화점 상품권 30만원 · 코스트코 1년 회원권<br>두 이벤트에 <b>함께 인정</b>됩니다</p>'
         + '<a class="costco-pop__tel" href="' + TEL + '">전화 문의 ' + PHONE + '</a>'
         + '<p class="costco-pop__note">※ 선착순 1,000명 마감 시 조기 종료됩니다.</p>'
         + '<p class="costco-pop__note">※ 선착순 기준·지급 시기·방법은 담당자가 개별 안내합니다.</p>'
@@ -155,7 +159,7 @@ import { useEffect } from "react";
       document.body.appendChild(root);
       mode = "solo";
       document.addEventListener("keydown", onKey, true);
-      var go = panel.querySelector(".costco-pop__go"); if (go && go.focus) go.focus();
+      var fb = panel.querySelector("[data-close]"); if (fb && fb.focus) fb.focus();
     }
     function openSide() {
       css();
