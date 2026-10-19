@@ -1,11 +1,14 @@
 // @ts-nocheck
-// 모델하우스 방문예약 팝업 (작업지시서 9) — 기존 팝업 2종 위에 뜨는 신규 팝업. 기존 팝업 파일은 바꾸지 않는다.
+// 모델하우스 방문예약 팝업 (작업지시서 9) — 기존 팝업 2종과 겹치지 않게 배치하는 신규 팝업. 기존 팝업 파일은 바꾸지 않는다.
 import { useEffect } from "react";
 
   /* 모델하우스 방문예약 팝업 (작업지시서 9, 2026-10-19)
      - arkone-visit-config 의 enabled=true 일 때만 띄운다(호출 실패 시 띄우지 않음 = 공개 스위치 겸 비상 정지).
      - 기존 팝업 2종(30만원·코스트코)은 선택자로 열림 여부만 읽는다. 그 파일·문구·저장 키는 건드리지 않는다.
-     - 가장 위 레이어: z-index = 기존 두 팝업 중 큰 값 + 1. 기존이 <dialog> 인 사이트는 이것도 <dialog>(top layer)로 띄운다.
+     - 겹치지 않게 배치(PM 지시 2026-10-19): 기존 팝업이 열려 있고 화면 폭이 넉넉하면(PC) 기존 카드들과 한 줄로 나란히,
+       폭이 모자라면(휴대폰·좁은 PC) 기존 팝업이 모두 닫힌 뒤에 띄운다. 나란히 놓는 동안만 기존 카드 위치(transform)를
+       잠시 옮기고 닫히면 되돌린다. 기존이 모달 <dialog> 면 그 안에 카드를 붙인다(코스트코 팝업과 같은 방식).
+     - 혼자 뜰 때: z-index = 기존 두 팝업 중 큰 값 + 1, 기존이 <dialog> 인 사이트는 이것도 <dialog>(top layer).
      - 「오늘 하루 보지 않기」 = localStorage arkone_visit_pop_hide_until 에 한국시간 다음 날 0시. 「닫기」·딤·Esc = 이번만. */
   var VISIT_CONFIG_URL = "https://jzmktahlrwtrtejjflrw.supabase.co/functions/v1/arkone-visit-config";
   var VISIT_HIDE_KEY = "arkone_visit_pop_hide_until";
@@ -22,7 +25,9 @@ import { useEffect } from "react";
   }
 
   function startVisitPopup(cfg) {
-    var dead = false, timers = [], root = null, panel = null, prevFocus = null, watch = 0, seen = [];
+    var GAP = 24;
+    var dead = false, closed = false, timers = [], mode = "", root = null, panel = null, prevFocus = null, watch = 0, focused = false;
+    var shifts = [];
     var useDialog = !!cfg.dialog && typeof HTMLDialogElement === "function" && typeof HTMLDialogElement.prototype.showModal === "function";
     function later(fn, ms) { var t = window.setTimeout(fn, ms); timers.push(t); return t; }
     function norm(path) {
@@ -41,26 +46,30 @@ import { useEffect } from "react";
       var d = new Date(Date.now() + 9 * 3600000);
       return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1) - 9 * 3600000;
     }
-    function isOpen(el) {
-      if (!el || !el.isConnected) return false;
-      if (el.tagName === "DIALOG" && !el.open) return false;
-      try { var s = window.getComputedStyle(el); return s.display !== "none" && s.visibility !== "hidden"; } catch (e) { return true; }
-    }
-    function openExisting() {
+    // 지금 화면에 보이는 기존 팝업 카드(읽기만)
+    function cards() {
       var out = [];
-      (cfg.existing || []).forEach(function (sel) {
+      (cfg.cards || []).forEach(function (sel) {
         var list = document.querySelectorAll(sel);
-        for (var i = 0; i < list.length; i++) if (list[i] !== root && isOpen(list[i])) out.push(list[i]);
+        for (var i = 0; i < list.length; i++) {
+          var el = list[i];
+          if (!el.isConnected || (panel && (el === panel || panel.contains(el)))) continue;
+          var dlg = el.closest ? el.closest("dialog") : null;
+          if (dlg && !dlg.open) continue;
+          var r = el.getBoundingClientRect();
+          if (r.width < 2 || r.height < 2) continue;
+          try { var s = window.getComputedStyle(el); if (s.visibility === "hidden" || s.display === "none") continue; } catch (e) {}
+          if (out.indexOf(el) < 0) out.push(el);
+        }
       });
       return out;
     }
-
     var CSS = ""
       + ".visit-pop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;background:rgba(3,43,32,.6);font-family:inherit;color:#032B20}"
       + "dialog.visit-pop{width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;overflow:auto}"
       + "dialog.visit-pop::backdrop{background:rgba(3,43,32,.6)}"
-      + ".visit-pop--stacked{background:transparent}"
-      + "dialog.visit-pop--stacked::backdrop{background:transparent}"
+      + ".visit-pop--side{background:transparent;pointer-events:none}"
+      + ".visit-pop--side .visit-pop__panel,.visit-pop__panel--side{position:absolute;pointer-events:auto;margin:0}"
       + "dialog.visit-pop{background:transparent}"
       + ".visit-pop__panel{position:relative;width:min(420px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;box-sizing:border-box;border:1px solid #B5853A;border-radius:16px;background:#F7F3EA;color:#032B20;text-align:left;font-family:inherit;animation:visitPopIn .25s ease-out both}"
       + ".visit-pop__panel *{box-sizing:border-box}"
@@ -107,13 +116,109 @@ import { useEffect } from "react";
         + '<div class="visit-pop__foot"><button type="button" data-visit-today="1">오늘 하루 보지 않기</button><button type="button" data-visit-close="1" aria-label="닫기">닫기</button></div>';
       return p;
     }
+    function shiftOf(el) {
+      for (var i = 0; i < shifts.length; i++) if (shifts[i].el === el) return shifts[i];
+      var s = { el: el, base: el.style.transform || "", wrote: null, dx: 0 };
+      shifts.push(s); return s;
+    }
+    function setShift(el, dx) {
+      var s = shiftOf(el);
+      if (s.wrote !== null && el.style.transform !== s.wrote) { s.base = el.style.transform || ""; s.dx = 0; } // 다른 코드가 바꿨으면 그 값을 기준으로
+      dx = Math.round(dx);
+      var v = dx ? (s.base ? s.base + " " : "") + "translateX(" + dx + "px)" : s.base;
+      if (el.style.transform !== v) el.style.transform = v;
+      s.wrote = el.style.transform; s.dx = dx;
+    }
+    function naturalLeft(el) {
+      var s = shiftOf(el);
+      var cur = s.wrote !== null && el.style.transform === s.wrote ? s.dx : 0;
+      return el.getBoundingClientRect().left - cur;
+    }
+    function clearShifts() {
+      shifts.forEach(function (s) { if (s.wrote !== null && s.el.style.transform === s.wrote) s.el.style.transform = s.base; });
+      shifts = [];
+    }
+    function panelWidth() { return Math.min(420, window.innerWidth - 32); }
+    function fits(cs) {
+      if (window.innerWidth < 768) return false;
+      var total = panelWidth();
+      cs.forEach(function (el) { total += el.getBoundingClientRect().width + GAP; });
+      return total + 32 <= window.innerWidth;
+    }
+    function detach() {
+      if (panel && panel.parentNode) panel.parentNode.removeChild(panel);
+      if (root) { if (useDialog && root.open) { try { root.close(); } catch (e) {} } if (root.parentNode) root.parentNode.removeChild(root); root = null; }
+      document.removeEventListener("focusin", onFocusIn, true);
+    }
+    function focusGo() {
+      if (focused || !panel) return;
+      focused = true;
+      var go = panel.querySelector(".visit-pop__go"); if (go) go.focus({ preventScroll: true });
+    }
+    function toSolo() {
+      detach(); clearShifts();
+      root = document.createElement(useDialog ? "dialog" : "div");
+      root.className = "visit-pop";
+      root.style.zIndex = String(cfg.z || 1102);
+      panel.className = "visit-pop__panel";
+      panel.style.left = ""; panel.style.top = ""; panel.style.width = "";
+      root.appendChild(panel);
+      root.addEventListener("click", function (e) { if (e.target === root) close(false); });
+      if (useDialog) root.addEventListener("cancel", function (e) { e.preventDefault(); close(false); });
+      document.body.appendChild(root);
+      if (useDialog) root.showModal(); else document.addEventListener("focusin", onFocusIn, true);
+      mode = "solo"; focused = false; focusGo();
+    }
+    function toWait() { detach(); clearShifts(); mode = "wait"; }
+    function toSide(cs) {
+      var dlg = null;
+      for (var i = 0; i < cs.length; i++) { var d = cs[i].closest ? cs[i].closest("dialog") : null; if (d && d.open) { dlg = d; break; } }
+      var host = dlg;
+      if (!host) {
+        if (!root || root.className.indexOf("visit-pop--side") < 0) {
+          detach();
+          root = document.createElement("div");
+          root.className = "visit-pop visit-pop--side";
+          root.style.zIndex = String(cfg.z || 1102);
+          document.body.appendChild(root);
+        }
+        host = root;
+      } else if (root) { detach(); }
+      panel.className = "visit-pop__panel visit-pop__panel--side";
+      if (panel.parentNode !== host) host.appendChild(panel);
+      mode = "side"; focusGo();
+      return host;
+    }
+    function arrange(cs, host) {
+      var list = cs.map(function (el) { return { el: el, left: naturalLeft(el), r: el.getBoundingClientRect() }; });
+      list.sort(function (a, b) { return a.left - b.left; });
+      var pw = panelWidth(), total = pw;
+      list.forEach(function (c) { total += c.r.width + GAP; });
+      var x = Math.round((window.innerWidth - total) / 2), top = Infinity;
+      list.forEach(function (c) { setShift(c.el, x - c.left); x += c.r.width + GAP; top = Math.min(top, c.r.top); });
+      panel.style.width = pw + "px";
+      var ph = panel.offsetHeight || 460;
+      top = Math.max(16, Math.min(top, window.innerHeight - ph - 16));
+      var hr = host === root ? { left: 0, top: 0 } : host.getBoundingClientRect();
+      var bl = host === root ? 0 : (host.clientLeft || 0), bt = host === root ? 0 : (host.clientTop || 0);
+      panel.style.left = Math.round(x - hr.left - bl) + "px";
+      panel.style.top = Math.round(top - hr.top - bt) + "px";
+    }
+    function tick() {
+      if (dead || closed || !panel) return;
+      var cs = cards();
+      if (!cs.length) { if (mode !== "solo" || !panel.isConnected) toSolo(); return; }
+      if (!fits(cs)) { if (mode !== "wait") toWait(); return; }
+      var host = toSide(cs);
+      arrange(cs, host);
+    }
     function focusables() {
       return panel ? Array.prototype.slice.call(panel.querySelectorAll("a[href], button")) : [];
     }
     function onKey(e) {
-      if (!root) return;
+      if (!panel || mode === "wait" || !panel.isConnected) return;
       if (e.key === "Escape") { e.preventDefault(); e.stopImmediatePropagation(); close(false); return; }
-      if (e.key !== "Tab") return;
+      if (e.key !== "Tab" || mode !== "solo") return;
       var items = focusables(); if (!items.length) return;
       e.preventDefault(); e.stopImmediatePropagation();
       var i = items.indexOf(document.activeElement);
@@ -121,43 +226,27 @@ import { useEffect } from "react";
       items[n].focus();
     }
     function onFocusIn(e) {
-      if (!panel || panel.contains(e.target)) return;
+      if (mode !== "solo" || !panel || panel.contains(e.target)) return;
       var go = panel.querySelector(".visit-pop__go"); if (go) go.focus();
-    }
-    function tick() {
-      if (!root) return;
-      var ex = openExisting();
-      root.classList.toggle("visit-pop--stacked", ex.length > 0);
-      if (useDialog) {
-        // 기존 <dialog> 가 이 팝업보다 늦게 열리면 그쪽이 맨 위가 된다. 다시 열어 맨 위로 올린다(기존 dialog 는 건드리지 않음).
-        var fresh = ex.some(function (el) { return el.tagName === "DIALOG" && seen.indexOf(el) < 0; });
-        seen = ex.slice();
-        if (fresh && root.open) { root.close(); root.showModal(); var go = panel.querySelector(".visit-pop__go"); if (go) go.focus(); }
-      }
     }
     function close(today) {
       if (today) { try { localStorage.setItem(VISIT_HIDE_KEY, String(nextKstMidnight())); } catch (e) {} }
-      if (!root) return;
+      if (closed) return;
+      closed = true;
       window.removeEventListener("keydown", onKey, true);
-      document.removeEventListener("focusin", onFocusIn, true);
+      window.removeEventListener("resize", tick);
       if (watch) { window.clearInterval(watch); watch = 0; }
-      if (useDialog && root.open) { try { root.close(); } catch (e) {} }
-      if (root.parentNode) root.parentNode.removeChild(root);
-      root = null; panel = null;
-      if (prevFocus && prevFocus.isConnected && prevFocus.focus && prevFocus !== document.body) { try { prevFocus.focus(); } catch (e) {} }
+      detach(); clearShifts();
+      panel = null; mode = "closed";
+      if (prevFocus && prevFocus.isConnected && prevFocus.focus && prevFocus !== document.body) { try { prevFocus.focus({ preventScroll: true }); } catch (e) {} }
     }
     function open() {
-      if (dead || root || hidden() || skip()) return;
+      if (dead || panel || hidden() || skip()) return;
       css();
       prevFocus = document.activeElement;
-      root = document.createElement(useDialog ? "dialog" : "div");
-      root.className = "visit-pop";
-      root.style.zIndex = String(cfg.z || 1102);
       panel = build();
-      root.appendChild(panel);
-      root.addEventListener("click", function (e) {
+      panel.addEventListener("click", function (e) {
         var t = e.target;
-        if (t === root) { close(false); return; }
         if (!t || !t.closest) return;
         if (t.closest(".visit-pop__go")) {
           e.preventDefault(); e.stopPropagation();
@@ -168,18 +257,14 @@ import { useEffect } from "react";
         if (t.closest("[data-visit-today]")) { e.stopPropagation(); close(true); }
         else if (t.closest("[data-visit-close]")) { e.stopPropagation(); close(false); }
       });
-      if (useDialog) root.addEventListener("cancel", function (e) { e.preventDefault(); close(false); });
-      document.body.appendChild(root);
-      if (useDialog) root.showModal();
-      seen = openExisting();
-      tick();
       window.addEventListener("keydown", onKey, true);
-      if (!useDialog) document.addEventListener("focusin", onFocusIn, true);
-      watch = window.setInterval(tick, 300);
-      var go = panel.querySelector(".visit-pop__go"); if (go) go.focus();
+      window.addEventListener("resize", tick);
+      tick();
+      watch = window.setInterval(tick, 250);
     }
     function whenReady(fn) {
       // 인트로가 도는 동안에는 띄우지 않는다(official-main 의 data-om-intro / om:intro-done, 또는 사이트 인트로 요소).
+      // 기존 팝업들이 자리를 잡은 뒤(cfg.delay) 배치를 정한다.
       var t0 = Date.now();
       function step() {
         if (dead) return;
@@ -201,8 +286,8 @@ export function VisitReservationPopupView() {
       phone: w.__arkoneVisitPhone || "1533-9014",
       tel: w.__arkoneVisitTel || "tel:15339014",
       register: "/register",
-      existing: ['[aria-labelledby="apt-event-pop-title"]', ".costco-pop"],
-      delay: 300,
+      cards: ['[aria-labelledby="apt-event-pop-title"] > div.relative', ".costco-pop__panel"],
+      delay: 2600,
       z: 52,
     });
   }, []);
