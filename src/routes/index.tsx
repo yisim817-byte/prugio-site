@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Shell, pageHead } from "@/components/layout";
 import { AptEventPopup } from "@/components/event-popup";
 import { CostcoEventPopup } from "@/components/CostcoEventPopup";
+import { VisitReservationPopup } from "@/components/VisitReservationPopup";
 import { RoleHome } from "@/components/role";
 
 export const Route = createFileRoute("/")({
@@ -15,6 +16,7 @@ function Home() {
     <Shell>
       <AptEventPopup />
       <CostcoEventPopup />
+      <VisitReservationPopup />
       <RoleHome />
     </Shell>
   );
