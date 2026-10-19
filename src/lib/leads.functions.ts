@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { getSql, dbSource } from "@/lib/db";
+import { getSql, dbSource, type Sql } from "@/lib/db";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { SITE_ID } from "@/data/content";
 import { LOGIN_ID_PATTERN, PASSWORD_MAX, passwordProblem } from "@/lib/staff-login";
+import { checkVisit } from "@/lib/visit.server";
 
 const SITE = SITE_ID;
 
@@ -17,6 +18,9 @@ const leadSchema = z.object({
   dong: z.string().trim().min(1).max(20),
   consent: z.literal(true),
   entry: z.string().trim().max(80).optional(),
+  // 작업지시서 9: 모델하우스 방문 희망일(선택). 없으면 종전과 같다.
+  visit_date: z.string().trim().max(10).optional(),
+  visit_slot: z.string().trim().max(3).optional(),
 });
 
 function digits(value: string) {
@@ -84,6 +88,21 @@ export const submitLead = createServerFn({ method: "POST" })
       }
       return { ok: false as const, error: "테스트 환경입니다. 접수는 저장되지 않았고 접수번호는 발급되지 않습니다." };
     }
+    const visit = await checkVisit(data.visit_date, data.visit_slot);
+    let visitSaved = false;
+    async function saveVisit(db: Sql): Promise<boolean> {
+      if (!visit) return false;
+      try {
+        await db`
+          update leads set visit_date = ${visit.date}, visit_slot = ${visit.slot}, visit_updated_at = now()
+          where site_id = ${SITE} and phone = ${phone}
+        `;
+        return true;
+      } catch {
+        console.error("[leads] visit save failed");
+        return false;
+      }
+    }
     let sql;
     let receipt = "";
     try {
@@ -94,11 +113,13 @@ export const submitLead = createServerFn({ method: "POST" })
       if (existing[0]) {
         // R21: 같은 번호 재접수 시 등록 상품만 최신 값으로 갱신(나머지 항목·접수번호 불변)
         await sql`update leads set product = ${data.product} where site_id = ${SITE} and phone = ${phone}`;
+        visitSaved = await saveVisit(sql);
         return {
           ok: true as const,
           duplicate: true,
           receiptNo: existing[0].receipt_no,
           notifyStatus: "skipped_duplicate",
+          visitSaved,
         };
       }
       receipt = receiptNo();
@@ -112,6 +133,7 @@ export const submitLead = createServerFn({ method: "POST" })
         insert into leads (site_id, receipt_no, name, phone, birth6, sido, sigungu, dong, entry_path, notify_status, product)
         values (${SITE}, ${receipt}, ${data.name}, ${phone}, ${data.birth6}, ${data.sido}, ${data.sigungu}, ${data.dong}, ${entry}, 'pending', ${data.product})
       `;
+      visitSaved = await saveVisit(sql);
     } catch {
       console.error("[leads] save failed");
       return { ok: false as const, error: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요." };
@@ -120,7 +142,7 @@ export const submitLead = createServerFn({ method: "POST" })
     try {
       const { sendStaffAlert } = await import("./kakao.server");
       const createdAt = new Date().toISOString();
-      const alert = await sendStaffAlert({ receiptNo: receipt, createdAt, name: data.name, phone, product: data.product });
+      const alert = await sendStaffAlert({ receiptNo: receipt, createdAt, name: data.name, phone, product: data.product, visit: visitSaved && visit ? visit.label : null });
       notifyStatus = alert.status;
       try {
         await sql`
@@ -143,7 +165,7 @@ export const submitLead = createServerFn({ method: "POST" })
         console.error("[leads] notify status update failed", receipt);
       }
     }
-    return { ok: true as const, duplicate: false, receiptNo: receipt, notifyStatus };
+    return { ok: true as const, duplicate: false, receiptNo: receipt, notifyStatus, visitSaved };
   });
 
 const changePasswordSchema = z.object({

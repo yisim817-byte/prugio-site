@@ -12,6 +12,8 @@ export type AlertInput = {
   phone: string;
   /** R21: 등록 상품(apt/officetel/commercial). 기존 행은 null. */
   product?: string | null;
+  /** 작업지시서 9: 저장된 방문 희망일(예: 10.30(금) 오전). 없으면 줄을 넣지 않는다. */
+  visit?: string | null;
 };
 
 export function productLabel(value: string | null | undefined): string {
@@ -70,11 +72,12 @@ export function alertSetup() {
   };
 }
 
-export function telegramText(input: Pick<AlertInput, "receiptNo" | "createdAt" | "product">): string {
+export function telegramText(input: Pick<AlertInput, "receiptNo" | "createdAt" | "product" | "visit">): string {
   return [
     `[${SITE_LABEL}] 새 사전고객 접수`,
     `접수번호 ${input.receiptNo}`,
     `고객군 ${productLabel(input.product)}`,
+    ...(input.visit ? [`방문희망: ${input.visit}`] : []),
     input.createdAt,
     `관리화면 ${SITE_HOST}/admin?receipt=${encodeURIComponent(input.receiptNo)}`,
   ].join("\n");
@@ -127,7 +130,7 @@ export async function sendStaffAlert(input: AlertInput): Promise<AlertResult> {
   ].join("\n");
   if (channel === "sms") {
     // R21: 문자에는 고객군 한 줄 추가. 알림톡(아래)은 승인 템플릿과 맞춰야 하므로 본문을 바꾸지 않는다.
-    const smsText = [text.split("\n")[0], text.split("\n")[1], `고객군 ${productLabel(input.product)}`, ...text.split("\n").slice(2)].join("\n");
+    const smsText = [text.split("\n")[0], text.split("\n")[1], `고객군 ${productLabel(input.product)}`, ...(input.visit ? [`방문희망: ${input.visit}`] : []), ...text.split("\n").slice(2)].join("\n");
     const sms = await sendSms(recipient, smsText);
     return { status: sms.ok ? "accepted" : "failed", detail: `${telegramDetail}${sms.detail}` };
   }
