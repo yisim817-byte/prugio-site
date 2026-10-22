@@ -46,8 +46,9 @@ export function Photo({
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper text-ink">
-      <Header />
+      {/* 단계 띠는 헤더 위에 둔다 — 홈 히어로가 투명 헤더 아래로 올라가는(margin-top: -헤더 높이) 구조라 헤더 아래에 두면 히어로에 가려진다 */}
       <PhaseBand />
+      <Header />
       {children}
       <Footer />
       <MobileBar />

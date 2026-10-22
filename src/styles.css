@@ -1917,7 +1917,7 @@ html[data-om-hd="clear"] .ak-hd__item > a:hover {
   height: calc(40 * var(--u));
   align-items: center;
   justify-content: center;
-  gap: 0.15em;
+  gap: 0.35em;
   margin-top: calc(28 * var(--u));
   padding: 0 calc(20 * var(--u));
   border: 1px solid rgba(255, 255, 255, 0.72);
@@ -1937,6 +1937,24 @@ html[data-om-hd="clear"] .ak-hd__item > a:hover {
 }
 .om-hero__open strong {
   font-weight: 700;
+}
+/* 작업지시서 11: 구절 단위로 끊기지 않게. 휴대폰·태블릿은 「·」 자리에서만 두 줄 */
+.om-hero__open_ph {
+  white-space: nowrap;
+}
+@media (max-width: 1024px) {
+  .om-hero__open {
+    flex-direction: column;
+    gap: calc(4 * var(--u));
+    height: auto;
+    min-height: calc(40 * var(--u));
+    padding: calc(8 * var(--u)) calc(20 * var(--u));
+    border-radius: calc(24 * var(--u));
+    line-height: 1.2;
+  }
+  .om-hero__open_sep {
+    display: none;
+  }
 }
 .om-hero__ui {
   position: absolute;
