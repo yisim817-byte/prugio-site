@@ -5033,3 +5033,15 @@ html[data-om-hd="clear"] .ak-hd__item > a:hover {
     display: none;
   }
 }
+
+/* 작업지시서 10 · 공고 반영 구간 (2026-10-22) */
+.notice-block { padding-top: 32px; padding-bottom: 8px; }
+.notice-lines p { margin: 0 0 8px; line-height: 1.7; word-break: keep-all; }
+.notice-h3 { margin: 20px 0 8px; font-weight: 700; }
+.notice-note { margin-top: 8px; font-size: 13px; color: var(--color-muted, #666); }
+.notice-tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 8px 0 16px; }
+.notice-tbl-wrap .ak-tbl th, .notice-tbl-wrap .ak-tbl td { white-space: nowrap; }
+/* 타입 연출 이미지 — 가로 100%, 비율 유지, 잘라내지 않음, 고지는 글자로 */
+.unit-figure { margin: 12px 0 24px; }
+.unit-figure img { display: block; width: 100%; height: auto; }
+.unit-figure figcaption { margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--color-muted, #555); }

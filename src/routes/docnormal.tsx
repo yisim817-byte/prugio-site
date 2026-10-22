@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { NoticeEligibility } from "@/components/notice-sections";
 import { Nb } from "@/components/chrome";
 import { Photo, Shell, SourceNote, SubHero, pageHead } from "@/components/layout";
 import { DepositTable } from "@/components/role";
@@ -16,11 +17,11 @@ const POINTS = [
     "모집공고일 현재 인천광역시, 서울특별시, 경기도 거주자. 인천광역시 50%, 기타 수도권 50%.",
   ],
   ["02", "만 19세 이상", "세대주와 세대원 모두 가능합니다."],
-  ["03", "유주택자도 1순위", "주택 수와 관계없습니다."],
+  ["03", "유주택자도 1순위 가능", "단, 추첨제는 추첨제 물량의 75%를 무주택세대구성원에게 먼저 공급합니다."],
   [
     "04",
-    "재당첨 제한 없음",
-    "기존 당첨 사실과 무관. 다만 2년 내 가점제 당첨자와 그 세대는 추첨제로만 청약.",
+    "기존 재당첨 제한 중에도 청약 가능",
+    "단, 이 단지에 당첨되면 재당첨 제한 10년이 적용됩니다. 2년 내 가점제 당첨자와 그 세대는 추첨제로만 청약.",
   ],
   ["05", "통장 가입 12개월", "지역별·면적별 예치금을 충족할 때."],
 ];
@@ -36,6 +37,7 @@ function Page() {
   return (
     <Shell>
       <SubHero en="INFORMATION" title="일반공급 안내" crumbs="청약안내 / 일반공급 안내" />
+      <NoticeEligibility />
       <article className="ak-wrap ak-page">
         <div className="ak-cols">
           <div>

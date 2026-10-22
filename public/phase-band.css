@@ -1,0 +1,8 @@
+/* 작업지시서 10 · 단계 띠 스타일 (고정 위치 아님 · 애니메이션 없음) */
+.ak-phase-band{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+  background:#032B20;color:#F7F3EA;padding:10px 16px;font-size:14px;line-height:1.45;text-align:center}
+.ak-phase-band__t{font-weight:600;word-break:keep-all}
+.ak-phase-band__b{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:999px;
+  background:#E2B565;color:#032B20;font-weight:700;text-decoration:none;white-space:nowrap}
+.ak-phase-band__b:focus-visible{outline:2px solid #F7F3EA;outline-offset:2px}
+@media (max-width:640px){.ak-phase-band{font-size:13px;gap:8px;padding:8px 12px}.ak-phase-band__b{height:30px}}

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { NoticeSpecial } from "@/components/notice-sections";
 import { Nb } from "@/components/chrome";
 import { Photo, Shell, SourceNote, SubHero, pageHead } from "@/components/layout";
 import { DepositTable, SourceLine } from "@/components/role";
@@ -15,13 +16,14 @@ const RULES = [
   "무주택: 대부분 무주택세대구성원. 노부모만 무주택세대주.",
   "기본 자격은 유형마다 다릅니다. 신혼은 혼인 7년 이내, 생애최초는 세대원 전원 주택 소유 사실 없음과 5년 이상 소득세 납부, 신생아는 2세 미만 자녀(태아 포함), 노부모는 만 65세 이상 직계존속 3년 이상 부양으로 적혀 있습니다.",
   "신혼·생애최초·신생아의 부동산 가액은 약 3.31억원 이하(토지 공시지가, 건축물 시가표준액, 전세보증금 제외). 기관추천·경제자유구역·다자녀·노부모의 소득·자산 칸은 「-」입니다.",
-  "통장: 앞 네 유형은 가입 6개월(기관추천의 장애인·국가유공자 등 제외), 신혼·생애최초·신생아는 12개월. 예치금은 아래 표.",
+  "통장: 기관추천·경제자유구역·다자녀가구·신혼부부·노부모부양은 가입 6개월(기관추천의 장애인·국가유공자 등 제외), 생애최초·신생아는 1순위(가입 12개월). 예치금은 아래 표.",
 ];
 
 function Page() {
   return (
     <Shell>
       <SubHero en="INFORMATION" title="특별공급 안내" crumbs="청약안내 / 특별공급 안내" />
+      <NoticeSpecial />
       <article className="ak-wrap ak-page">
         <div className="ak-cols">
           <h2 className="ak-h2">공급 비율과 적용 타입</h2>
