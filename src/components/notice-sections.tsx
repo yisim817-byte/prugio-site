@@ -97,7 +97,7 @@ export function NoticePrice() {
           `※ 분양가상한제 적용 단지입니다. 원하시는 동·층·호의 금액은 대표번호 ${PROJECT_PHONE_DISPLAY}로 상담해 주세요.`,
         ]}
       />
-      <h3 className="notice-h3">발코니 확장비 (부가가치세 포함 · 계약금 10% · 잔금 90%)</h3>
+      <h3 className="notice-h3">발코니 확장비 (VAT 포함 · 계약금 10% · 잔금 90%)</h3>
       <Table columns={["주택형", ...NOTICE.balcony.map((b) => b.type)]} rows={[["확장비", ...NOTICE.balcony.map((b) => `${b.price.toLocaleString("ko-KR")}원`)]]} />
     </Block>
   );
@@ -175,6 +175,23 @@ function UnitFigure({ file, alt }: { file: string; alt: string }) {
 }
 
 /** M7 · 주택형 안내 (면적 단위 ㎡) + 타입 연출 이미지 5종 */
+const PLAN_NOTE = "분양 안내 자료의 평면을 다시 그린 안내용 이미지입니다. 실제와 다를 수 있으며 입주자모집공고문과 견본주택이 우선합니다.";
+
+/** 평면 안내도(작업지시서 12 · 3절). 누르면 원본 PNG 새 창(휴대폰 확대용). */
+function PlanFigure({ file, alt }: { file: string; alt: string }) {
+  return (
+    <figure className="plan-figure">
+      <a href={`/plans/${file}.png`} target="_blank" rel="noopener">
+        <picture>
+          <source type="image/webp" srcSet={`/plans/${file}.webp`} />
+          <img src={`/plans/${file}.png`} alt={alt} width={2000} height={1250} loading="lazy" decoding="async" />
+        </picture>
+      </a>
+      <figcaption>{PLAN_NOTE}</figcaption>
+    </figure>
+  );
+}
+
 export function NoticeTypes() {
   const s = NOTICE.supply;
   const rows = NOTICE.types.map((t) => [t.type, t.units, t.exclusive, t.residentialCommon, t.supply, t.otherCommon, t.contract]);
@@ -184,9 +201,11 @@ export function NoticeTypes() {
       <div className="notice-lines">
         <p>{`총 ${s.total}세대 (특별공급 ${s.special}세대 · 일반공급 ${s.general}세대) · ${s.buildings}개동 · ${s.floors} · 입주 ${s.moveIn}`}</p>
         <p>84㎡C — 4Bay 판상형, 맞통풍 구조, 2면 개방, 팬트리 수납</p>
+        <PlanFigure file="plan-84c-redraw-v2" alt="청라 아크원 푸르지오 84㎡C 평면 안내도" />
         <UnitFigure file="unit-84c-living-ai.webp" alt="84㎡C 거실 인테리어 연출 이미지(AI 제작)" />
         <UnitFigure file="unit-84c-living-kitchen-ai.webp" alt="84㎡C 거실·주방 인테리어 연출 이미지(AI 제작)" />
         <p>103㎡A — 알파룸을 더해 방 4개처럼 쓸 수 있는 구성, 넓은 팬트리, 별도 세탁실</p>
+        <PlanFigure file="plan-103a-redraw-v2" alt="청라 아크원 푸르지오 103㎡A 평면 안내도" />
         <UnitFigure file="unit-103a-alpha-study-ai.webp" alt="103㎡A 알파룸을 서재로 꾸민 인테리어 연출 이미지(AI 제작)" />
         <p>※ 특화 내용은 현장 상품 설명 자료 기준이며 주택형·옵션 선택에 따라 다를 수 있으니 견본주택에서 확인해 주세요.</p>
         <p>견본주택에는 84A·103A 유니트가 설치되어 있습니다.</p>
