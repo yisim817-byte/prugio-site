@@ -294,6 +294,22 @@ export const adminSnapshot = createServerFn({ method: "GET" })
             order by role, login_id
           `
         : [];
+    // 작업지시서 13: 모델하우스 방문예약(사전고객등록과 별도 표). 표가 아직 없으면 빈 목록.
+    let visits: {
+      receipt_no: string; name: string; phone: string; visit_date: string | null; visit_slot: string;
+      interest: string | null; created_at: string; is_test: boolean; notify_status: string | null; status: string;
+    }[] = [];
+    try {
+      visits = await sql`
+        select receipt_no, name, phone, visit_date, visit_slot, interest, created_at::text as created_at, is_test, notify_status, status
+        from visit_reservations
+        where site_id = ${SITE}
+        order by id desc
+        limit 200
+      `;
+    } catch {
+      visits = [];
+    }
     const { alertSetup } = await import("./kakao.server");
     return {
       ok: true as const,
@@ -301,6 +317,7 @@ export const adminSnapshot = createServerFn({ method: "GET" })
       loginId: access.loginId,
       alert: alertSetup(),
       leads,
+      visits,
       accounts,
     };
   });

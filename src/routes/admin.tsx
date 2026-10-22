@@ -52,6 +52,10 @@ type Snap = {
     missingSms: string[];
   };
   leads: Lead[];
+  visits: {
+    receipt_no: string; name: string; phone: string; visit_date: string | null; visit_slot: string;
+    interest: string | null; created_at: string; is_test: boolean; notify_status: string | null; status: string;
+  }[];
   accounts: Account[];
 };
 
@@ -195,6 +199,22 @@ function Page() {
                 <ChangePassword loginId={snap.loginId} />
               </section>
             )}
+            {snap.visits.length ? (
+              <section className="mt-6 text-sm" aria-label="모델하우스 방문예약">
+                <h2 className="font-medium">모델하우스 방문예약 ({snap.visits.length})</h2>
+                <ul className="mt-2 divide-y divide-line border-y border-line">
+                  {snap.visits.map((v) => (
+                    <li key={v.receipt_no} className="py-3">
+                      <p className="font-medium">{v.receipt_no} · {v.name}{v.is_test ? " · 테스트" : ""}</p>
+                      <p className="mt-1 text-muted">
+                        {formatPhone(v.phone)} · 방문희망 {v.visit_date ?? "날짜 미선택(전화 확인)"} {({ AM: "오전", PM: "오후", ANY: "시간 상관없음" } as Record<string, string>)[v.visit_slot] ?? v.visit_slot} · 관심 {v.interest ?? "미선택"}
+                      </p>
+                      <p className="mt-1 text-muted">{v.created_at} · 알림 {v.notify_status ?? "-"}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
             <ul className="mt-6 divide-y divide-line border-y border-line">
               {snap.leads.map((lead) => (
                 <li key={lead.receipt_no} className={`py-4 text-sm ${receipt === lead.receipt_no ? "bg-line/60" : ""}`}>

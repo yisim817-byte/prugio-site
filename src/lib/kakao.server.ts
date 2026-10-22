@@ -160,7 +160,7 @@ export async function sendStaffAlert(input: AlertInput): Promise<AlertResult> {
 
 // ── 작업지시서 13 (2026-10-22): 모델하우스 방문예약 알림 ─────────────────────
 // 사전고객등록 알림과 같은 경로(텔레그램 → 알림톡 → 문자)로 보내고, 제목 앞에 「[방문예약]」을 붙인다.
-// 지시서 4-5에 따라 이름·휴대폰·방문 희망일·시간대·관심 상품·사이트를 넣는다(방문예약은 관리 화면 목록이 없으므로).
+// 텔레그램에는 사전고객등록과 같이 이름·휴대폰을 싣지 않는다(관리화면 방문예약 목록에서 확인). 알림톡·문자에는 이름·휴대폰을 싣는다.
 export type VisitAlertInput = {
   receiptNo: string;
   createdAt: string;
@@ -170,6 +170,18 @@ export type VisitAlertInput = {
   interest: string | null;
   test: boolean;
 };
+
+export function visitTelegramText(input: VisitAlertInput): string {
+  return [
+    `${input.test ? "[테스트] " : ""}[방문예약] ${SITE_LABEL}`,
+    `접수번호 ${input.receiptNo}`,
+    `방문희망 ${input.visit}`,
+    `관심상품 ${input.interest || "미선택"}`,
+    `사이트 ${SITE_HOST.replace("https://", "")}`,
+    input.createdAt,
+    `관리화면 ${SITE_HOST}/admin?visit=${encodeURIComponent(input.receiptNo)}`,
+  ].join("\n");
+}
 
 export function visitAlertText(input: VisitAlertInput): string {
   return [
@@ -196,7 +208,7 @@ export async function sendVisitAlert(input: VisitAlertInput): Promise<AlertResul
       const res = await fetch(`${base}/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
+        body: JSON.stringify({ chat_id: chatId, text: visitTelegramText(input), disable_web_page_preview: true }),
         signal: AbortSignal.timeout(8000),
       });
       const body = (await res.json().catch(() => null)) as { ok?: boolean } | null;
