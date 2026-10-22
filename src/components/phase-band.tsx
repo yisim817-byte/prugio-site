@@ -6,6 +6,7 @@ const PHASE_CFG = {
   fnUrl: "https://jzmktahlrwtrtejjflrw.supabase.co/functions/v1/arkone-site-phase",
   fnHeaders: {}, // arkone-visit-config 호출과 같은 방식(별도 헤더·anon 키 없음)
   registerPath: "/register",
+  visitPath: "/visit", // 작업지시서 13: 단계 띠 「방문 상담 예약」 → 방문예약 전용 페이지
   scheduleHref: "/changeinfo",
   noticeUrl: "https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancDetail.do?houseManageNo=2026000496&pblancNo=2026000496",
 };

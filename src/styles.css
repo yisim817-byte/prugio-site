@@ -5067,3 +5067,110 @@ html[data-om-hd="clear"] .ak-hd__item > a:hover {
 .plan-figure a { display: block; }
 .plan-figure img { display: block; width: 100%; height: auto; border: 1px solid #e3e3e3; }
 .plan-figure figcaption { margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--color-muted, #555); }
+
+/* ── 작업지시서 13 (2026-10-22): 헤더 → 단계 띠 → 본문, 헤더·하단 바·30만원 팝업을 아크원푸르지오.site(A)와 같은 값으로 ── */
+/* 헤더: A 값 — 높이 90(PC)·72(태블릿)·70(휴대폰), 하위 페이지는 흰 바탕(0.85+블러)·초록 글자, 홈은 검정 바탕·흰 글자 */
+.ak-hd {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  color: #004b45;
+  font-family: "SUIT", "Pretendard", sans-serif;
+}
+.ak-hd > .ak-wrap.ak-hd__row {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: 70px;
+  gap: 12px;
+  padding: 0 20px;
+}
+.ak-hd__brand { margin-right: auto; color: inherit; }
+.ak-hd__name { font-family: inherit; font-size: 16px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: inherit; }
+.ak-hd__sep, .ak-hd__mark, .ak-hd .ak-hd__cta { display: none !important; }
+.ak-hd__tel { display: none; color: inherit; }
+.ak-hd__mtel {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 32px; height: 32px; border: 1px solid rgb(0 75 69 / 0.2); border-radius: 50%; color: inherit; font-size: 0;
+}
+.ak-hd__mtel::after { content: "☎"; font-size: 14px; }
+.ak-hd__menu { width: 40px; height: 40px; margin-left: 0; border: 0; border-radius: 0; color: inherit; background: transparent; }
+@media (min-width: 768px) {
+  .ak-hd > .ak-wrap.ak-hd__row { height: 72px; padding: 0 50px; }
+}
+@media (min-width: 1200px) {
+  .ak-hd > .ak-wrap.ak-hd__row { height: 90px; padding: 0 80px; gap: 24px; }
+  .ak-hd__name { font-size: 22px; }
+  .ak-hd__nav {
+    position: absolute; top: 0; left: 50%; display: flex; height: 100%; gap: 18px; margin: 0;
+    transform: translateX(-50%); color: inherit; font-size: 16px; font-weight: 500;
+  }
+  .ak-hd__item { display: flex; align-items: center; height: 100%; }
+  .ak-hd__item > a { display: flex; align-items: center; height: 100%; padding: 0 6px; white-space: nowrap; }
+  .ak-hd__item > a:hover { color: inherit; opacity: 0.75; }
+  .ak-hd__tel { display: flex; margin-left: 0; font-size: 26px; font-weight: 700; color: inherit; }
+  .ak-hd__mtel { display: none; }
+}
+/* 홈: A처럼 불투명 검정 헤더 + 흰 글자(장면과 관계없이). 히어로는 띠 아래에서 시작한다 */
+html[data-om-hd] .ak-hd { background: #000; backdrop-filter: none; border-bottom-color: transparent; }
+html[data-om-hd] .ak-hd__name,
+html[data-om-hd] .ak-hd__nav,
+html[data-om-hd] .ak-hd__item > a,
+html[data-om-hd] .ak-hd__tel,
+html[data-om-hd] .ak-hd__mtel,
+html[data-om-hd] .ak-hd__menu { color: #fff; }
+html[data-om-hd] .ak-hd__mtel { border-color: rgba(255, 255, 255, 0.4); }
+.om-hero { margin-top: 0; }
+
+/* 휴대폰 하단 고정 바: A(quick-mo) 값 — 1024px 이하, 높이 56, 초록 바탕, 흰 굵은 글자, 가운데 구분선 */
+.ak-mbar { display: none; }
+@media (max-width: 1024px) {
+  .ak-mbar {
+    position: sticky; bottom: 0; z-index: 1050; display: grid; grid-template-columns: 1fr 1fr;
+    min-height: calc(56px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
+    border-top: 0; background: #004b45; color: #fff;
+  }
+  .ak-mbar a { display: flex; height: auto; min-height: 56px; align-items: center; justify-content: center; background: transparent; color: #fff; font-size: 16px; font-weight: 700; }
+  .ak-mbar a + a { background: transparent; color: #fff; border-left: 1px solid color-mix(in srgb, #fff 35%, transparent); }
+}
+
+/* 30만원 팝업: A(prereg-popup) 값 그대로 */
+.prereg-pop { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; }
+.prereg-pop__bg { position: absolute; inset: 0; border: 0; background: color-mix(in srgb, #303030 55%, transparent); }
+.prereg-pop__panel {
+  position: relative; width: min(480px, calc(100% - 32px)); margin: auto; padding: 32px; border-radius: 8px;
+  background: #fff; color: #303030; font-family: "SUIT", "Pretendard", sans-serif; font-size: 16px; line-height: 24px; text-align: left;
+}
+.prereg-pop__panel p, .prereg-pop__panel a, .prereg-pop__panel button { margin: 0; color: #303030; }
+.prereg-pop__panel h2 { margin: 4px 0 12px; color: #004b45; font-size: 16px; font-weight: 400; line-height: 24px; font-family: inherit; }
+.prereg-pop__panel .reg__submit {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 60px; margin-top: 12px; border-radius: 8px;
+  background: #004b45; color: #fff; font-size: 18px; font-weight: 700; text-decoration: none;
+}
+.prereg-pop__panel .prereg-fine { font-size: 13px; line-height: 19.5px; }
+.prereg-pop__panel .prereg-fine:first-of-type { margin-top: 12px; }
+.prereg-pop__x { position: absolute; top: 8px; right: 8px; min-width: 44px; min-height: 44px; border: 0; background: transparent; }
+.prereg-pop__actions { display: flex; margin: 16px -32px -32px; border-top: 1px solid #e6e6e6; }
+.prereg-pop__actions button { flex: 1; height: 48px; border: 0; background: transparent; font: inherit; }
+body.prereg-lock { overflow: hidden; }
+@media (max-width: 1024px) {
+  .prereg-pop__panel { max-height: 85vh; overflow-y: auto; padding-bottom: 84px; }
+  .prereg-pop__actions { position: sticky; bottom: -32px; background: #fff; }
+}
+@media (max-width: 600px) {
+  .prereg-pop { align-items: flex-end; }
+  .prereg-pop__panel { width: 100%; max-height: 85vh; margin: 0; overflow-y: auto; border-radius: 8px 8px 0 0; }
+}
+.prereg-strip { display: none; }
+@media (max-width: 767px) {
+  .prereg-strip {
+    position: fixed; z-index: 1040; left: 0; right: 0; bottom: calc(56px + env(safe-area-inset-bottom)); height: 44px;
+    display: flex; align-items: center; gap: 8px; padding: 0 4px 0 14px; background: #8b7f71; color: #fff; font-size: 13px; font-weight: 700;
+  }
+  .prereg-strip__txt { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .prereg-strip__more { flex: none; height: 32px; padding: 0 12px; border: 1px solid color-mix(in srgb, #fff 60%, transparent); border-radius: 16px; background: transparent; color: #fff; font: inherit; font-weight: 700; }
+  .prereg-strip__x { flex: none; width: 40px; height: 40px; border: 0; background: transparent; color: #fff; font-size: 16px; }
+}

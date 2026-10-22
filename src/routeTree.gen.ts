@@ -24,6 +24,8 @@ import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as VideoRouteImport } from './routes/video'
+import { Route as VisitRouteImport } from './routes/visit'
+import { Route as ApiVisitRouteImport } from './routes/api/visit'
 import { Route as EventAptRouteImport } from './routes/event.apt'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -102,6 +104,16 @@ const VideoRoute = VideoRouteImport.update({
   path: '/video',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VisitRoute = VisitRouteImport.update({
+  id: '/visit',
+  path: '/visit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiVisitRoute = ApiVisitRouteImport.update({
+  id: '/api/visit',
+  path: '/api/visit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventAptRoute = EventAptRouteImport.update({
   id: '/event/apt',
   path: '/event/apt',
@@ -129,6 +141,8 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/video': typeof VideoRoute
+  '/visit': typeof VisitRoute
+  '/api/visit': typeof ApiVisitRoute
   '/event/apt': typeof EventAptRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -148,6 +162,8 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/video': typeof VideoRoute
+  '/visit': typeof VisitRoute
+  '/api/visit': typeof ApiVisitRoute
   '/event/apt': typeof EventAptRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -168,6 +184,8 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/video': typeof VideoRoute
+  '/visit': typeof VisitRoute
+  '/api/visit': typeof ApiVisitRoute
   '/event/apt': typeof EventAptRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -189,6 +207,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/register'
     | '/video'
+    | '/visit'
+    | '/api/visit'
     | '/event/apt'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
@@ -208,6 +228,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/register'
     | '/video'
+    | '/visit'
+    | '/api/visit'
     | '/event/apt'
     | '/api/auth/$'
   id:
@@ -227,6 +249,8 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/register'
     | '/video'
+    | '/visit'
+    | '/api/visit'
     | '/event/apt'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
@@ -247,6 +271,8 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   VideoRoute: typeof VideoRoute
+  VisitRoute: typeof VisitRoute
+  ApiVisitRoute: typeof ApiVisitRoute
   EventAptRoute: typeof EventAptRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -358,6 +384,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VideoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/visit': {
+      id: '/visit'
+      path: '/visit'
+      fullPath: '/visit'
+      preLoaderRoute: typeof VisitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/visit': {
+      id: '/api/visit'
+      path: '/api/visit'
+      fullPath: '/api/visit'
+      preLoaderRoute: typeof ApiVisitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/event/apt': {
       id: '/event/apt'
       path: '/event/apt'
@@ -391,6 +431,8 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   VideoRoute: VideoRoute,
+  VisitRoute: VisitRoute,
+  ApiVisitRoute: ApiVisitRoute,
   EventAptRoute: EventAptRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

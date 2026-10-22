@@ -9,6 +9,7 @@
   var FN_URL = CFG.fnUrl || '';                 // https://jzmktahlrwtrtejjflrw.supabase.co/functions/v1/arkone-site-phase
   var FN_HEADERS = CFG.fnHeaders || {};         // arkone-visit-config 호출과 같은 헤더(anon 키 방식 그대로)
   var REG = CFG.registerPath || '/register';
+  var VISIT = CFG.visitPath || '/visit';           // 작업지시서 13: 방문예약 전용 페이지
   var SCHEDULE = CFG.scheduleHref || '/#schedule';
   var NOTICE = CFG.noticeUrl || 'https://www.applyhome.co.kr';
   var APPLY = 'https://www.applyhome.co.kr';
@@ -16,7 +17,7 @@
   var HIDE = CFG.hidePaths || ['/privacy', '/terms'];
   var PHASES = {
     0: { t: '입주자모집공고 게시 2026.10.22(목) · 특별공급 11.02(월) · 1순위 11.03(화) · 2순위 11.04(수)', b: '청약 일정 보기', h: SCHEDULE, x: false },
-    1: { t: '견본주택 GRAND OPEN 10.30(금) · 특별공급 접수 11.02(월)', b: '방문 상담 예약', h: REG + '?visit=1#visit', x: false },
+    1: { t: '견본주택 GRAND OPEN 10.30(금) · 특별공급 접수 11.02(월)', b: '방문 상담 예약', h: VISIT, x: false },
     2: { t: '청약 접수 기간 · 특별공급 11.02(월) · 1순위 11.03(화) · 2순위 11.04(수)', b: '청약홈 바로가기', h: APPLY, x: true },
     3: { t: '당첨자 발표 11.10(화) · 청약홈에서 확인할 수 있습니다', b: '청약홈 바로가기', h: APPLY, x: true },
     4: { t: '당첨자 서류접수 11.12(목)~11.16(월) · 계약 11.22(일)~11.24(화)', b: '공고문 보기', h: NOTICE, x: true }

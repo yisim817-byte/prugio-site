@@ -13,7 +13,8 @@ import { SEO_FAQS, SEO_PAGES } from "@/data/seo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const menu = NAV.filter((item) => item.href !== "/register");
+  // 작업지시서 13: 헤더는 아크원푸르지오.site(A)와 같은 모양 — 사전고객등록·방문예약도 메뉴 글자로 둔다(버튼 없음).
+  const menu = NAV;
   return (
     <header className="ak-hd">
       <div className="ak-wrap ak-hd__row">
@@ -41,12 +42,9 @@ export function Header() {
           ))}
         </nav>
         <a href={PROJECT_PHONE_TEL} className="ak-hd__tel ak-num">
-          <small>상담</small>
           {PROJECT_PHONE_DISPLAY}
         </a>
-        <Link to="/register" className="ak-btn ak-btn--primary ak-btn--sm ak-hd__cta">
-          {REGISTER_LABEL}
-        </Link>
+        <a href={PROJECT_PHONE_TEL} className="ak-hd__mtel" aria-label={`전화 상담 ${PROJECT_PHONE_DISPLAY}`} />
         <button
           type="button"
           className="ak-hd__menu"
@@ -133,7 +131,7 @@ export function MobileBar() {
   if (NO_BAR.some((p) => path === p || path.startsWith(`${p}/`))) return null;
   return (
     <nav className="ak-mbar" aria-label="빠른 연결">
-      <a href={PROJECT_PHONE_TEL}>전화 상담</a>
+      <a href={PROJECT_PHONE_TEL}>전화상담 {PROJECT_PHONE_DISPLAY}</a>
       <Link to="/register">{REGISTER_LABEL}</Link>
     </nav>
   );

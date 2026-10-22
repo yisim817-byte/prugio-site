@@ -1,129 +1,115 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { PROJECT_PHONE_DISPLAY } from "@/data/content";
 
+// 아파트 사전고객등록 이벤트(백화점 상품권 30만원) 팝업.
+// 작업지시서 13 (2026-10-22): 모양·배치를 아크원푸르지오.site(A)의 30만원 팝업(prereg-popup)과 같게 바꿨다. 문구와 「오늘 하루 보지 않기」 저장 키는 그대로.
+// 휴대폰(767px 이하)은 A와 같이 자동으로 열지 않고 하단 띠를 두며, 「자세히」를 누르면 팝업을 연다.
 const HIDE_DAY = "arkone-staff-apt-event-day";
+const MOBILE_QUERY = "(max-width: 767px)";
+const STRIP_CLOSED = "prereg_strip_closed";
+
+function isMobileView() {
+  try { return window.matchMedia(MOBILE_QUERY).matches; } catch { return false; }
+}
+function hiddenToday() {
+  try { return localStorage.getItem(HIDE_DAY) === new Date().toISOString().slice(0, 10); } catch { return false; }
+}
 
 export function AptEventPopup() {
   const [open, setOpen] = useState(false);
-  const [hideToday, setHideToday] = useState(false);
-  const closeBtn = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const returnFocus = useRef<HTMLElement | null>(null);
-  const hideTodayRef = useRef(false);
-  hideTodayRef.current = hideToday;
+  const [strip, setStrip] = useState(false);
 
   useEffect(() => {
-    try {
-      if (localStorage.getItem(HIDE_DAY) === new Date().toISOString().slice(0, 10)) return;
-    } catch {
-      /* 저장을 못 해도 팝업은 연다 */
-    }
-    // 홈의 인트로(공식 메인 복제)가 도는 동안에는 열지 않고, 끝난 뒤에 연다. 인트로가 없으면(「동작 줄이기」 등) 바로 연다.
-    // 인트로 영상을 내렸으므로(2026-10-15) 기다리지 않는다.
-    const introAhead = false;
-    if (!introAhead) {
-      setOpen(true);
+    if (hiddenToday()) return;
+    if (isMobileView()) {
+      try { sessionStorage.removeItem(STRIP_CLOSED); } catch { /* ignore */ }
+      setStrip(true);
       return;
     }
-    let done = false;
-    const show = () => {
-      if (done) return;
-      done = true;
-      setOpen(true);
-    };
-    window.addEventListener("om:intro-done", show, { once: true });
-    const fallback = window.setTimeout(show, 9000);
-    return () => {
-      window.removeEventListener("om:intro-done", show);
-      window.clearTimeout(fallback);
-    };
+    setOpen(true);
+    document.body.classList.add("prereg-lock");
   }, []);
+
+  function openFromStrip() {
+    setStrip(false);
+    setOpen(true);
+    document.body.classList.add("prereg-lock");
+  }
+
+  function closeStrip() {
+    try { sessionStorage.setItem(STRIP_CLOSED, "1"); } catch { /* ignore */ }
+    setStrip(false);
+  }
+
+  function close(today = false) {
+    if (today) {
+      try { localStorage.setItem(HIDE_DAY, new Date().toISOString().slice(0, 10)); } catch { /* ignore */ }
+    }
+    document.body.classList.remove("prereg-lock");
+    setOpen(false);
+    if (!today && isMobileView()) {
+      let closedStrip = false;
+      try { closedStrip = sessionStorage.getItem(STRIP_CLOSED) === "1"; } catch { /* ignore */ }
+      if (!closedStrip) setStrip(true);
+    }
+  }
 
   useEffect(() => {
     if (!open) return;
-    returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    closeBtn.current?.focus();
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const panel = document.querySelector<HTMLElement>(".prereg-pop__panel");
+    const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    panel?.querySelector<HTMLElement>("button, a[href]")?.focus();
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-        return;
-      }
-      if (event.key !== "Tab") return;
-      const root = dialogRef.current;
-      if (!root) return;
-      const items = [...root.querySelectorAll<HTMLElement>("button, a[href], input, select, textarea")].filter(
-        (el) => !el.hasAttribute("disabled"),
-      );
-      if (!items.length) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      const active = document.activeElement;
-      if (event.shiftKey && (active === first || !root.contains(active))) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && (active === last || !root.contains(active))) {
-        event.preventDefault();
-        first.focus();
+      if (event.key === "Escape") close();
+      if (event.key === "Tab") {
+        const items = panel?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (!items?.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     }
     document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
       document.removeEventListener("keydown", onKey);
-      returnFocus.current?.focus();
+      document.body.classList.remove("prereg-lock");
+      returnFocus?.focus();
     };
   }, [open]);
 
-  function close() {
-    if (hideTodayRef.current) {
-      try {
-        localStorage.setItem(HIDE_DAY, new Date().toISOString().slice(0, 10));
-      } catch {
-        /* ignore */
-      }
-    }
-    setOpen(false);
+  if (!open) {
+    if (!strip) return null;
+    return (
+      <div className="prereg-strip" role="region" aria-label="사전고객등록 이벤트 안내">
+        <span className="prereg-strip__txt">EVENT · 사전고객등록 백화점 상품권 30만원</span>
+        <button type="button" className="prereg-strip__more" onClick={openFromStrip}>자세히</button>
+        <button type="button" className="prereg-strip__x" aria-label="닫기" onClick={closeStrip}>✕</button>
+      </div>
+    );
   }
-
-  if (!open) return null;
-
   return (
-    <div ref={dialogRef} className="fixed inset-0 z-50 grid place-items-center bg-ink/70 p-4" role="dialog" aria-modal="true" aria-labelledby="apt-event-pop-title">
-      <button type="button" className="absolute inset-0" aria-label="닫기" onClick={close} />
-      <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto bg-paper">
-        <div className="flex items-center justify-between bg-forest px-5 py-4 text-paper">
-          <p className="text-xs tracking-[0.18em]">CHEONGNA ARK-ONE PRUGIO</p>
-          <button ref={closeBtn} type="button" className="grid h-11 w-11 place-items-center border border-paper/40 text-lg" aria-label="닫기" onClick={close}>
-            ×
-          </button>
-        </div>
-        <div className="space-y-4 px-5 py-6">
-          <p className="text-sm text-forest">아파트 이벤트</p>
-          <h2 id="apt-event-pop-title" className="font-serif text-3xl leading-snug">
-            아파트 사전고객등록 이벤트
-          </h2>
-          <p className="font-serif text-4xl text-forest">백화점 상품권 30만원</p>
-          <p className="text-sm tracking-wide text-bronze">롯데 · 현대 · 신세계 중 선택</p>
-          <p className="border border-line bg-paper p-4 text-sm leading-6">
-            사전고객등록 후 청약 당첨 및 지급 조건을 충족하고 계약하신 고객 대상
-          </p>
-          <p className="text-sm leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. <span className="whitespace-nowrap">입주자모집공고 게시 2026.10.22(목) · 견본주택 GRAND OPEN 10.30(금)</span> · <span className="whitespace-nowrap">일정 문의 {PROJECT_PHONE_DISPLAY}</span></p>
-          <p className="text-sm leading-6">※ 동일 현장의 다른 홈페이지·분양 채널에 중복으로 등록하신 경우, 상품권 지급이 제한될 수 있습니다.</p>
-          <Link
-            to="/event/apt"
-            className="grid h-12 place-items-center bg-forest text-sm text-paper"
-            onClick={close}
-          >
-            이벤트 자세히 보기
-          </Link>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={hideToday} onChange={(e) => setHideToday(e.target.checked)} />
-            오늘 하루 보지 않기
-          </label>
+    <div className="prereg-pop is-in" role="dialog" aria-modal="true" aria-labelledby="apt-event-pop-title">
+      <button type="button" className="prereg-pop__bg" aria-label="닫기" onClick={() => close()} />
+      <div className="prereg-pop__panel">
+        <button type="button" className="prereg-pop__x" aria-label="닫기" onClick={() => close()}>✕</button>
+        <p>아파트 이벤트</p>
+        <p>아파트 사전고객등록 이벤트</p>
+        <h2 id="apt-event-pop-title">백화점 상품권 30만원</h2>
+        <p>롯데 · 현대 · 신세계 중 선택</p>
+        <p>사전고객등록 후 청약 당첨 및 지급 조건을 충족하고 계약하신 고객 대상</p>
+        <Link className="reg__submit" to="/event/apt" onClick={() => close()}>이벤트 자세히 보기</Link>
+        <p className="prereg-fine">※ 사전고객등록은 공식 청약 신청이 아닙니다. 등록만으로 지급되지 않습니다. <span className="whitespace-nowrap">입주자모집공고 게시 2026.10.22(목) · 견본주택 GRAND OPEN 10.30(금)</span> · <span className="whitespace-nowrap">일정 문의 {PROJECT_PHONE_DISPLAY}</span></p>
+        <p className="prereg-fine">※ 동일 현장의 다른 홈페이지·분양 채널에 중복으로 등록하신 경우, 상품권 지급이 제한될 수 있습니다.</p>
+        <div className="prereg-pop__actions">
+          <button type="button" onClick={() => close(true)}>오늘 하루 보지 않기</button>
+          <button type="button" onClick={() => close()}>닫기</button>
         </div>
       </div>
     </div>
