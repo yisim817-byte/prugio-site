@@ -5174,3 +5174,6 @@ body.prereg-lock { overflow: hidden; }
   .prereg-strip__more { flex: none; height: 32px; padding: 0 12px; border: 1px solid color-mix(in srgb, #fff 60%, transparent); border-radius: 16px; background: transparent; color: #fff; font: inherit; font-weight: 700; }
   .prereg-strip__x { flex: none; width: 40px; height: 40px; border: 0; background: transparent; color: #fff; font-size: 16px; }
 }
+/* PM 지시(2026-10-22): /overview 평면 캡션 아래 공급금액 한 줄 + 103㎡A 아래 공급금액표 */
+.plan-figure__price { display: block; margin-top: 4px; color: #004b45; font-size: 14px; font-weight: 600; }
+.notice-price-inline { margin: 8px 0 24px; }

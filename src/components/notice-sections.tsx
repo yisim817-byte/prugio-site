@@ -82,12 +82,12 @@ const won = (v: number) => {
 };
 const range = (min: number, max: number) => `${won(min)} ~ ${won(max)}`;
 
-/** M3 · 주택형별 공급금액 (작업지시서 12 · 공고문 6~20면) */
-export function NoticePrice() {
+/** 공급금액표 본문(2-1 표 + 84A 라인 + 2-2 고정 문구 + 2-3 발코니 확장비). /changeinfo 와 /overview 가 같이 쓴다. */
+function PriceBody() {
   const p84a = NOTICE.prices.find((p) => p.type === "84A");
   const lines = p84a && "lines" in p84a ? p84a.lines : [];
   return (
-    <Block label="분양가 안내" title="주택형별 공급금액 (입주자모집공고문 6~20면)">
+    <>
       <Table columns={["주택형", "세대수", "공급금액 (최저 ~ 최고)"]} rows={NOTICE.prices.map((p) => [p.type, p.units, range(p.min, p.max)])} />
       <Lines
         lines={[
@@ -99,6 +99,15 @@ export function NoticePrice() {
       />
       <h3 className="notice-h3">발코니 확장비 (VAT 포함 · 계약금 10% · 잔금 90%)</h3>
       <Table columns={["주택형", ...NOTICE.balcony.map((b) => b.type)]} rows={[["확장비", ...NOTICE.balcony.map((b) => `${b.price.toLocaleString("ko-KR")}원`)]]} />
+    </>
+  );
+}
+
+/** M3 · 주택형별 공급금액 (작업지시서 12 · 공고문 6~20면) */
+export function NoticePrice() {
+  return (
+    <Block label="분양가 안내" title="주택형별 공급금액 (입주자모집공고문 6~20면)">
+      <PriceBody />
     </Block>
   );
 }
@@ -178,7 +187,8 @@ function UnitFigure({ file, alt }: { file: string; alt: string }) {
 const PLAN_NOTE = "분양 안내 자료의 평면을 다시 그린 안내용 이미지입니다. 실제와 다를 수 있으며 입주자모집공고문과 견본주택이 우선합니다.";
 
 /** 평면 안내도(작업지시서 12 · 3절). 누르면 원본 PNG 새 창(휴대폰 확대용). */
-function PlanFigure({ file, alt }: { file: string; alt: string }) {
+function PlanFigure({ file, alt, type, name }: { file: string; alt: string; type: string; name: string }) {
+  const p = NOTICE.prices.find((x) => x.type === type);
   return (
     <figure className="plan-figure">
       <a href={`/plans/${file}.png`} target="_blank" rel="noopener">
@@ -187,7 +197,10 @@ function PlanFigure({ file, alt }: { file: string; alt: string }) {
           <img src={`/plans/${file}.png`} alt={alt} width={2000} height={1250} loading="lazy" decoding="async" />
         </picture>
       </a>
-      <figcaption>{PLAN_NOTE}</figcaption>
+      <figcaption>
+        {PLAN_NOTE}
+        {p ? <span className="plan-figure__price">{`${name} 공급금액 ${range(p.min, p.max)} (동·층·호별 상이)`}</span> : null}
+      </figcaption>
     </figure>
   );
 }
@@ -201,11 +214,16 @@ export function NoticeTypes() {
       <div className="notice-lines">
         <p>{`총 ${s.total}세대 (특별공급 ${s.special}세대 · 일반공급 ${s.general}세대) · ${s.buildings}개동 · ${s.floors} · 입주 ${s.moveIn}`}</p>
         <p>84㎡C — 4Bay 판상형, 맞통풍 구조, 2면 개방, 팬트리 수납</p>
-        <PlanFigure file="plan-84c-redraw-v2" alt="청라 아크원 푸르지오 84㎡C 평면 안내도" />
+        <PlanFigure file="plan-84c-redraw-v2" alt="청라 아크원 푸르지오 84㎡C 평면 안내도" type="84C" name="84㎡C" />
         <UnitFigure file="unit-84c-living-ai.webp" alt="84㎡C 거실 인테리어 연출 이미지(AI 제작)" />
         <UnitFigure file="unit-84c-living-kitchen-ai.webp" alt="84㎡C 거실·주방 인테리어 연출 이미지(AI 제작)" />
         <p>103㎡A — 알파룸을 더해 방 4개처럼 쓸 수 있는 구성, 넓은 팬트리, 별도 세탁실</p>
-        <PlanFigure file="plan-103a-redraw-v2" alt="청라 아크원 푸르지오 103㎡A 평면 안내도" />
+        <PlanFigure file="plan-103a-redraw-v2" alt="청라 아크원 푸르지오 103㎡A 평면 안내도" type="103A" name="103㎡A" />
+        {/* PM 지시(2026-10-22): 103㎡A 평면 바로 아래에 /changeinfo 와 같은 공급금액표 */}
+        <div className="notice-price-inline" aria-label="주택형별 공급금액">
+          <h3 className="notice-h3">주택형별 공급금액 (입주자모집공고문 6~20면)</h3>
+          <PriceBody />
+        </div>
         <UnitFigure file="unit-103a-alpha-study-ai.webp" alt="103㎡A 알파룸을 서재로 꾸민 인테리어 연출 이미지(AI 제작)" />
         <p>※ 특화 내용은 현장 상품 설명 자료 기준이며 주택형·옵션 선택에 따라 다를 수 있으니 견본주택에서 확인해 주세요.</p>
         <p>견본주택에는 84A·103A 유니트가 설치되어 있습니다.</p>
