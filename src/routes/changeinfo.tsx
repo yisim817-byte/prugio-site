@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { NoticePayment, NoticePrice, NoticeSchedule } from "@/components/notice-sections";
 import { Nb } from "@/components/chrome";
 import { Photo, Shell, SourceNote, SubHero, pageHead } from "@/components/layout";
@@ -31,6 +31,7 @@ function Page() {
     <Shell>
       <SubHero en="INFORMATION" title="변경된 청약제도" crumbs="청약안내 / 변경된 청약제도" />
       <NoticeSchedule />
+      <p className="ak-wrap mt-6 text-sm"><Link to="/plans" className="ak-link">평면도·공급금액 한눈에 보기 →</Link></p>
       <NoticePrice />
       <NoticePayment />
       <article className="ak-wrap ak-page">

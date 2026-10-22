@@ -35,6 +35,8 @@ export const NAV: NavItem[] = [
     href: "/premium",
     children: [{ label: "프리미엄", href: "/premium" }],
   },
+  // PM 지시(2026-10-22): 평면도·공급금액을 한 페이지에서 바로 찾도록 최상위 메뉴
+  { label: "평면·분양가", en: "PLANS", href: "/plans" },
   {
     label: "청약안내",
     en: "INFORMATION",

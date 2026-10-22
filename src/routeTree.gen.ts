@@ -20,6 +20,7 @@ import { Route as LocationRouteImport } from './routes/location'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as OverviewRouteImport } from './routes/overview'
+import { Route as PlansRouteImport } from './routes/plans'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
@@ -84,6 +85,11 @@ const OverviewRoute = OverviewRouteImport.update({
   path: '/overview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PremiumRoute = PremiumRouteImport.update({
   id: '/premium',
   path: '/premium',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/news': typeof NewsRoute
   '/overview': typeof OverviewRoute
+  '/plans': typeof PlansRoute
   '/premium': typeof PremiumRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/news': typeof NewsRoute
   '/overview': typeof OverviewRoute
+  '/plans': typeof PlansRoute
   '/premium': typeof PremiumRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/news': typeof NewsRoute
   '/overview': typeof OverviewRoute
+  '/plans': typeof PlansRoute
   '/premium': typeof PremiumRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/news'
     | '/overview'
+    | '/plans'
     | '/premium'
     | '/privacy'
     | '/register'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/news'
     | '/overview'
+    | '/plans'
     | '/premium'
     | '/privacy'
     | '/register'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/news'
     | '/overview'
+    | '/plans'
     | '/premium'
     | '/privacy'
     | '/register'
@@ -267,6 +279,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   NewsRoute: typeof NewsRoute
   OverviewRoute: typeof OverviewRoute
+  PlansRoute: typeof PlansRoute
   PremiumRoute: typeof PremiumRoute
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OverviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/premium': {
       id: '/premium'
       path: '/premium'
@@ -427,6 +447,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   NewsRoute: NewsRoute,
   OverviewRoute: OverviewRoute,
+  PlansRoute: PlansRoute,
   PremiumRoute: PremiumRoute,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,

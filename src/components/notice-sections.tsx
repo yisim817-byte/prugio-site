@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { NOTICE } from "@/lib/notice-facts.v1";
 import { PROJECT_PHONE_DISPLAY } from "@/data/content";
 
@@ -83,7 +84,7 @@ const won = (v: number) => {
 const range = (min: number, max: number) => `${won(min)} ~ ${won(max)}`;
 
 /** 공급금액표 본문(2-1 표 + 84A 라인 + 2-2 고정 문구 + 2-3 발코니 확장비). /changeinfo 와 /overview 가 같이 쓴다. */
-function PriceBody() {
+export function PriceBody() {
   const p84a = NOTICE.prices.find((p) => p.type === "84A");
   const lines = p84a && "lines" in p84a ? p84a.lines : [];
   return (
@@ -184,10 +185,10 @@ function UnitFigure({ file, alt }: { file: string; alt: string }) {
 }
 
 /** M7 · 주택형 안내 (면적 단위 ㎡) + 타입 연출 이미지 5종 */
-const PLAN_NOTE = "분양 안내 자료의 평면을 다시 그린 안내용 이미지입니다. 실제와 다를 수 있으며 입주자모집공고문과 견본주택이 우선합니다.";
+export const PLAN_NOTE = "분양 안내 자료의 평면을 다시 그린 안내용 이미지입니다. 실제와 다를 수 있으며 입주자모집공고문과 견본주택이 우선합니다.";
 
 /** 평면 안내도(작업지시서 12 · 3절). 누르면 원본 PNG 새 창(휴대폰 확대용). */
-function PlanFigure({ file, alt, type, name }: { file: string; alt: string; type: string; name: string }) {
+export function PlanFigure({ file, alt, type, name }: { file: string; alt: string; type: string; name: string }) {
   const p = NOTICE.prices.find((x) => x.type === type);
   return (
     <figure className="plan-figure">
@@ -236,5 +237,37 @@ export function NoticeTypes() {
         <UnitFigure file="interior-bathroom-ai.webp" alt="욕실 인테리어 연출 이미지(AI 제작)" />
       </div>
     </Block>
+  );
+}
+
+/** PM 지시(2026-10-22): 홈 히어로 바로 아래 배너 — 평면도·공급금액 상세(/plans)로 가는 하나의 큰 링크. 금액은 공고 팩트에서 만든다. */
+function areaRange(prefix: string) {
+  const list = NOTICE.prices.filter((p) => p.type.startsWith(prefix));
+  return range(Math.min(...list.map((p) => p.min)), Math.max(...list.map((p) => p.max)));
+}
+
+export function PlansBanner() {
+  return (
+    <section id="plans" className="plans-banner-wrap" aria-labelledby="plans-banner-title">
+      <Link to="/plans" className="plans-banner">
+            <div className="plans-banner__text">
+              <h2 id="plans-banner-title" className="plans-banner__title">평면도 · 공급금액</h2>
+              <p className="plans-banner__sub">84㎡C · 103㎡A 평면도와 주택형별 공급금액 (입주자모집공고 기준)</p>
+              <p className="plans-banner__price">{`84㎡ ${areaRange("84")} · 103㎡ ${areaRange("103")} (동·층·호별 상이, 발코니 확장 등 별도)`}</p>
+              <span className="plans-banner__btn">평면도·공급금액 보기 →</span>
+            </div>
+            <div className="plans-banner__thumbs">
+              <picture>
+                <source type="image/webp" srcSet="/plans/plan-84c-redraw-v2.webp" />
+                <img src="/plans/plan-84c-redraw-v2.png" alt="청라 아크원 푸르지오 84㎡C 평면 안내도" width={2000} height={1250} loading="lazy" decoding="async" />
+              </picture>
+              <picture>
+                <source type="image/webp" srcSet="/plans/plan-103a-redraw-v2.webp" />
+                <img src="/plans/plan-103a-redraw-v2.png" alt="청라 아크원 푸르지오 103㎡A 평면 안내도" width={2000} height={1250} loading="lazy" decoding="async" />
+              </picture>
+              <p className="plans-banner__note">{PLAN_NOTE}</p>
+            </div>
+      </Link>
+    </section>
   );
 }
