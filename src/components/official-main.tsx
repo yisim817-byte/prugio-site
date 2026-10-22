@@ -29,7 +29,7 @@ const HISTORY_EVENTS: { key: string; year: string; tbd?: boolean; file: string; 
   { key: "2029", year: "2029", file: "history_img_2029.v4.jpg", alt: "서울아산청라병원 조감도", captions: [["서울아산청라병원", "(예정)"]] },
   { key: "2030", year: "시기 미정", tbd: true, file: "history_img_2030.v4.jpg", alt: "7호선 국제업무단지역 예정지", captions: [["7호선 국제업무단지역", "(예정 · 개통 시기 미정)"]] },
   { key: "2031", year: "2031", file: "history_img_2031.v4.jpg", alt: "영상문화복합단지 조감도", captions: [["영상문화복합단지", "(계획)"]] },
-  { key: "ark_one", year: "공고 후", file: "history_img_ark_one.v4.jpg", alt: "청라 아크원 푸르지오 투시도", captions: [["청라 아크원 푸르지오", "(입주 시기 공고문 확인)"]] },
+  { key: "ark_one", year: "2031.08", file: "history_img_ark_one.v4.jpg", alt: "청라 아크원 푸르지오 투시도", captions: [["청라 아크원 푸르지오", "(2031년 08월 입주 예정)"]] },
 ];
 
 const BRAND_CARDS = [
@@ -486,7 +486,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 <span className="om-hero__role">{ROLE.h1[1]}</span>
               </h1>
               <span className="om-hero__open">
-                <strong>모집공고 10.22 · GRAND OPEN 10.30</strong>예정
+                <strong>입주자모집공고 게시 · GRAND OPEN 10.30(금)</strong>예정
               </span>
             </div>
             <div className="om-hero__ui">

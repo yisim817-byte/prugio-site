@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PhaseBand } from "@/components/phase-band";
 import { Footer, Header, MobileBar } from "@/components/chrome";
 import { SEO_FAQS, SEO_ORIGIN, SEO_PAGES } from "@/data/seo";
 import { IMAGE_SIZES } from "@/data/image-sizes";
@@ -46,6 +47,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper text-ink">
       <Header />
+      <PhaseBand />
       {children}
       <Footer />
       <MobileBar />

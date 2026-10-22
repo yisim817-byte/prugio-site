@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { NoticeTypes } from "@/components/notice-sections";
 import { Nb } from "@/components/chrome";
 import { Photo, Shell, SourceNote, SubHero, pageHead, PageFaq, QuickAnswer } from "@/components/layout";
 import { OVERVIEW_ROWS, img } from "@/data/content";
@@ -36,6 +37,7 @@ function Page() {
           className="w-full object-cover"
         />
       </article>
+      <NoticeTypes />
       <SourceNote />
     </Shell>
   );
