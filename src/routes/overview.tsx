@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { NoticeTypes } from "@/components/notice-sections";
 import { Nb } from "@/components/chrome";
 import { Photo, Shell, SourceNote, SubHero, pageHead, PageFaq, QuickAnswer } from "@/components/layout";
@@ -37,6 +37,7 @@ function Page() {
           className="w-full object-cover"
         />
       </article>
+      <p className="ak-wrap mt-6 text-sm"><Link to="/plans" className="ak-link">평면도·공급금액 한눈에 보기 →</Link></p>
       <NoticeTypes />
       <SourceNote />
     </Shell>

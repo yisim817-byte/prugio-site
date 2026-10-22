@@ -5177,3 +5177,36 @@ body.prereg-lock { overflow: hidden; }
 /* PM 지시(2026-10-22): /overview 평면 캡션 아래 공급금액 한 줄 + 103㎡A 아래 공급금액표 */
 .plan-figure__price { display: block; margin-top: 4px; color: #004b45; font-size: 14px; font-weight: 600; }
 .notice-price-inline { margin: 8px 0 24px; }
+/* PM 지시(2026-10-22): /plans — 평면 2장(넓은 화면은 나란히) + 공급금액표 */
+.plans-grid { display: grid; gap: 24px; }
+@media (min-width: 1024px) { .plans-grid { grid-template-columns: 1fr 1fr; } }
+/* 메뉴 8개(평면·분양가 추가): 1200~1439px에서는 간격·글자를 줄여 로고·전화번호와 겹치지 않게 */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .ak-hd__nav { gap: 10px; font-size: 15px; }
+  .ak-hd__item > a { padding: 0 4px; }
+  .ak-hd__tel { font-size: 22px; }
+}
+/* PM 지시(2026-10-22): 홈 히어로 바로 아래 「평면도 · 공급금액」 배너 — A 톤(짙은 초록·크림 글자·금색 버튼) */
+.plans-banner-wrap { padding: 40px 20px; background: #fff; scroll-margin-top: 100px; }
+.plans-banner {
+  display: grid; gap: 24px; max-width: 1120px; margin: 0 auto; padding: 28px 22px; border-radius: 8px;
+  background: #032B20; color: #F7F3EA; text-decoration: none; font-family: "SUIT", "Pretendard", sans-serif;
+}
+.plans-banner__title { margin: 0; color: #fff; font-size: 26px; font-weight: 800; line-height: 1.3; letter-spacing: -0.02em; }
+.plans-banner__sub { margin: 10px 0 0; color: #F7F3EA; font-size: 15px; line-height: 1.6; word-break: keep-all; }
+.plans-banner__price { margin: 14px 0 0; color: #F7F3EA; font-size: 15px; font-weight: 700; line-height: 1.6; word-break: keep-all; }
+.plans-banner__btn {
+  display: inline-flex; align-items: center; justify-content: center; margin-top: 20px; min-height: 48px; padding: 0 22px;
+  border-radius: 8px; background: #E2B565; color: #032B20; font-size: 16px; font-weight: 800;
+}
+.plans-banner:hover .plans-banner__btn, .plans-banner:focus-visible .plans-banner__btn { filter: brightness(1.05); }
+.plans-banner:focus-visible { outline: 3px solid #E2B565; outline-offset: 3px; }
+.plans-banner__thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-content: start; }
+.plans-banner__thumbs img { display: block; width: 100%; height: auto; border-radius: 4px; background: #fff; }
+.plans-banner__note { grid-column: 1 / -1; margin: 0; color: rgba(247, 243, 234, 0.8); font-size: 12px; line-height: 1.5; }
+@media (min-width: 1025px) {
+  .plans-banner-wrap { padding: 56px 80px; }
+  .plans-banner { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: 40px; padding: 40px 44px; }
+  .plans-banner__title { font-size: 34px; }
+  .plans-banner__sub, .plans-banner__price { font-size: 17px; }
+}

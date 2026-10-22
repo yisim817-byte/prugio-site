@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { PLACES, img } from "@/data/content";
 import { REGISTER_LABEL } from "@/data/labels";
 import { ROLE } from "@/data/role";
+import { PlansBanner } from "@/components/notice-sections";
 
 /**
  * 사업주체 공식 홈페이지 메인을 그대로 옮긴 홈 본문 (저장소마다 같은 파일).
@@ -57,13 +58,14 @@ const BRAND_CARDS = [
 ] as const;
 
 /** 구간(공식 섹션 7개 + 검색용 묶음). 순서는 공식 메인과 같다. */
-const SECTIONS = ["hero", "overview", "location", "history", "premium", "brand", "contact", "site-info"] as const;
+const SECTIONS = ["hero", "plans", "overview", "location", "history", "premium", "brand", "contact", "site-info"] as const;
 type SectionId = (typeof SECTIONS)[number];
 
 /** PC 장면 16개(+ 검색용 묶음). 구간 안의 단계는 공식 main.v4.css 의 data-flow-step 값과 같다. */
 const SCENES: { sec: SectionId; step: string }[] = [
   { sec: "hero", step: "hero-final" },
   { sec: "hero", step: "hero-definition" },
+  { sec: "plans", step: "plans-01" }, // PM 지시(2026-10-22): 평면도·공급금액 배너
   { sec: "overview", step: "overview-mask" },
   { sec: "overview", step: "overview-content" },
   { sec: "location", step: "location-01" },
@@ -548,6 +550,9 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
           </div>
         </div>
       </section>
+
+      {/* ── 평면도·공급금액 배너(PM 지시 2026-10-22) — 히어로 바로 아래 ── */}
+      <PlansBanner />
 
       {/* ── 3·4 사업개요 ───────────────────────────────────────────── */}
       <section id="overview" className={`om-s om-overview${active("overview")}`} data-step={step("overview")} aria-labelledby="om-overview-title">
