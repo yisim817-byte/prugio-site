@@ -5,10 +5,10 @@ import { REGISTER_LABEL } from "@/data/labels";
 import { ROLE } from "@/data/role";
 
 /**
- * 사업주체 홈페이지(arkone-prugio.com) 메인을 그대로 옮긴 홈 본문 (저장소마다 같은 파일).
+ * 사업주체 공식 홈페이지 메인을 그대로 옮긴 홈 본문 (저장소마다 같은 파일).
  *
  * 기준: 2026-10-05 공식 메인(home.html, main.v4.css, 공식 화면 캡처). 작업지시서 2의 2절·3절과 작업지시서 3.
- * - 이미지와 영상은 공식 서버의 파일을 img() 로 직접 불러온다(저장소에 복사하지 않는다). 부르는 파일 이름은
+ * - 이미지는 공식 메인과 같은 파일을 이 저장소 public/resources 에 두고 img() 로 부른다(작업지시서 12 · 2026-10-22). 부르는 파일 이름은
  *   공식 메인이 쓰는 71개 안에서만 고른다(scripts/design-check.mjs 가 검사한다).
  * - 다르게 두는 것은 네 가지뿐이다: 사이트 틀(헤더·푸터·하단 바·팝업은 지금 것), 등록·전화(「사전고객등록」/register,
  *   사이트 대표번호), 7호선(연도 대신 「시기 미정」), 검색용 요소(h1·「한눈에 보기」·역할 띠·사이트별 안내는 유지).
@@ -553,7 +553,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       <section id="overview" className={`om-s om-overview${active("overview")}`} data-step={step("overview")} aria-labelledby="om-overview-title">
         <div className="om-overview__stage">
           <div className="om-overview__background" aria-hidden="true">
-            <img src={"/assets/opt/overview_bg.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/overview_bg.v4.jpg */} alt="" loading="lazy" />
+            <img src={"/assets/opt/overview_bg.v4.webp" /* orig 공식 메인 overview_bg.v4.jpg */} alt="" loading="lazy" />
             <span className="om-overview__dim" />
           </div>
           <div className="om-overview__content">
@@ -634,7 +634,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </span>
               ))}
             </p>
-            <img className="om-location__visual_image" src={"/assets/opt/location_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/location_img.v4.png */} alt="청라 아크원 푸르지오 입지환경 이미지" loading="lazy" />
+            <img className="om-location__visual_image" src={"/assets/opt/location_img.v4.webp" /* orig 공식 메인 location_img.v4.png */} alt="청라 아크원 푸르지오 입지환경 이미지" loading="lazy" />
             <div className="om-location__title_mask">
               <h2 id="om-location-title" className="om-location__title" lang="en">
                 ARK-ONE
@@ -689,7 +689,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                 </h2>
               </header>
               <ol className="om-history__events">
-                {HISTORY_EVENTS.map((ev, i) => (
+                {HISTORY_EVENTS.map((ev) => (
                   <li className={`om-history__event om-history__event-${ev.key}`} key={ev.key}>
                     {ev.key === "ark_one" ? (
                       <img className="om-history__climax" src={asset("history_climax.v4.png")} alt="Climax" loading="lazy" />
@@ -704,13 +704,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                         </time>
                       )}
                       <figure className="om-history__event_figure">
-                        <img
-                          className="om-history__event_bg"
-                          src={asset(i % 2 === 0 ? "history_event_bg_01.jpg" : "history_event_bg_02.jpg")}
-                          alt=""
-                          aria-hidden="true"
-                          loading="lazy"
-                        />
+                        {/* 장식 배경(history_event_bg_01·02.jpg)은 공식 서버에서도 404라 표시되지 않던 그림이다. 작업지시서 12에서 외부 주소와 함께 뺐다. */}
                         <img className="om-history__event_image" src={asset(ev.file)} alt={ev.alt} loading="lazy" />
                         <figcaption className="om-history__event_caption">
                           {ev.captions.map(([name, note]) => (
@@ -834,7 +828,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             </article>
             <article className="om-premium__panel om-premium__panel-residence">
               <div className="om-premium__residence_visual">
-                <img className="om-premium__residence_image" src={"/assets/opt/premium_img_left_03.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_img_left_03.v4.jpg */} alt="따뜻한 빛이 드는 주거 공간 이미지" loading="lazy" />
+                <img className="om-premium__residence_image" src={"/assets/opt/premium_img_left_03.v4.webp" /* orig 공식 메인 premium_img_left_03.v4.jpg */} alt="따뜻한 빛이 드는 주거 공간 이미지" loading="lazy" />
                 <div className="om-premium__residence_blur">
                   <div className="om-premium__residence_copy">
                     <h3 className="om-premium__residence_title">
@@ -854,7 +848,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
               </figure>
               <div className="om-premium__video_reel">
                 <figure className="om-premium__video om-premium__video-side">
-                  <LazyVideo poster={"/assets/opt/premium_poster_02.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
+                  <LazyVideo poster={"/assets/opt/premium_poster_02.v4.webp" /* orig 공식 메인 premium_poster_02.v4.jpg */} reduced={reduced} label="라이프스타일 영상" />
                   <figcaption className="om-premium__video_caption">이 영상은 AI로 제작된 것으로서 실제와 다릅니다.</figcaption>
                 </figure>
                 <figure className="om-premium__video_echo">
@@ -888,8 +882,8 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
           <article className="om-brand__panel om-brand__panel-story">
             <img className="om-brand__panel_background" src={asset("brand_bg_02.v4.jpg")} alt="" loading="lazy" decoding="async" />
             <figure className="om-brand__story_visual">
-              <img src={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} alt="잔잔하게 번지는 물결" loading="lazy" decoding="async" />
-              <LazyVideo className="om-brand__story_video" poster={"/assets/opt/brand_visual_img.v4.webp" /* orig https://arkone-prugio.com/resources/img/pages/main/brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
+              <img src={"/assets/opt/brand_visual_img.v4.webp" /* orig 공식 메인 brand_visual_img.v4.jpg */} alt="잔잔하게 번지는 물결" loading="lazy" decoding="async" />
+              <LazyVideo className="om-brand__story_video" poster={"/assets/opt/brand_visual_img.v4.webp" /* orig 공식 메인 brand_visual_img.v4.jpg */} reduced={reduced} label="자연을 어루만지는 손길 영상" />
               <figcaption>이미지컷</figcaption>
             </figure>
             <p className="om-brand__story_copy">

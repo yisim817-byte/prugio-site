@@ -3,7 +3,7 @@ import { NOTICE } from "@/lib/notice-facts.v1";
 import { PROJECT_PHONE_DISPLAY } from "@/data/content";
 
 // 작업지시서 10 (2026-10-22): 입주자모집공고(주택관리번호 2026000496) 확정 내용 — 아크원푸르지오.site와 같은 문구.
-// 금액은 쓰지 않는다. 표 숫자는 notice-facts.v1.ts 에서만 그린다.
+// 표 숫자·금액은 notice-facts.v1.ts 에서만 그린다(작업지시서 12: 공급금액표 공개).
 
 function Block({ label, title, children }: { label: string; title: string; children: ReactNode }) {
   return (
@@ -74,17 +74,31 @@ export function NoticeSchedule() {
   );
 }
 
-/** M3 · 분양가 안내 (금액 없음) */
+/** 원 단위 공고 금액 → 「8억 3,780만원」 */
+const won = (v: number) => {
+  const eok = Math.floor(v / 100000000);
+  const man = Math.round((v % 100000000) / 10000);
+  return man ? `${eok}억 ${man.toLocaleString("ko-KR")}만원` : `${eok}억원`;
+};
+const range = (min: number, max: number) => `${won(min)} ~ ${won(max)}`;
+
+/** M3 · 주택형별 공급금액 (작업지시서 12 · 공고문 6~20면) */
 export function NoticePrice() {
+  const p84a = NOTICE.prices.find((p) => p.type === "84A");
+  const lines = p84a && "lines" in p84a ? p84a.lines : [];
   return (
-    <Block label="분양가 안내" title="분양가 안내">
+    <Block label="분양가 안내" title="주택형별 공급금액 (입주자모집공고문 6~20면)">
+      <Table columns={["주택형", "세대수", "공급금액 (최저 ~ 최고)"]} rows={NOTICE.prices.map((p) => [p.type, p.units, range(p.min, p.max)])} />
       <Lines
         lines={[
-          `분양가(공급금액)는 입주자모집공고문(주택관리번호 2026000496)의 공급금액표에 주택형·동·층·호별로 공개되어 있습니다. 주택형과 층에 따라 금액이 다르므로 원하시는 조건은 대표번호 ${PROJECT_PHONE_DISPLAY}로 상담해 주세요.`,
-          "분양가상한제 적용 단지입니다.",
-          "※ 발코니 확장·유상옵션·취득세 등은 공급금액에 포함되어 있지 않습니다.",
+          `84A는 ${lines.map((l) => `${l.line} 라인 ${range(l.min, l.max)}`).join(", ")}입니다.`,
+          "※ 공급금액은 동·층·호별로 다르며, 입주자모집공고문 6~20면 공급금액표가 우선합니다.",
+          "※ 공급금액에는 발코니 확장비·유상옵션·취득세 등이 포함되어 있지 않습니다. 전용 85㎡ 이하는 부가가치세 대상이 아니며, 103㎡ 공급금액에는 건축비 부가가치세가 포함되어 있습니다.",
+          `※ 분양가상한제 적용 단지입니다. 원하시는 동·층·호의 금액은 대표번호 ${PROJECT_PHONE_DISPLAY}로 상담해 주세요.`,
         ]}
       />
+      <h3 className="notice-h3">발코니 확장비 (VAT 포함 · 계약금 10% · 잔금 90%)</h3>
+      <Table columns={["주택형", ...NOTICE.balcony.map((b) => b.type)]} rows={[["확장비", ...NOTICE.balcony.map((b) => `${b.price.toLocaleString("ko-KR")}원`)]]} />
     </Block>
   );
 }
@@ -95,7 +109,7 @@ export function NoticePayment() {
     <Block label="납부 조건" title="납부 조건 (공급금액 기준 비율)">
       <Lines
         lines={[
-          "계약금 5% — 2회 분할 납부",
+          "계약금 5% — 1차 1천만원(계약 시) + 2차 나머지(계약일부터 30일 이내)",
           "중도금 60% — 6회 분할, 이자후불제 (사업주체가 지정하는 금융기관을 통한 중도금 대출 알선 예정. 정부 정책·금융기관 사정으로 대출이 어려우면 계약자가 직접 납부)",
           "잔금 35% — 입주지정일",
           "※ 잔금대출은 DSR 등 대출 규제에 따라 개인별 한도가 줄거나 대출이 어려울 수 있습니다.",
@@ -161,6 +175,23 @@ function UnitFigure({ file, alt }: { file: string; alt: string }) {
 }
 
 /** M7 · 주택형 안내 (면적 단위 ㎡) + 타입 연출 이미지 5종 */
+const PLAN_NOTE = "분양 안내 자료의 평면을 다시 그린 안내용 이미지입니다. 실제와 다를 수 있으며 입주자모집공고문과 견본주택이 우선합니다.";
+
+/** 평면 안내도(작업지시서 12 · 3절). 누르면 원본 PNG 새 창(휴대폰 확대용). */
+function PlanFigure({ file, alt }: { file: string; alt: string }) {
+  return (
+    <figure className="plan-figure">
+      <a href={`/plans/${file}.png`} target="_blank" rel="noopener">
+        <picture>
+          <source type="image/webp" srcSet={`/plans/${file}.webp`} />
+          <img src={`/plans/${file}.png`} alt={alt} width={2000} height={1250} loading="lazy" decoding="async" />
+        </picture>
+      </a>
+      <figcaption>{PLAN_NOTE}</figcaption>
+    </figure>
+  );
+}
+
 export function NoticeTypes() {
   const s = NOTICE.supply;
   const rows = NOTICE.types.map((t) => [t.type, t.units, t.exclusive, t.residentialCommon, t.supply, t.otherCommon, t.contract]);
@@ -170,9 +201,11 @@ export function NoticeTypes() {
       <div className="notice-lines">
         <p>{`총 ${s.total}세대 (특별공급 ${s.special}세대 · 일반공급 ${s.general}세대) · ${s.buildings}개동 · ${s.floors} · 입주 ${s.moveIn}`}</p>
         <p>84㎡C — 4Bay 판상형, 맞통풍 구조, 2면 개방, 팬트리 수납</p>
+        <PlanFigure file="plan-84c-redraw-v2" alt="청라 아크원 푸르지오 84㎡C 평면 안내도" />
         <UnitFigure file="unit-84c-living-ai.webp" alt="84㎡C 거실 인테리어 연출 이미지(AI 제작)" />
         <UnitFigure file="unit-84c-living-kitchen-ai.webp" alt="84㎡C 거실·주방 인테리어 연출 이미지(AI 제작)" />
         <p>103㎡A — 알파룸을 더해 방 4개처럼 쓸 수 있는 구성, 넓은 팬트리, 별도 세탁실</p>
+        <PlanFigure file="plan-103a-redraw-v2" alt="청라 아크원 푸르지오 103㎡A 평면 안내도" />
         <UnitFigure file="unit-103a-alpha-study-ai.webp" alt="103㎡A 알파룸을 서재로 꾸민 인테리어 연출 이미지(AI 제작)" />
         <p>※ 특화 내용은 현장 상품 설명 자료 기준이며 주택형·옵션 선택에 따라 다를 수 있으니 견본주택에서 확인해 주세요.</p>
         <p>견본주택에는 84A·103A 유니트가 설치되어 있습니다.</p>
