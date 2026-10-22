@@ -7,7 +7,7 @@ import { useEffect } from "react";
      휴대폰(좁은 화면): 기존 팝업을 닫은 뒤에 이어서 표시
      기존 팝업 파일은 바꾸지 않는다. 나란히 놓는 동안만 기존 카드 위치(transform)를 잠시 옮기고, 닫으면 원래대로 되돌린다. */
   var HIDE_KEY = "arkone_costco_pop_hide_until";
-  var W = 400, GAP = 24, SHIFT = (W + GAP) / 2;
+  var W = 400, GAP = 16, /* 작업지시서 13: 팝업 간격 16px */ SHIFT = (W + GAP) / 2;
 
   function norm(path) {
     var p = path || "/";
@@ -235,9 +235,9 @@ export function CostcoEventPopupView() {
       phone: w.__arkoneCostcoPhone || "1533-9014",
       tel: w.__arkoneCostcoTel || "tel:15339014",
       register: "/register",
-      existing: '[aria-labelledby="apt-event-pop-title"]',
-      card: '[aria-labelledby="apt-event-pop-title"] > div.relative',
-      z: 51,
+      existing: '.prereg-pop',
+      card: '.prereg-pop__panel',
+      z: 1101,
     });
   }, []);
   return null;

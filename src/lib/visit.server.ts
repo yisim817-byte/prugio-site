@@ -29,3 +29,19 @@ export async function checkVisit(date: string | undefined, slot: string | undefi
     return null;
   }
 }
+
+/** 작업지시서 13: /api/visit 용. 요청 주소(origin)를 직접 받아 arkone-visit-config 와 같은 규칙으로 날짜를 확인한다. */
+export async function checkVisitDate(date: string | undefined, origin: string): Promise<{ value: string; label: string } | null> {
+  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  try {
+    const res = await fetch(CONFIG_URL, { headers: origin ? { origin } : {}, signal: AbortSignal.timeout(5000) });
+    if (!res.ok) return null;
+    const body = (await res.json()) as { enabled?: boolean; dates?: { value: string; label: string }[] };
+    if (body?.enabled !== true || !Array.isArray(body.dates)) return null;
+    return body.dates.find((item) => item?.value === date) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export const VISIT_SLOT_TEXT = SLOT_LABEL;
