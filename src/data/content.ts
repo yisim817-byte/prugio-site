@@ -1,6 +1,6 @@
 export const SITE_ID = "prugio-site";
-export const OFFICIAL = "https://arkone-prugio.com";
-export const img = (path: string) => `${OFFICIAL}${encodeURI(path)}`;
+// 작업지시서 12 (2026-10-22): 공식 이미지는 이 저장소 public/ 의 같은 경로(/resources·/upload)에 두고 자기 주소로 부른다.
+export const img = (path: string) => encodeURI(path);
 
 export const PROJECT_PHONE_DISPLAY = "1533-9014";
 export const PROJECT_PHONE_TEL = "tel:15339014";
