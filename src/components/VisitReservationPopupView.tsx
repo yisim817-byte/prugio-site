@@ -107,6 +107,7 @@ import { useEffect } from "react";
         + '<h2 id="visit-pop-title" class="visit-pop__title">모델하우스 방문예약</h2>'
         + '<p class="visit-pop__desc">방문 희망 날짜를 남겨 주시면, 담당자가 확인 후 방문 시간을 안내해 드립니다.</p>'
         + '<p class="visit-pop__loc"><span>견본주택 위치</span>인천광역시 서해구 청라동 87-1</p>'
+        + '<p class="visit-pop__loc"><span>운영 기간</span>10.30(금) · 10.31(토) · 11.01(일) 3일간</p>'
         + '<a class="visit-pop__go" href="' + (cfg.visit || "/visit") + '">방문 날짜 선택하고 예약하기</a>'
         + '<a class="visit-pop__tel" href="' + (cfg.tel || "tel:15339014") + '">전화 예약 ' + (cfg.phone || "1533-9014") + '</a>'
         + '<p class="visit-pop__note">※ 방문예약 신청은 담당자 확인 후 확정됩니다. 희망 일정이 어려운 경우 다른 일정으로 안내드릴 수 있습니다.</p>'
