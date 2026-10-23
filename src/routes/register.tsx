@@ -151,7 +151,7 @@ function Page() {
             <label className="flex items-start gap-3 text-sm leading-6">
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-5 w-5" />
               <span>
-                <Nb>개인정보 수집·이용에 동의합니다. 항목은 관심 상품·성명·휴대전화·생년월일 앞 6자리·시군구동(자동 수집: 서비스 이용 기록, 접속 로그, 쿠키, 접속 IP 정보, 불량이용 기록, 기기정보)이며, 이용 목적은 청라 아크원 푸르지오 분양정보 제공 및 마케팅 활용(마케팅 활용은 광고성 정보 수신에 동의한 경우에 한함)·사전고객 관리입니다. 삭제할 때까지 보유합니다.</Nb>{" "}
+                <Nb>개인정보 수집·이용에 동의합니다. 항목은 관심 상품·성명·휴대전화·생년월일 앞 6자리·시군구동(자동 수집: 서비스 이용 기록, 접속 로그, 쿠키, 접속 IP 정보, 불량이용 기록, 기기정보)이며, 이용 목적은 청라 아크원 푸르지오 분양정보 제공 및 마케팅 활용(마케팅 활용은 광고성 정보 수신에 동의한 경우에 한함)·사전고객 관리입니다. 분양 종료 시 파기합니다.</Nb>{" "}
                 <Link to="/privacy" className="underline">처리방침</Link>
               </span>
             </label>
