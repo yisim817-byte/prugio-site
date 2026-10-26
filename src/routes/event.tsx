@@ -147,8 +147,7 @@ function EventArticle() {
                 id={`oe-panel-${day.id}`}
                 role="tabpanel"
                 aria-labelledby={`oe-tab-${day.id}`}
-                hidden={tab !== index}
-                className="oe-draw-col"
+                className={tab === index ? "oe-draw-col" : "oe-draw-col is-off"}
               >
                 <h3 className="oe-draw-col__h">{day.label}<small>{day.date}</small></h3>
                 <ol>
@@ -180,7 +179,7 @@ function EventArticle() {
               <p>현대명품 금쌀</p>
             </article>
           </div>
-          <p className="oe-note">※ 인증 기간·방법은 견본주택에서 안내합니다.</p>
+          <p className="oe-note">※ 인증 기간: 당첨자 서류접수 기간 11.12(목)~11.16(월) · 인증 방법은 견본주택에서 안내합니다.</p>
         </section>
 
         <section className="oe-sec" id="notice" aria-labelledby="oe-notice-title">

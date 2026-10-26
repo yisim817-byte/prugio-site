@@ -86,7 +86,7 @@
       + "dialog.oe-pop{width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;overflow:auto;background:transparent}"
       + "dialog.oe-pop::backdrop{background:rgba(3,43,32,.6)}"
       + ".oe-pop--side{background:transparent;pointer-events:none}"
-      + ".oe-pop--side .oe-pop__panel,.oe-pop__panel--side{position:absolute;pointer-events:auto;margin:0}"
+      + ".oe-pop--side .oe-pop__panel,.oe-pop__panel.oe-pop__panel--side{position:absolute;pointer-events:auto;margin:0}"
       + ".oe-pop__panel{position:relative;width:min(420px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;box-sizing:border-box;border:1px solid #B5853A;border-radius:16px;background:#F7F3EA;color:#032B20;text-align:left;font-family:inherit;animation:oePopIn .25s ease-out both}"
       + ".oe-pop__panel *{box-sizing:border-box}"
       + ".oe-pop__band{display:flex;align-items:center;height:36px;margin:0;padding:0 18px;background:#032B20;color:#E2B565;font-size:12px;line-height:1.2;font-weight:700}"
@@ -153,7 +153,7 @@
         + '<hr class="oe-pop__rule">'
         + '<a class="oe-pop__go" href="/event#after">이벤트 자세히 보기</a>'
         + '<a class="oe-pop__sub" href="' + (tel || "#") + '">전화 문의 ' + phone + "</a>"
-        + '<p class="oe-pop__note">※ 인증 기간·방법은 견본주택에서 안내합니다.</p>'
+        + '<p class="oe-pop__note">※ 인증 기간: 당첨자 서류접수 기간 11.12(목)~11.16(월) · 인증 방법은 견본주택에서 안내합니다.</p>'
         + '<p class="oe-pop__note">※ 견본주택 현장 이벤트로, 홈페이지 사전고객등록 이벤트와는 별개입니다.</p>'
         + "</div>";
       p.innerHTML = (variant === "after" ? afterHtml : openHtml)
@@ -252,8 +252,9 @@
       var x = Math.round((window.innerWidth - total) / 2), top = Infinity;
       list.forEach(function (c) { setShift(c.el, x - c.left); x += c.r.width + GAP; top = Math.min(top, c.r.top); });
       panel.style.width = pw + "px";
-      var ph = panel.offsetHeight || 460;
-      top = Math.max(16, Math.min(top, window.innerHeight - ph - 16));
+      if (!isFinite(top)) top = 16;
+      top = Math.max(16, top);
+      panel.style.maxHeight = Math.max(240, window.innerHeight - top - 16) + "px";
       var hr = host === root ? { left: 0, top: 0 } : host.getBoundingClientRect();
       var bl = host === root ? 0 : (host.clientLeft || 0), bt = host === root ? 0 : (host.clientTop || 0);
       panel.style.left = Math.round(x - hr.left - bl) + "px";
