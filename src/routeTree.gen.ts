@@ -16,6 +16,7 @@ import { Route as ChangeinfoRouteImport } from './routes/changeinfo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DocnormalRouteImport } from './routes/docnormal'
 import { Route as DocspecialRouteImport } from './routes/docspecial'
+import { Route as EventRouteImport } from './routes/event'
 import { Route as LocationRouteImport } from './routes/location'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as NewsRouteImport } from './routes/news'
@@ -63,6 +64,11 @@ const DocnormalRoute = DocnormalRouteImport.update({
 const DocspecialRoute = DocspecialRouteImport.update({
   id: '/docspecial',
   path: '/docspecial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventRoute = EventRouteImport.update({
+  id: '/event',
+  path: '/event',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationRoute = LocationRouteImport.update({
@@ -121,9 +127,9 @@ const ApiVisitRoute = ApiVisitRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventAptRoute = EventAptRouteImport.update({
-  id: '/event/apt',
-  path: '/event/apt',
-  getParentRoute: () => rootRouteImport,
+  id: '/apt',
+  path: '/apt',
+  getParentRoute: () => EventRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/docnormal': typeof DocnormalRoute
   '/docspecial': typeof DocspecialRoute
+  '/event': typeof EventRouteWithChildren
   '/location': typeof LocationRoute
   '/login': typeof LoginRoute
   '/news': typeof NewsRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/docnormal': typeof DocnormalRoute
   '/docspecial': typeof DocspecialRoute
+  '/event': typeof EventRouteWithChildren
   '/location': typeof LocationRoute
   '/login': typeof LoginRoute
   '/news': typeof NewsRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/docnormal': typeof DocnormalRoute
   '/docspecial': typeof DocspecialRoute
+  '/event': typeof EventRouteWithChildren
   '/location': typeof LocationRoute
   '/login': typeof LoginRoute
   '/news': typeof NewsRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/docnormal'
     | '/docspecial'
+    | '/event'
     | '/location'
     | '/login'
     | '/news'
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/docnormal'
     | '/docspecial'
+    | '/event'
     | '/location'
     | '/login'
     | '/news'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/docnormal'
     | '/docspecial'
+    | '/event'
     | '/location'
     | '/login'
     | '/news'
@@ -275,6 +287,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DocnormalRoute: typeof DocnormalRoute
   DocspecialRoute: typeof DocspecialRoute
+  EventRoute: typeof EventRouteWithChildren
   LocationRoute: typeof LocationRoute
   LoginRoute: typeof LoginRoute
   NewsRoute: typeof NewsRoute
@@ -286,7 +299,6 @@ export interface RootRouteChildren {
   VideoRoute: typeof VideoRoute
   VisitRoute: typeof VisitRoute
   ApiVisitRoute: typeof ApiVisitRoute
-  EventAptRoute: typeof EventAptRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -339,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/docspecial'
       fullPath: '/docspecial'
       preLoaderRoute: typeof DocspecialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/event': {
+      id: '/event'
+      path: '/event'
+      fullPath: '/event'
+      preLoaderRoute: typeof EventRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/location': {
@@ -420,10 +439,10 @@ declare module '@tanstack/react-router' {
     }
     '/event/apt': {
       id: '/event/apt'
-      path: '/event/apt'
+      path: '/apt'
       fullPath: '/event/apt'
       preLoaderRoute: typeof EventAptRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EventRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -435,6 +454,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface EventRouteChildren {
+  EventAptRoute: typeof EventAptRoute
+}
+
+const EventRouteChildren: EventRouteChildren = {
+  EventAptRoute: EventAptRoute,
+}
+
+const EventRouteWithChildren = EventRoute._addFileChildren(EventRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
@@ -443,6 +472,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DocnormalRoute: DocnormalRoute,
   DocspecialRoute: DocspecialRoute,
+  EventRoute: EventRouteWithChildren,
   LocationRoute: LocationRoute,
   LoginRoute: LoginRoute,
   NewsRoute: NewsRoute,
@@ -454,18 +484,8 @@ const rootRouteChildren: RootRouteChildren = {
   VideoRoute: VideoRoute,
   VisitRoute: VisitRoute,
   ApiVisitRoute: ApiVisitRoute,
-  EventAptRoute: EventAptRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
