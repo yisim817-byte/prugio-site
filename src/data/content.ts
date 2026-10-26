@@ -58,6 +58,7 @@ export const NAV: NavItem[] = [
   },
   { label: "사전고객등록", en: "REGISTER", href: "/register" },
   // 작업지시서 13: 모델하우스 방문예약 전용 페이지
+  { label: "이벤트", en: "EVENT", href: "/event" },
   { label: "방문예약", en: "VISIT", href: "/visit" },
 ];
 
