@@ -33,7 +33,7 @@ function Page() {
         </div>
         <Photo
           src={img("/resources/img/sub/overview_apt_img.v4.jpg")}
-          alt="단지 이미지"
+          alt="도로변에 늘어선 고층 타워 조감"
           className="w-full object-cover"
         />
       </article>
