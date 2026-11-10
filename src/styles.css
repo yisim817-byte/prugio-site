@@ -5068,7 +5068,7 @@ html[data-om-hd="clear"] .ak-hd__item > a:hover {
 .plan-figure img { display: block; width: 100%; height: auto; border: 1px solid #e3e3e3; }
 .plan-figure figcaption { margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--color-muted, #555); }
 
-/* ── 작업지시서 13 (2026-10-22): 헤더 → 단계 띠 → 본문, 헤더·하단 바·30만원 팝업을 아크원푸르지오.site(A)와 같은 값으로 ── */
+/* ── 작업지시서 13 (2026-10-22): 헤더 → 단계 띠 → 본문, 헤더·하단 바·사전등록 팝업을 아크원푸르지오.site(A)와 같은 값으로 ── */
 /* 헤더: A 값 — 높이 90(PC)·72(태블릿)·70(휴대폰), 하위 페이지는 흰 바탕(0.85+블러)·초록 글자, 홈은 검정 바탕·흰 글자 */
 .ak-hd {
   position: sticky;
@@ -5137,7 +5137,7 @@ html[data-om-hd] .ak-hd__mtel { border-color: rgba(255, 255, 255, 0.4); }
   .ak-mbar a + a { background: transparent; color: #fff; border-left: 1px solid color-mix(in srgb, #fff 35%, transparent); }
 }
 
-/* 30만원 팝업: A(prereg-popup) 값 그대로 */
+/* 사전등록 팝업: A(prereg-popup) 값 그대로 */
 .prereg-pop { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; }
 .prereg-pop__bg { position: absolute; inset: 0; border: 0; background: color-mix(in srgb, #303030 55%, transparent); }
 .prereg-pop__panel {
@@ -5280,4 +5280,585 @@ body.prereg-lock { overflow: hidden; }
 @media (min-width: 768px) {
   .oe-cards { display: none; }
 }
+
+/* port_all_1105 shared: soon popup + commercial btn + reg-gate from A */
+@font-face {
+  font-family: "Eulyoo1945";
+  src: url("/official/fonts/Eulyoo1945-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Eulyoo1945";
+  src: url("/official/fonts/Eulyoo1945-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aboreto";
+  src: url("/official/fonts/Aboreto-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@charset "utf-8";
+
+/********************************************
+    popup_soon : 오픈 예정 안내 팝업 (상업시설/오피스텔)
+    디자인 기준 PC 1400x800 / MO 390x800, 뷰포트 비율에 맞춰 확대·축소
+********************************************/
+.popup_soon {
+  --pf-unit: min(1px, calc((100vw - 40px) / 1400), calc((100vh - 40px) / 800));
+  --pf-bg: #999;
+  position: fixed;
+  z-index: 110000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+}
+
+.popup_soon[hidden] {
+  display: none;
+}
+
+.popup_soon:not([hidden]) {
+  animation: popup-soon-in 0.25s ease-out;
+}
+
+.popup_soon__dialog {
+  position: relative;
+  flex: none;
+  width: calc(1400 * var(--pf-unit));
+  height: calc(800 * var(--pf-unit));
+  overflow: hidden;
+  background: var(--pf-bg);
+  outline: none;
+}
+
+/* 배경 */
+.popup_soon__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.popup_soon__bg picture,
+.popup_soon__bg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.popup_soon__bg img {
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+/* 텍스트 */
+.popup_soon__content {
+  position: absolute;
+  z-index: 1;
+  top: calc(101 * var(--pf-unit));
+  left: 50%;
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(52 * var(--pf-unit));
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.popup_soon__logo {
+  width: calc(257 * var(--pf-unit));
+  height: calc(45 * var(--pf-unit));
+  margin: 0;
+}
+
+.popup_soon__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.popup_soon__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(10 * var(--pf-unit));
+}
+
+.popup_soon__title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: calc(80 * var(--pf-unit));
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: calc(-4 * var(--pf-unit));
+  white-space: nowrap;
+}
+
+.popup_soon__type {
+  margin-left: 0.25em;
+}
+
+.popup_soon__english {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-en);
+  font-size: calc(20 * var(--pf-unit));
+  line-height: 1;
+  letter-spacing: calc(1.4 * var(--pf-unit));
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.popup_soon__coming {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-en);
+  font-size: calc(110 * var(--pf-unit));
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 사전고객등록 버튼 */
+.popup_soon__cta {
+  position: absolute;
+  z-index: 1;
+  top: calc(633 * var(--pf-unit));
+  left: 50%;
+  display: flex;
+  width: calc(238 * var(--pf-unit));
+  height: calc(53 * var(--pf-unit));
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--pf-unit));
+  border-radius: calc(8 * var(--pf-unit));
+  background: #fff;
+  color: #000;
+  font-family: var(--font-base);
+  font-size: calc(18 * var(--pf-unit));
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.popup_soon__cta::before {
+  content: '';
+  position: absolute;
+  inset: calc(3 * var(--pf-unit));
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: calc(6 * var(--pf-unit));
+  pointer-events: none;
+  transition: border-color 0.3s ease;
+}
+
+.popup_soon__cta strong {
+  font-weight: 700;
+}
+
+.popup_soon__cta_arrow {
+  width: calc(9 * var(--pf-unit));
+  height: calc(6 * var(--pf-unit));
+  margin: 0 calc(-1.5 * var(--pf-unit));
+  background: url('/official/soon/ico_arrow.v1.svg') center / 100% 100% no-repeat;
+  transform: rotate(-90deg);
+  transition: filter 0.3s ease;
+}
+
+/* common.css의 a:hover/a:visited { color: inherit }보다 우선하도록 색상을 명시한다. */
+.popup_soon .popup_soon__cta,
+.popup_soon .popup_soon__cta:visited,
+.popup_soon .popup_soon__cta:active {
+  color: #000;
+}
+
+.popup_soon .popup_soon__cta:focus-visible {
+  outline: calc(2 * var(--pf-unit)) solid #fff;
+  outline-offset: calc(4 * var(--pf-unit));
+  background: #000;
+  color: #fff;
+}
+
+.popup_soon .popup_soon__cta:focus-visible::before {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.popup_soon .popup_soon__cta:focus-visible .popup_soon__cta_arrow {
+  filter: invert(1);
+}
+
+/* 닫기 버튼 : 영상 모달(.nex-modal--video .nex-modal__close)과 동일한 스타일 */
+.popup_soon__close {
+  position: absolute;
+  z-index: 5;
+  top: calc(30 * var(--pf-unit));
+  right: calc(30 * var(--pf-unit));
+  width: calc(50 * var(--pf-unit));
+  height: calc(50 * var(--pf-unit));
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: calc(6 * var(--pf-unit));
+  color: transparent;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: none;
+  font-size: 0;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.popup_soon__close::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/official/soon/ico_close.v1.svg') center / calc(16 * var(--pf-unit)) calc(16 * var(--pf-unit)) no-repeat;
+  transition: transform 0.25s ease;
+}
+
+.popup_soon__close:focus-visible {
+  border-color: #fff;
+  outline: calc(2 * var(--pf-unit)) solid #fff;
+  outline-offset: calc(4 * var(--pf-unit));
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 오피스텔: 로고와 제목 영역은 공통 위치를 유지하고 하단 문구만 별도로 배치한다. */
+.popup_soon--officetel .popup_soon__lead {
+  position: absolute;
+  z-index: 1;
+  top: calc(328 * var(--pf-unit));
+  left: calc(203 * var(--pf-unit));
+  margin: 0;
+  color: #fff;
+  font-size: calc(24 * var(--pf-unit));
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.popup_soon--officetel .popup_soon__message {
+  position: absolute;
+  z-index: 1;
+  top: calc(469 * var(--pf-unit));
+  left: calc(736 * var(--pf-unit));
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.popup_soon--officetel .popup_soon__tagline {
+  margin: 0;
+  color: #fff;
+  font-size: calc(24 * var(--pf-unit));
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.popup_soon--officetel .popup_soon__coming {
+  font-size: calc(60 * var(--pf-unit));
+}
+
+.popup_soon--officetel .popup_soon__cta {
+  top: calc(628 * var(--pf-unit));
+  background: #44A5A9;
+}
+
+.popup_soon--officetel .popup_soon__cta,
+.popup_soon--officetel .popup_soon__cta:visited,
+.popup_soon--officetel .popup_soon__cta:active {
+  color: #fff;
+}
+
+.popup_soon--officetel .popup_soon__cta::before {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.popup_soon--officetel .popup_soon__cta_arrow {
+  filter: invert(1);
+}
+
+.popup_soon__note {
+  margin: 0;
+  color: #fff;
+  opacity: 0.7;
+  font-size: calc(13 * var(--pf-unit));
+  font-weight: 400;
+  line-height: 1.5;
+  position: absolute;
+  bottom: calc(20 * var(--pf-unit));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  word-break: keep-all;
+  text-align: center;
+}
+
+@media screen and (min-width: 1025px) {
+  .popup_soon .popup_soon__cta:hover {
+    background: #000;
+    color: #fff;
+  }
+
+  .popup_soon .popup_soon__cta:hover::before {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .popup_soon .popup_soon__cta:hover .popup_soon__cta_arrow {
+    filter: invert(1);
+  }
+
+  .popup_soon__close:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 calc(18 * var(--pf-unit)) rgba(255, 255, 255, 0.12);
+  }
+
+  .popup_soon__close:hover::before {
+    transform: rotate(90deg);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .popup_soon {
+    --pf-unit: min(calc((100vw - 40px) / 390), calc((100vh - 40px) / 800));
+  }
+
+  .popup_soon__dialog {
+    width: calc(390 * var(--pf-unit));
+  }
+
+  .popup_soon__content {
+    top: calc(101 * var(--pf-unit));
+    width: calc(289 * var(--pf-unit));
+  }
+
+  .popup_soon__title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: calc(20 * var(--pf-unit));
+    letter-spacing: calc(-1 * var(--pf-unit));
+    white-space: normal;
+  }
+
+  .popup_soon__type {
+    margin-left: 0;
+    font-size: calc(40 * var(--pf-unit));
+  }
+
+  /* 디자인상 영문 부제 영역 높이가 76이며 두 줄 텍스트가 세로 중앙에 놓인다. */
+  .popup_soon__english {
+    padding: calc(24 * var(--pf-unit)) 0;
+    font-size: calc(14 * var(--pf-unit));
+    letter-spacing: calc(0.98 * var(--pf-unit));
+  }
+
+  .popup_soon__coming {
+    font-size: calc(60 * var(--pf-unit));
+  }
+
+  .popup_soon__cta {
+    top: calc(623 * var(--pf-unit));
+  }
+
+  .popup_soon--officetel .popup_soon__lead {
+
+    top: calc(325 * var(--pf-unit));
+    left: 50%;
+    font-size: calc(18 * var(--pf-unit));
+    text-align: center;
+    transform: translateX(-50%);
+  }
+
+  .popup_soon--officetel .popup_soon__message {
+    top: calc(427 * var(--pf-unit));
+    left: 50%;
+    align-items: center;
+    gap: calc(5 * var(--pf-unit));
+    text-align: center;
+    transform: translateX(-50%);
+  }
+
+  .popup_soon--officetel .popup_soon__tagline {
+    font-size: calc(20 * var(--pf-unit));
+  }
+
+  .popup_soon--officetel .popup_soon__cta {
+    top: calc(650 * var(--pf-unit));
+  }
+
+  .popup_soon__close {
+    top: calc(13 * var(--pf-unit));
+    right: calc(13 * var(--pf-unit));
+    width: calc(54 * var(--pf-unit));
+    height: calc(54 * var(--pf-unit));
+  }
+
+}
+
+/* 모바일 주소창 때문에 100vh가 실제 보이는 높이보다 커지는 문제 방지 */
+@supports (height: 100dvh) {
+  @media screen and (min-width: 1025px) {
+    .popup_soon {
+      --pf-unit: min(1px, calc((100vw - 40px) / 1400), calc((100dvh - 40px) / 800));
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    .popup_soon {
+      --pf-unit: min(calc((100vw - 40px) / 390), calc((100dvh - 40px) / 800));
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup_soon:not([hidden]) {
+    animation: none;
+  }
+}
+
+@keyframes popup-soon-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+@font-face {
+  font-family: "Eulyoo1945";
+  src: url("/official/fonts/Eulyoo1945-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Eulyoo1945";
+  src: url("/official/fonts/Eulyoo1945-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aboreto";
+  src: url("/official/fonts/Aboreto-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+.popup_soon { --font-serif: "Eulyoo1945", serif; --font-en: "Aboreto", serif; }
+.header__btn_mark { height: 28px; width: auto; }
+.header.is-inverted .header__btn_logo.is-home-top { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.header__btn_commercial {
+  display: inline-flex; align-items: center; justify-content: center; position: relative;
+  gap: 10px; height: 53px; padding: 0 20px; border-radius: 999px; background: #3C4096; color: #fff;
+}
+.header__btn_commercial span { font-family: "Eulyoo1945", serif; color: #fff; font-size: 18px; letter-spacing: -0.03em; }
+.header__btn_commercial::before {
+  content: ""; position: absolute; inset: 3px; border: 1px solid rgba(255,255,255,.45); border-radius: 999px; pointer-events: none;
+}
+.header__btn_commercial::after {
+  content: ""; width: 6px; height: 6px; border-top: 1.5px solid #fff; border-right: 1.5px solid #fff; transform: rotate(45deg);
+}
+.header__btn_commercial:hover { transform: translateY(-2px); }
+.header__logo_wrap { margin-right: 0; flex: none; }
+@media (min-width: 1025px) {
+  .gnb { position: relative; left: auto; top: auto; transform: none; flex: 1 1 auto; display: flex; justify-content: center; min-width: 0; height: 100%; }
+}
+.header__util_wrap { flex: none; gap: 16px; }
+.gnb__depth1 { gap: 2px; }
+.gnb__depth1_link { min-width: 72px; padding: 0 8px; font-size: 16px; }
+@media (min-width: 1280px) {
+  .gnb__depth1_link { min-width: 90px; font-size: 18px; }
+}
+.gnb__depth2_label, .allmenu__group { display: block; font-weight: 700; margin-bottom: 8px; }
+.gnb__depth3 { list-style: none; margin: 0; padding: 0 0 0 8px; }
+.gnb__depth3 li + li { margin-top: 10px; }
+.allmenu__en { letter-spacing: 0.08em; }
+.allmenu__btn_commercial { margin: 28px auto 0; }
+.allmenu__top_wrap { display: none; }
+.header.is-menu-open { z-index: 1400; }
+.header.is-menu-open .header__container { background: #c4beb6; color: #173a36; }
+.allmenu__depth1_item .allmenu__kr { display: inline; }
+.allmenu__depth1_item .allmenu__en { display: none; }
+@media (max-width: 1024px) {
+  .header__btn_commercial { display: none; }
+  .allmenu .header__btn_commercial, .allmenu__btn_commercial { display: inline-flex; }
+  .allmenu__menu { padding-top: calc(var(--header-height) + 20px); }
+  .allmenu__depth1_item { align-items: flex-start; }
+  .allmenu__depth1_item .allmenu__en { display: block; font-size: 22px; font-weight: 700; letter-spacing: 0.04em; color: #004B45; }
+  .allmenu__depth1_item .allmenu__kr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .hero__quick { display: flex !important; }
+  .hero__quick_item--reg { display: none !important; }
+  .hero__quick_item { width: 96px; height: 96px; }
+}
+.hero__quick {
+  position: absolute; top: calc(var(--header-height) + 40px); right: var(--page-margin); bottom: auto;
+  z-index: 4; display: flex; flex-direction: column; gap: 20px;
+}
+.hero__quick_item { width: 140px; height: 140px; }
+.hero__quick_orbit { animation-duration: 24s; }
+@media (prefers-reduced-motion: reduce) { .hero__quick_orbit { animation: none; } }
+.reg-page { padding: 24px 16px 80px; }
+.reg-gate { max-width: 590px; margin: 0 auto; text-align: center; }
+.reg-gate__poster { width: min(590px, 100%); height: auto; display: block; margin: 0 auto; }
+.reg-gate__title { margin: 18px 0 12px; font-size: 22px; font-weight: 700; }
+.reg-gate__open { width: 100%; height: 56px; border: 0; border-radius: 8px; background: #004B45; color: #fff; font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; }
+.reg-dialog { position: fixed; inset: 0; z-index: 120000; background: rgba(0,0,0,.72); display: flex; align-items: flex-end; justify-content: center; }
+.reg-dialog[hidden] { display: none !important; }
+.reg-dialog__sheet { position: relative; width: min(600px, 100%); }
+.reg-dialog__panel { position: relative; width: 100%; height: min(80vh, 900px); background: #fff; color: #202926; border-radius: 16px 16px 0 0; overflow: auto; text-align: left; padding: 18px 18px 28px; }
+.reg-dialog__x { position: absolute; top: -56px; right: 0; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; font-size: 20px; cursor: pointer; z-index: 2; }
+.reg-dialog__head { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; margin-bottom: 8px; }
+.reg-dialog__head h2 { margin: 0; text-align: center; font-size: 18px; }
+.reg-dialog__back { width: 44px; height: 44px; border: 0; background: none; font-size: 28px; cursor: pointer; }
+.reg-dialog__subject { margin: 8px 0; padding-bottom: 10px; border-bottom: 1px solid #e6e6e6; font-weight: 700; }
+.reg-dialog__all, .reg-dialog__box label { display: flex; gap: 8px; align-items: flex-start; }
+.reg-dialog__fine { color: #666; font-size: 12px; line-height: 1.5; }
+.reg-dialog__box { border: 1px solid #e6e6e6; border-radius: 8px; padding: 12px; display: grid; gap: 10px; }
+.reg-dialog__row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.reg-dialog__row button, .reg-dialog__guide button { border: 0; background: none; color: #004B45; cursor: pointer; font: inherit; }
+.reg-dialog__guide button { text-decoration: underline; }
+.reg-dialog__ask { font-size: 14px; line-height: 1.5; }
+.reg__phone { display: grid; grid-template-columns: 88px 1fr; gap: 8px; }
+.reg__phone select, .reg-dialog .reg__field input { height: 56px; border: 1px solid #e6e6e6; border-radius: 8px; padding: 0 12px; background: #fff; width: 100%; }
+.reg__submit:disabled { background: #c8c8c8; color: #fff; }
+.reg-dialog .reg__submit:disabled { opacity: 1; background: #c8c8c8; }
+.reg-dialog .reg__submit:not(:disabled) { background: #004B45; opacity: 1; }
+@media (min-width: 861px) {
+  .reg-dialog { align-items: flex-end; }
+  .reg-dialog__panel { height: auto; max-height: 86vh; border-radius: 16px 16px 0 0; margin-bottom: 0; }
+}
+@media (max-width: 860px) {
+  .reg-dialog__panel { height: 80vh; width: 100%; }
+  .reg-dialog__x { right: 8px; top: -52px; }
+}
+
+
+/* staff-site adaptation: commercial CTA on ak-hd */
+.ak-hd__commercial {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-right: 12px; padding: 8px 14px; border-radius: 999px;
+  background: #004B45; color: #fff; font-size: 14px; font-weight: 600;
+  text-decoration: none; white-space: nowrap;
+}
+.ak-hd__commercial:hover { opacity: .92; }
+@media (max-width: 1024px) {
+  .ak-hd__commercial { display: none; }
+  .ak-hd__panel .ak-hd__commercial { display: inline-flex; margin: 16px 0 0; }
+}
+.register-layout { display: grid; grid-template-columns: minmax(240px,.85fr) minmax(0,1.15fr); gap: 32px; align-items: start; }
+.register-layout__summary { padding: 20px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; line-height: 1.6; }
+.register-layout__schedule { margin-top: 20px; padding-top: 14px; border-top: 1px solid #ddd; font-size: 14px; }
+.register-layout__schedule h2 { font-size: 18px; margin: 0 0 8px; }
+@media (max-width: 900px) { .register-layout { grid-template-columns: 1fr; } }
 

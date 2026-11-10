@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell, pageHead } from "@/components/layout";
 import { AptEventPopup } from "@/components/event-popup";
-import { CostcoEventPopup } from "@/components/CostcoEventPopup";
-import { OpenEventPopup } from "@/components/OpenEventPopup";
 import { RoleHome } from "@/components/role";
 
 export const Route = createFileRoute("/")({
@@ -15,8 +13,6 @@ function Home() {
   return (
     <Shell>
       <AptEventPopup />
-      <CostcoEventPopup />
-      <OpenEventPopup />
       <RoleHome />
     </Shell>
   );

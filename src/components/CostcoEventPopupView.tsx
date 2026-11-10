@@ -96,11 +96,10 @@ import { useEffect } from "react";
         + '<h2 id="costco-pop-title" class="costco-pop__title">선착순 1,000명</h2>'
         + '<p class="costco-pop__benefit">코스트코 1년 회원권 증정</p>'
         + '<p class="costco-pop__target">홈페이지 사전고객등록 후 청약하신 고객 · 청약 당첨 여부와 관계없이</p>'
-        + '<p class="costco-pop__both">사전고객등록 <b>한 번</b>이면<br>백화점 상품권 30만원 · 코스트코 1년 회원권<br>두 이벤트에 <b>함께 인정</b>됩니다</p>'
         + '<a class="costco-pop__tel" href="' + TEL + '">전화 문의 ' + PHONE + '</a>'
         + '<p class="costco-pop__note">※ 선착순 1,000명 마감 시 조기 종료됩니다.</p>'
         + '<p class="costco-pop__note">※ 선착순 기준·지급 시기·방법은 담당자가 개별 안내합니다.</p>'
-        + '<p class="costco-pop__note">※ 사전고객등록은 공식 청약 신청이 아니며, 등록만으로는 증정되지 않습니다.</p>'
+        + '<p class="costco-pop__note">※ 사전고객등록만으로는 증정되지 않습니다.</p>'
         + '<p class="costco-pop__note">※ 홈페이지 운영자가 진행하는 이벤트로, 시행·시공사 및 코스트코가 제공하는 혜택이 아닙니다.</p>'
         + '<div class="costco-pop__foot"><button type="button" data-today="1">오늘 하루 보지 않기</button><button type="button" data-close="1" aria-label="닫기">닫기</button></div>';
       p.addEventListener("click", function (e) {

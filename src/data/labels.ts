@@ -7,7 +7,6 @@
 export const REGISTER_LABEL = "사전고객등록";
 
 /** 등록 버튼 가까이에 항상 붙는 안내. */
-export const REGISTER_NOTE = "사전고객등록은 공식 청약 신청이 아닙니다.";
 
 /** 헤더와 푸터에 쓰는 현장명. */
 export const PROJECT_NAME = "청라 아크원 푸르지오";

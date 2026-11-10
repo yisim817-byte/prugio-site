@@ -148,7 +148,6 @@
         + '<h2 id="oe-pop-title" class="oe-pop__title">청약·당첨 고객 이벤트</h2>'
         + '<ul class="oe-pop__list">'
         + row("1", "청약 인증 고객", "코스트코 골드스타 연간 회원권 (수량 한정)")
-        + row("2", "당첨자 서류접수 고객", "현대명품 금쌀")
         + "</ul>"
         + '<hr class="oe-pop__rule">'
         + '<a class="oe-pop__go" href="/event#after">이벤트 자세히 보기</a>'
@@ -340,10 +339,10 @@
     }
     loadPhase().then(function (ph) {
       if (dead) return;
-      if (ph === null) variant = openByDate() ? "open" : "after";
+      if (ph === null) variant = "after";
       else if (ph === 5) return;
       else if (ph >= 2) variant = "after";
-      else variant = "open";
+      else variant = "after";
       whenReady(open);
     });
     return function stop() { dead = true; timers.forEach(function (t) { window.clearTimeout(t); }); close(false); };

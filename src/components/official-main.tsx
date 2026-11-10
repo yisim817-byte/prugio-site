@@ -490,7 +490,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
               <span className="om-hero__open">
                 <strong className="om-hero__open_ph">입주자모집공고 게시 10.22(목)</strong>
                 <span className="om-hero__open_sep" aria-hidden="true">·</span>
-                <span className="om-hero__open_ph">견본주택 GRAND OPEN 10.30(금)</span>
+                <span className="om-hero__open_ph">견본주택 별도 공지 시까지 운영</span>
               </span>
             </div>
             <div className="om-hero__ui">
@@ -503,11 +503,11 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
               <div className="om-hero__quick">
                 <p className="om-hero__quick_item om-hero__quick_item-policy">
                   <span className="om-blind">분양가 상한제 적용단지</span>
-                  <img className="om-hero__quick_orbit" src={asset("hero_circle_text.svg")} alt="" aria-hidden="true" />
-                  <img className="om-hero__quick_content" src={asset("hero_circle_01.svg")} alt="분양가 상한제 적용단지" />
+                  <img className="om-hero__quick_orbit" src="/official/badge/hero_circle_text.v100.svg" alt="" aria-hidden="true" />
+                  <img className="om-hero__quick_content" src="/official/badge/hero_circle_01.v100.svg" alt="분양가 상한제 적용단지" />
                 </p>
                 <Link to="/register" className="om-hero__quick_item om-hero__quick_item-regist" aria-label={REGISTER_LABEL}>
-                  <img className="om-hero__quick_orbit" src={asset("hero_circle_text.svg")} alt="" aria-hidden="true" />
+                  <img className="om-hero__quick_orbit" src="/official/badge/hero_circle_text.v100.svg" alt="" aria-hidden="true" />
                   <span className="om-hero__quick_register" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.4">
                       <circle cx="10" cy="8" r="3.6" />

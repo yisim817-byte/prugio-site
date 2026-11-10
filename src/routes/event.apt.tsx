@@ -3,42 +3,39 @@ import { Shell, SubHero, pageHead } from "@/components/layout";
 import { PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 
 export const Route = createFileRoute("/event/apt")({
-  head: () => pageHead("아파트 사전고객등록 이벤트"),
+  head: () => pageHead("상가·오피스텔 사전등록 이벤트"),
   component: Page,
 });
 
 const STEPS = [
-  "홈페이지 사전고객등록",
-  "공식 청약 신청",
-  "청약 당첨과 지급 조건 확인",
-  "계약 체결 후 지급 대상 확인",
-  "조건 충족 시 계약 당일 백화점 상품권 지급",
+  "홈페이지 상가·오피스텔 사전등록",
+  "오피스텔·상가 계약",
+  "계약 시 백화점 상품권 지급",
 ];
 
 const TERMS = [
-  "대상: 본 홈페이지에서 사전고객등록을 완료한 고객 중, 청라 아크원 푸르지오 아파트 청약에 당첨되어 지급 조건을 충족한 고객",
-  "혜택: 백화점 상품권 30만원 (롯데·현대·신세계 중 1종 선택)",
-  "지급 시기: 청약 당첨 및 지급 조건 충족 확인 후 계약 당일 지급합니다.",
+  "대상: 이 홈페이지에서 상가·오피스텔 사전등록을 한 뒤 청라 아크원 푸르지오 오피스텔 또는 상가를 계약한 고객",
+  "혜택: 백화점 상품권 50만원 (롯데·현대·신세계 중 1종 선택)",
+  "이벤트 기간: 2026년 11월 20일(금)까지",
+  "지급 시기: 오피스텔·상가 계약 시 지급합니다.",
   "1인(동일인·동일 휴대전화번호) 1회 지급합니다.",
-  "부적격 당첨, 계약 미체결·취소·해제 시 지급 대상에서 제외됩니다. 지급 후 해당 사유가 발생한 경우의 처리 기준은 담당자가 개별 안내합니다.",
+  "계약 미체결·취소·해제 시 지급 대상에서 제외됩니다. 지급 후 해당 사유가 발생한 경우의 처리 기준은 담당자가 개별 안내합니다.",
   "제세공과금 처리 기준은 확정 후 담당자가 개별 안내합니다.",
   "이벤트 내용은 사전 공지 후 변경 또는 조기 종료될 수 있습니다.",
-  "사전고객등록은 공식 청약 신청이 아니며, 청약 자격과 일정은 입주자모집공고를 따릅니다.",
 ];
 
 function Page() {
   return (
     <Shell>
-      <SubHero en="APT EVENT" title="아파트 사전고객등록 이벤트" crumbs="아파트 이벤트" />
+      <SubHero en="EVENT" title="상가·오피스텔 사전등록 이벤트" crumbs="상가·오피스텔 이벤트" />
       <article className="ak-wrap ak-page">
         <div className="max-w-3xl">
-        <p className="text-sm font-semibold text-forest">아파트 이벤트</p>
-        <h2 className="ak-h2 mt-3">백화점 상품권 30만원</h2>
+        <p className="text-sm font-semibold text-forest">상가·오피스텔 이벤트</p>
+        <h2 className="ak-h2 mt-3">백화점 상품권 50만원</h2>
         <p className="mt-3 text-sm">롯데 · 현대 · 신세계 중 선택</p>
         <p className="mt-6 border-y border-line py-4 leading-7">
-          사전고객등록 후 청약 당첨 및 지급 조건을 충족하고 계약하신 아파트 고객 대상입니다. 등록만으로 지급되지 않습니다.
+          상가·오피스텔 사전등록 후 오피스텔·상가 계약 시 지급합니다. 이벤트 기간은 11월 20일(금)까지이며, 등록만으로 지급되지 않습니다.
         </p>
-        <p className="mt-4 text-sm font-medium leading-6">※ 사전고객등록은 공식 청약 신청이 아닙니다.</p>
 
         <h3 className="ak-h3 mt-12">지급까지 순서</h3>
         <ol className="mt-4 border-t border-ink">

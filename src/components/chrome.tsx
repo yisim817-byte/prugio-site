@@ -41,6 +41,9 @@ export function Header() {
             </div>
           ))}
         </nav>
+        <a href="#popup_soon_commercial" className="ak-hd__commercial" data-popup-soon="commercial" aria-haspopup="dialog">
+          근린생활시설
+        </a>
         <a href={PROJECT_PHONE_TEL} className="ak-hd__tel ak-num">
           {PROJECT_PHONE_DISPLAY}
         </a>
@@ -76,6 +79,12 @@ export function Header() {
                 </div>
               );
             })}
+            <a href="#popup_soon_officetel" data-popup-soon="officetel" aria-haspopup="dialog" onClick={() => setOpen(false)}>
+              오피스텔 오픈예정
+            </a>
+            <a href="#popup_soon_commercial" className="ak-hd__commercial" data-popup-soon="commercial" aria-haspopup="dialog" onClick={() => setOpen(false)}>
+              근린생활시설
+            </a>
           </div>
         </div>
       ) : null}

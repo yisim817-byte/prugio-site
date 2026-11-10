@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Nb, PageFaq, QuickAnswer } from "@/components/chrome";
 import { OfficialMain } from "@/components/official-main";
 import { DEPOSIT, OVERVIEW_ROWS, PLACES, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
-import { REGISTER_LABEL, REGISTER_NOTE } from "@/data/labels";
+import { REGISTER_LABEL } from "@/data/labels";
 import { ROLE } from "@/data/role";
 import type { Chip, RoleFigure, RoleMain as RoleMainData, SourceItem } from "@/data/role-types";
 
@@ -356,7 +356,6 @@ function InfoHead() {
               {ROLE.heroLink.label}
             </Link>
           </div>
-          <p className="ak-hero__note">{REGISTER_NOTE}</p>
         </div>
         <Figure figure={ROLE.figure} />
       </div>

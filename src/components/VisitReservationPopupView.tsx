@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
   /* 모델하우스 방문예약 팝업 (작업지시서 9, 2026-10-19)
      - arkone-visit-config 의 enabled=true 일 때만 띄운다(호출 실패 시 띄우지 않음 = 공개 스위치 겸 비상 정지).
-     - 기존 팝업 2종(30만원·코스트코)은 선택자로 열림 여부만 읽는다. 그 파일·문구·저장 키는 건드리지 않는다.
+     - 기존 팝업 2종(사전등록·코스트코)은 선택자로 열림 여부만 읽는다. 그 파일·문구·저장 키는 건드리지 않는다.
      - 겹치지 않게 배치(PM 지시 2026-10-19): 기존 팝업이 열려 있고 화면 폭이 넉넉하면(PC) 기존 카드들과 한 줄로 나란히,
        폭이 모자라면(휴대폰·좁은 PC) 기존 팝업이 모두 닫힌 뒤에 띄운다. 나란히 놓는 동안만 기존 카드 위치(transform)를
        잠시 옮기고 닫히면 되돌린다. 기존이 모달 <dialog> 면 그 안에 카드를 붙인다(코스트코 팝업과 같은 방식).
@@ -107,7 +107,7 @@ import { useEffect } from "react";
         + '<h2 id="visit-pop-title" class="visit-pop__title">모델하우스 방문예약</h2>'
         + '<p class="visit-pop__desc">방문 희망 날짜를 남겨 주시면, 담당자가 확인 후 방문 시간을 안내해 드립니다.</p>'
         + '<p class="visit-pop__loc"><span>견본주택 위치</span>인천광역시 서해구 청라동 87-1</p>'
-        + '<p class="visit-pop__loc"><span>운영 기간</span>10.30(금) · 10.31(토) · 11.01(일) 3일간</p>'
+        + '<p class="visit-pop__loc"><span>운영 기간</span>견본주택 별도 공지 시까지 운영</p>'
         + '<a class="visit-pop__go" href="' + (cfg.visit || "/visit") + '">방문 날짜 선택하고 예약하기</a>'
         + '<a class="visit-pop__tel" href="' + (cfg.tel || "tel:15339014") + '">전화 예약 ' + (cfg.phone || "1533-9014") + '</a>'
         + '<p class="visit-pop__note">※ 방문예약 신청은 담당자 확인 후 확정됩니다. 희망 일정이 어려운 경우 다른 일정으로 안내드릴 수 있습니다.</p>'
