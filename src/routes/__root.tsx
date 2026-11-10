@@ -9,6 +9,8 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // 2026-11-10 PM 지시: 브라우저 자동번역이 화면 글자를 바꾸지 못하게 한다.
+      { name: "google", content: "notranslate" },
       { title: "청라 아크원 푸르지오" },
       { name: "robots", content: "noindex, nofollow" },
       { name: "theme-color", content: "#1c3a32" },
@@ -52,7 +54,7 @@ export const Route = createRootRoute({
     ],
   }),
   component: () => (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko" translate="no" className="notranslate" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

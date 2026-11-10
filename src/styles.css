@@ -5862,3 +5862,83 @@ body.prereg-lock { overflow: hidden; }
 .register-layout__schedule h2 { font-size: 18px; margin: 0 0 8px; }
 @media (max-width: 900px) { .register-layout { grid-template-columns: 1fr; } }
 
+/* ===== 작업지시서 16-2: 오피스텔·상업시설 = 공식 팝업 디자인을 그대로 사용 ===== */
+/* (1) 홈 구역: 공식 안내 화면 2장 */
+.otf { background: #0e1513; }
+.otf .popup_soon { position: relative; inset: auto; z-index: auto; display: flex; justify-content: center; background: none; animation: none; --pf-unit: min(1px, calc(100vw / 1400)); }
+.otf .popup_soon + div, .otf > div { margin-top: 0; }
+@media screen and (max-width: 1024px) {
+  .otf .popup_soon { --pf-unit: calc(100vw / 390); }
+}
+/* (2) 첫 화면 팝업: 공식 팝업(세로) 2장 */
+.otp { position: fixed; inset: 0; z-index: 110000; display: flex; padding: 20px; background: rgba(0,0,0,0.8); overflow-y: auto; animation: popup-soon-in 0.25s ease-out; }
+.otp__wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; margin: auto; }
+.otp__close { min-height: 44px; padding: 0 16px; border: 0; background: none; color: #fff; font-size: 15px; cursor: pointer; }
+.otp-row { display: flex; gap: 16px; }
+.otp__today { display: flex; align-items: center; gap: 10px; min-height: 44px; color: #fff; font-size: 15px; cursor: pointer; }
+.otp__today input { width: 20px; height: 20px; }
+.otp-row .popup_soon {
+    --pf-unit: min(calc((100vw - 40px) / 390), calc((100vh - 40px) / 800));
+  }.otp-row .popup_soon__dialog {
+    width: calc(390 * var(--pf-unit));
+  }.otp-row .popup_soon__content {
+    top: calc(101 * var(--pf-unit));
+    width: calc(289 * var(--pf-unit));
+  }.otp-row .popup_soon__title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: calc(20 * var(--pf-unit));
+    letter-spacing: calc(-1 * var(--pf-unit));
+    white-space: normal;
+  }.otp-row .popup_soon__type {
+    margin-left: 0;
+    font-size: calc(40 * var(--pf-unit));
+  }.otp-row /* 디자인상 영문 부제 영역 높이가 76이며 두 줄 텍스트가 세로 중앙에 놓인다. */
+  .popup_soon__english {
+    padding: calc(24 * var(--pf-unit)) 0;
+    font-size: calc(14 * var(--pf-unit));
+    letter-spacing: calc(0.98 * var(--pf-unit));
+  }.otp-row .popup_soon__coming {
+    font-size: calc(60 * var(--pf-unit));
+  }.otp-row .popup_soon__cta {
+    top: calc(623 * var(--pf-unit));
+  }.otp-row .popup_soon--officetel .popup_soon__lead {
+
+    top: calc(325 * var(--pf-unit));
+    left: 50%;
+    font-size: calc(18 * var(--pf-unit));
+    text-align: center;
+    transform: translateX(-50%);
+  }.otp-row .popup_soon--officetel .popup_soon__message {
+    top: calc(427 * var(--pf-unit));
+    left: 50%;
+    align-items: center;
+    gap: calc(5 * var(--pf-unit));
+    text-align: center;
+    transform: translateX(-50%);
+  }.otp-row .popup_soon--officetel .popup_soon__tagline {
+    font-size: calc(20 * var(--pf-unit));
+  }.otp-row .popup_soon--officetel .popup_soon__cta {
+    top: calc(650 * var(--pf-unit));
+  }.otp-row .popup_soon__close {
+    top: calc(13 * var(--pf-unit));
+    right: calc(13 * var(--pf-unit));
+    width: calc(54 * var(--pf-unit));
+    height: calc(54 * var(--pf-unit));
+  }
+
+
+.otp-row .popup_soon { position: relative; inset: auto; z-index: auto; display: block; background: none; animation: none; --pf-unit: min(1px, calc((100vw - 56px) / 796), calc((100vh - 170px) / 800)); }
+@media screen and (max-width: 1024px) {
+  .otp { align-items: flex-start; padding-top: 64px; } /* 모바일: 상단 공지 띠에 「팝업닫기」가 가리지 않게 */
+  .otp-row { flex-direction: column; }
+  .otp-row .popup_soon { --pf-unit: min(1px, calc((100vw - 40px) / 390)); }
+}
+/* (3) 등록 화면: 광고성 정보 수신 동의 하위 항목 (공식과 같은 구성) */
+.reg-dialog__sub { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 4px 0 8px 28px; font-size: 14px; }
+.otp-row br.m-only { display: initial; }
+
+/* 직원 사이트 보완: 구역(가로)에서는 PC에서 줄바꿈을 숨기고 휴대폰에서만 보인다. */
+.otf br.m-only { display: none; }
+@media (max-width: 1024px) { .otf br.m-only { display: initial; } }

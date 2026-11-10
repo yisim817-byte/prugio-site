@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell, pageHead } from "@/components/layout";
-import { AptEventPopup } from "@/components/event-popup";
+import { OtPopups } from "@/components/ot-official";
 import { RoleHome } from "@/components/role";
 
 export const Route = createFileRoute("/")({
@@ -12,7 +12,8 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <Shell>
-      <AptEventPopup />
+      {/* 2026-11-10 PM 지시: 첫 화면 팝업은 공식 오피스텔·상업시설 팝업 2장만. 기존 팝업(event-popup.tsx)은 파일을 두고 렌더만 끈다. */}
+      <OtPopups />
       <RoleHome />
     </Shell>
   );
