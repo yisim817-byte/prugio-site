@@ -45,6 +45,7 @@ export const NAV: NavItem[] = [
       { label: "변경된 청약제도", href: "/changeinfo" },
       { label: "특별공급 안내", href: "/docspecial" },
       { label: "일반공급 안내", href: "/docnormal" },
+      { label: "103㎡B 선착순 안내", href: "/103b" },
     ],
   },
   {

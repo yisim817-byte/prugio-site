@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as R103bRouteImport } from './routes/103b'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ChangeinfoRouteImport } from './routes/changeinfo'
@@ -34,6 +35,11 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const R103bRoute = R103bRouteImport.update({
+  id: '/103b',
+  path: '/103b',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -139,6 +145,7 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/103b': typeof R103bRoute
   '/admin': typeof AdminRoute
   '/brand': typeof BrandRoute
   '/changeinfo': typeof ChangeinfoRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/103b': typeof R103bRoute
   '/admin': typeof AdminRoute
   '/brand': typeof BrandRoute
   '/changeinfo': typeof ChangeinfoRoute
@@ -186,6 +194,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/103b': typeof R103bRoute
   '/admin': typeof AdminRoute
   '/brand': typeof BrandRoute
   '/changeinfo': typeof ChangeinfoRoute
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/103b'
     | '/admin'
     | '/brand'
     | '/changeinfo'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/103b'
     | '/admin'
     | '/brand'
     | '/changeinfo'
@@ -257,6 +268,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/103b'
     | '/admin'
     | '/brand'
     | '/changeinfo'
@@ -281,6 +293,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R103bRoute: typeof R103bRoute
   AdminRoute: typeof AdminRoute
   BrandRoute: typeof BrandRoute
   ChangeinfoRoute: typeof ChangeinfoRoute
@@ -309,6 +322,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/103b': {
+      id: '/103b'
+      path: '/103b'
+      fullPath: '/103b'
+      preLoaderRoute: typeof R103bRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -466,6 +486,7 @@ const EventRouteWithChildren = EventRoute._addFileChildren(EventRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R103bRoute: R103bRoute,
   AdminRoute: AdminRoute,
   BrandRoute: BrandRoute,
   ChangeinfoRoute: ChangeinfoRoute,
@@ -489,3 +510,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

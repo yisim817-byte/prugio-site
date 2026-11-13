@@ -1,12 +1,12 @@
-/* 평면도 공개 상단 띠 (2026-10-31, t244u 전 타입 갱신) */
+/* 상단 띠: 103㎡B 선착순 참여의향서 접수 안내 (2026-11-13 작업지시서 17). 이전 내용 = 평면도 공개 띠(2026-10-31). 파일 이름·요소 id·높이는 그대로 둔다. */
 (function () {
   'use strict';
   if (window.__planOpenBar) return; window.__planOpenBar = 1;
   if (/register|prereg|admin|login/i.test(location.pathname)) return;
-  var KEY = 'planOpenBarClosed_20261031b';
+  var KEY = 'b103BarClosed_20261113';
   try { if (sessionStorage.getItem(KEY)) return; } catch (e) {}
   var s = document.currentScript;
-  var HREF = (s && s.getAttribute('data-href')) || '/plans';
+  var HREF = (s && s.getAttribute('data-b103-href')) || '/103b';
   var H = 38;
   function run() {
     if (document.getElementById('plan-open-bar')) return;
@@ -21,8 +21,8 @@
       'html.pob-on body{padding-top:' + H + 'px!important}';
     document.head.appendChild(css);
     var bar = document.createElement('div');
-    bar.id = 'plan-open-bar'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', '평면도 공개 안내');
-    bar.innerHTML = '<a class="pob-link" href="' + HREF + '"><span class="pob-tag">평면도 공개</span><span class="pob-types">84㎡A·B·C·D · 103㎡A·B 전 타입</span><span class="pob-go">평면도·분양가 보기 ›</span></a><button type="button" aria-label="닫기">×</button>';
+    bar.id = 'plan-open-bar'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', '103㎡B 선착순 참여의향서 접수 안내');
+    bar.innerHTML = '<a class="pob-link" href="' + HREF + '"><span class="pob-tag">103㎡B 선착순</span><span class="pob-types">참여의향서 11.17(화)부터 견본주택 접수</span><span class="pob-go">접수 안내 보기 ›</span></a><button type="button" aria-label="닫기">×</button>';
     document.documentElement.appendChild(bar);
     document.documentElement.classList.add('pob-on');
     var moved = [];
