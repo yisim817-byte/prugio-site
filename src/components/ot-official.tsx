@@ -55,6 +55,28 @@ function SoonCard({ kind, portrait, headingId }: { kind: Kind; portrait?: boolea
   );
 }
 
+/** 작업지시서 17-1 (2026-11-13): 103㎡B 선착순 공급 참여의향서 접수 안내 카드. 공식 CG를 쓰지 않는 글자 카드(공식 녹색 바탕)다. 문구는 /103b 원장과 같다. */
+function B103Card() {
+  return (
+    <div className="popup_soon otp-b103">
+      <div className="otp-b103__dialog">
+        <p className="otp-b103__logo"><img src="/official/soon/logo.svg" alt="PRUGIO" width={257} height={45} /></p>
+        <h2 id="otp-b103-title" className="otp-b103__title">
+          <span className="otp-b103__brand">청라 아크원 푸르지오</span>
+          <span className="otp-b103__type">103㎡B</span>
+          <span className="otp-b103__kind">선착순 공급</span>
+        </h2>
+        <p className="otp-b103__label">참여의향서 접수</p>
+        <p className="otp-b103__date">11.17</p>
+        <p className="otp-b103__when">2026년 11월 17일(화)부터 · 견본주택</p>
+        <p className="otp-b103__cond">신청자 본인 방문 · 신분증 원본 · 1인 1건</p>
+        <a className="otp-b103__cta" href="/103b"><strong>접수 안내</strong> 보기 ›</a>
+        <p className="otp-b103__note">※ 선착순 공급 일정·방식은 현재 미정이며, 확정 후 접수 고객에게 별도 안내합니다.</p>
+      </div>
+    </div>
+  );
+}
+
 /** 홈 히어로 바로 아래: 공식 오피스텔·상업시설 안내 화면 2장을 구역으로 놓는다. */
 export function OtFeature() {
   return (
@@ -67,9 +89,10 @@ export function OtFeature() {
   );
 }
 
-const KEY = "ot_cm_pop_hide_until";
+// 17-1: 카드 구성이 바뀌어 키를 새로 쓴다(전에 「오늘 하루 보지 않기」를 누른 방문자에게도 한 번 보인다).
+const KEY = "ot_pop3_hide_until_20261113";
 
-/** 첫 화면 팝업: 공식 오피스텔·상업시설 팝업(세로) 2장만 띄운다. */
+/** 첫 화면 팝업: 103㎡B 선착순 안내 카드 + 공식 오피스텔·상업시설 팝업(세로) 2장. 17-1 에서 크기를 줄였다. */
 export function OtPopups() {
   const [open, setOpen] = useState(false);
   const [today, setToday] = useState(false);
@@ -108,13 +131,15 @@ export function OtPopups() {
   if (!open) return null;
 
   return (
-    <div className="otp" role="dialog" aria-modal="true" aria-label="오피스텔 · 상업시설 사전고객등록 안내" onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
+    <div className="otp" role="dialog" aria-modal="true" aria-label="103㎡B 선착순 · 오피스텔 · 상업시설 안내" onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
       <div className="otp__wrap">
         <button type="button" className="otp__close" onClick={close}>팝업닫기 ✕</button>
         <div className="otp-row">
+          <B103Card />
           <SoonCard kind="officetel" portrait headingId="otp-officetel-title" />
           <SoonCard kind="commercial" portrait headingId="otp-commercial-title" />
         </div>
+        <p className="otp__hint" aria-hidden="true">‹ 옆으로 넘겨 보기 ›</p>
         <label className="otp__today">
           <input type="checkbox" checked={today} onChange={(e) => setToday(e.target.checked)} />
           오늘 하루동안 보지 않기
