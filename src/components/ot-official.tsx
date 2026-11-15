@@ -77,6 +77,28 @@ function B103Card() {
   );
 }
 
+/** PM 지시(2026-11-15): 아파트 예비당첨자 사전고객등록 안내 카드. 103㎡B 카드와 같은 글자 카드이며 맨 앞에 둔다. */
+function ReserveCard() {
+  return (
+    <div className="popup_soon otp-b103 otp-reserve">
+      <div className="otp-b103__dialog">
+        <p className="otp-b103__logo"><img src="/official/soon/logo.svg" alt="PRUGIO" width={257} height={45} /></p>
+        <h2 id="otp-reserve-title" className="otp-b103__title">
+          <span className="otp-b103__brand">청라 아크원 푸르지오</span>
+          <span className="otp-b103__type">예비당첨자</span>
+          <span className="otp-b103__kind">사전고객등록</span>
+        </h2>
+        <p className="otp-b103__label">사전고객등록 접수</p>
+        <p className="otp-b103__date">접수 중</p>
+        <p className="otp-b103__when">당첨자 계약 11.22(일)~11.24(화) 이후 · 예비당첨자 계약</p>
+        <p className="otp-b103__cond">청약홈 예비당첨자 선정 고객 · 본인 명의로 등록</p>
+        <a className="otp-b103__cta" href="/register"><strong>사전고객등록</strong> 하기 ›</a>
+        <p className="otp-b103__note">※ 사전고객등록은 공식 청약·계약 신청이 아닙니다. 예비당첨자 선정·순번과 계약 일정은 청약홈·입주자모집공고를 따릅니다.</p>
+      </div>
+    </div>
+  );
+}
+
 /** 홈 히어로 바로 아래: 공식 오피스텔·상업시설 안내 화면 2장을 구역으로 놓는다. */
 export function OtFeature() {
   return (
@@ -90,7 +112,7 @@ export function OtFeature() {
 }
 
 // 17-1: 카드 구성이 바뀌어 키를 새로 쓴다(전에 「오늘 하루 보지 않기」를 누른 방문자에게도 한 번 보인다).
-const KEY = "ot_pop3_hide_until_20261113";
+const KEY = "ot_pop4_hide_until_20261115";
 
 /** 첫 화면 팝업: 103㎡B 선착순 안내 카드 + 공식 오피스텔·상업시설 팝업(세로) 2장. 17-1 에서 크기를 줄였다. */
 export function OtPopups() {
@@ -131,10 +153,11 @@ export function OtPopups() {
   if (!open) return null;
 
   return (
-    <div className="otp" role="dialog" aria-modal="true" aria-label="103㎡B 선착순 · 오피스텔 · 상업시설 안내" onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
+    <div className="otp" role="dialog" aria-modal="true" aria-label="예비당첨자 사전고객등록 · 103㎡B 선착순 · 오피스텔 · 상업시설 안내" onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
       <div className="otp__wrap">
         <button type="button" className="otp__close" onClick={close}>팝업닫기 ✕</button>
         <div className="otp-row">
+          <ReserveCard />
           <B103Card />
           <SoonCard kind="officetel" portrait headingId="otp-officetel-title" />
           <SoonCard kind="commercial" portrait headingId="otp-commercial-title" />
