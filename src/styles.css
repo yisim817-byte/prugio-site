@@ -5945,7 +5945,7 @@ body.prereg-lock { overflow: hidden; }
 
 /* 작업지시서 17-1 (2026-11-13): 첫 화면 팝업 크기를 줄이고 103㎡B 선착순 카드를 맨 앞에 둔다. 위 16-2 규칙을 뒤에서 덮어쓴다. */
 .otp-row { gap: 14px; }
-.otp-row .popup_soon { flex: 0 0 auto; --pf-unit: min(0.7px, calc((100vw - 88px) / 1202), calc((100vh - 190px) / 800)); }
+.otp-row .popup_soon { flex: 0 0 auto; --pf-unit: min(0.7px, calc((100vw - 88px) / 1602), calc((100vh - 190px) / 800)); } /* 2026-11-15: 예비당첨자 카드 추가로 4장 */
 .otp__wrap { gap: 8px; }
 .otp__hint { display: none; margin: 0; color: rgba(255,255,255,0.8); font-size: 13px; }
 .otp-b103__dialog { position: relative; display: flex; flex-direction: column; align-items: center; width: calc(390 * var(--pf-unit)); height: calc(800 * var(--pf-unit)); overflow: hidden; background: #004B45; color: #fff; text-align: center; font-family: "SUIT", "Pretendard", sans-serif; word-break: keep-all; }
