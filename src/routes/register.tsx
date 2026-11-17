@@ -4,6 +4,8 @@ import { PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { Shell, pageHead } from "@/components/layout";
 import { REGISTER_LABEL } from "@/data/labels";
 import { submitLead } from "@/lib/leads.functions";
+import { PREREG_ONLINE } from "@/data/prereg-mode";
+import { PhoneRegisterPanel } from "@/components/prereg-phone";
 
 export const Route = createFileRoute("/register")({
   // 작업지시서 13: 옛 방문예약 링크(/register?visit=1#visit)는 방문예약 전용 페이지로 보낸다.
@@ -118,7 +120,10 @@ function Page() {
           </aside>
 
           <div>
-            {done ? (
+            {!PREREG_ONLINE ? (
+              // 작업지시서 18: 온라인 등록 일시 폐쇄 — 전화 등록 안내만 보인다. 아래 폼 코드는 다시 열 때를 위해 그대로 둔다.
+              <PhoneRegisterPanel />
+            ) : done ? (
               <div className="reg reg__done" role="status">
                 <p>청라 아크원 푸르지오</p>
                 <h2 className="ak-h2">{done.duplicate ? "이미 등록된 번호" : "사전등록 완료되었습니다."}</h2>

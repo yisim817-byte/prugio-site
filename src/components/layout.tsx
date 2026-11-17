@@ -4,6 +4,7 @@ import { Footer, Header, MobileBar } from "@/components/chrome";
 import { SoonPopups } from "@/components/soon-popups";
 import { SEO_FAQS, SEO_ORIGIN, SEO_PAGES } from "@/data/seo";
 import { IMAGE_SIZES } from "@/data/image-sizes";
+import { PREREG_ONLINE } from "@/data/prereg-mode";
 
 // 헤더·푸터·상세 페이지 머리·「한눈에 보기」는 chrome.tsx 로 옮겼다. 기존 import 경로는 그대로 쓸 수 있다.
 export { Footer, PageFaq, QuickAnswer, SubHero } from "@/components/chrome";
@@ -79,7 +80,7 @@ const PAGE_DESCRIPTION: Record<string, string> = {
   "일반공급 안내": "일반공급 안내. 자격과 일정은 입주자모집공고를 따릅니다.",
   언론보도: "청라 아크원 푸르지오 관련 언론 기사 목록.",
   홍보영상: "청라 아크원 푸르지오 홍보영상.",
-  사전고객등록: "사전고객등록 안내. 주민등록번호는 받지 않습니다.",
+  사전고객등록: PREREG_ONLINE ? "사전고객등록 안내. 주민등록번호는 받지 않습니다." : "사전고객등록 전화 접수 안내. 대표번호로 전화하시면 담당자가 등록해 드립니다.",
   "상가·오피스텔 사전등록 이벤트": "사전고객등록 이벤트 조건 안내. 등록만으로 지급되지 않습니다.",
   개인정보처리방침: "개인정보 처리방침.",
   "접수 관리": "운영자 접수 확인 화면.",

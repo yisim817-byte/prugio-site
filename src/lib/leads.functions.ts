@@ -5,6 +5,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { SITE_ID } from "@/data/content";
 import { LOGIN_ID_PATTERN, PASSWORD_MAX, passwordProblem } from "@/lib/staff-login";
 import { checkVisit } from "@/lib/visit.server";
+import { PREREG_ONLINE, PREREG_CLOSED_MESSAGE } from "@/data/prereg-mode";
 
 const SITE = SITE_ID;
 
@@ -78,6 +79,8 @@ async function readyAccess(userId: string): Promise<Access | null> {
 export const submitLead = createServerFn({ method: "POST" })
   .validator((raw: unknown) => leadSchema.parse(raw))
   .handler(async ({ data }) => {
+    // 작업지시서 18: 온라인 등록 일시 폐쇄 중에는 저장·알림 없이 전화 안내만 돌려준다.
+    if (!PREREG_ONLINE) return { ok: false as const, error: PREREG_CLOSED_MESSAGE };
     const phone = digits(data.phone);
     if (!validPhone(phone)) return { ok: false as const, error: "휴대전화는 010으로 시작하는 11자리입니다." };
     if (!validBirth(data.birth6)) return { ok: false as const, error: "생년월일은 앞 6자리(YYMMDD)만 입력합니다." };

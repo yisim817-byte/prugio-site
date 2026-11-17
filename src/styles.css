@@ -5972,3 +5972,13 @@ body.prereg-lock { overflow: hidden; }
   .otp-row .popup_soon { scroll-snap-align: center; --pf-unit: min(1px, calc(66vw / 390), calc((100vh - 230px) / 800)); }
   .otp__hint { display: block; }
 }
+
+/* 작업지시서 18 (2026-11-17): 사전고객등록 전화 접수 안내 */
+.reg-phone__lead { margin: 0 0 16px; font-size: 17px; font-weight: 600; line-height: 1.6; }
+.reg-phone__call { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+.reg-phone__call:hover { filter: brightness(.95); }
+.reg-phone__notes { margin: 18px 0 0; padding: 0; list-style: none; text-align: left; font-size: 14px; line-height: 1.7; }
+.reg-phone__notes li { position: relative; padding-left: 14px; }
+.reg-phone__notes li + li { margin-top: 6px; }
+.reg-phone__notes li::before { content: "·"; position: absolute; left: 2px; }
+.reg-phone__visit { margin-top: 18px; }
