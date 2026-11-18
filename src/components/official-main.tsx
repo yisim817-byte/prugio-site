@@ -491,7 +491,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
               <span className="om-hero__open">
                 <strong className="om-hero__open_ph">오피스텔 · 상가 11월말 분양예정</strong>
                 <span className="om-hero__open_sep" aria-hidden="true">·</span>
-                <span className="om-hero__open_ph">견본주택 별도 공지 시까지 운영</span>
+                <span className="om-hero__open_ph">견본주택 방문 사전 예약제</span>
               </span>
             </div>
             <div className="om-hero__ui">
