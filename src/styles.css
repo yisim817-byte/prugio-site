@@ -5982,3 +5982,8 @@ body.prereg-lock { overflow: hidden; }
 .reg-phone__notes li + li { margin-top: 6px; }
 .reg-phone__notes li::before { content: "·"; position: absolute; left: 2px; }
 .reg-phone__visit { margin-top: 18px; }
+
+/* PM 지시(2026-11-18): 견본주택 방문예약 카드. 「예약 필수」가 한 줄에 들어가게 글자 크기를 줄인다. */
+.otp-visit .otp-b103__date { font-family: "Eulyoo1945", serif; font-size: calc(62 * var(--pf-unit)); line-height: 1.2; letter-spacing: -0.02em; white-space: nowrap; }
+.otp-visit .otp-b103__when { padding: 0 calc(30 * var(--pf-unit)); text-align: center; word-break: keep-all; }
+.otp-visit .otp-b103__cond { padding: 0 calc(30 * var(--pf-unit)); text-align: center; word-break: keep-all; }
