@@ -18,7 +18,7 @@ export function PhoneRegisterPanel() {
         ))}
       </ul>
       <p className="reg-phone__visit">
-        <Link className="ak-link" to="/visit">모델하우스 방문예약 하기</Link>
+        <Link className="ak-link" to="/visit">견본주택 방문예약 안내 (전화 접수)</Link>
       </p>
     </div>
   );
