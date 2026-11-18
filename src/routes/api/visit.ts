@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getSql, dbSource } from "@/lib/db";
 import { SITE_ID } from "@/data/content";
 import { checkVisitDate, VISIT_SLOT_TEXT } from "@/lib/visit.server";
+import { VISIT_CLOSED_MESSAGE, VISIT_ONLINE } from "@/data/visit-mode";
 
 // 작업지시서 13 (2026-10-22): 모델하우스 방문예약 접수 API. 사전고객등록(leads)과 별도 표 visit_reservations 에만 쓴다.
 // - 휴대폰 010 형식 검사, 방문 희망일은 arkone-visit-config 목록 안의 날짜만(아니면 날짜만 비우고 접수)
@@ -25,6 +26,8 @@ function receiptNo() {
 }
 
 async function handle(request: Request): Promise<Response> {
+  // PM 지시 2026-11-18: 온라인 방문예약을 닫은 동안에는 저장하지 않고 전화 안내만 돌려준다.
+  if (!VISIT_ONLINE) return json(403, { ok: false, error: VISIT_CLOSED_MESSAGE });
   const raw = await request.text();
   if (raw.length > 4000) return json(413, { ok: false, error: "too_large" });
   let b: Record<string, unknown>;

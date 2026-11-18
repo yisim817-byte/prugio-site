@@ -4,6 +4,8 @@ import { Nb } from "@/components/chrome";
 import { Shell, SubHero, pageHead } from "@/components/layout";
 import { PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { REGISTER_LABEL } from "@/data/labels";
+import { PhoneVisitPanel } from "@/components/visit-phone";
+import { VISIT_ONLINE, VISIT_PHONE_INTRO } from "@/data/visit-mode";
 import { loadVisitConfig, VISIT_SLOT_LABEL, type VisitOption } from "@/lib/visit-config";
 
 // 작업지시서 13 (2026-10-22): 모델하우스 방문예약 전용 페이지. 사전고객등록과 따로 접수한다(/api/visit → visit_reservations).
@@ -38,6 +40,7 @@ function Page() {
   const [done, setDone] = useState<Done | null>(null);
 
   useEffect(() => {
+    if (!VISIT_ONLINE) return; // 전화 접수 중에는 날짜 목록을 불러오지 않는다.
     let live = true;
     loadVisitConfig().then((c) => {
       if (!live) return;
@@ -82,9 +85,11 @@ function Page() {
       <SubHero en="VISIT" title="모델하우스 방문예약" crumbs="모델하우스 방문예약" />
       <main className="ak-wrap ak-page">
         <div className="max-w-lg">
-          <p className="border-y border-line py-4 leading-7">방문 희망 날짜를 남겨 주시면, 담당자가 확인 후 방문 시간을 전화로 안내해 드립니다.</p>
+          <p className="border-y border-line py-4 leading-7">{VISIT_ONLINE ? "방문 희망 날짜를 남겨 주시면, 담당자가 확인 후 방문 시간을 전화로 안내해 드립니다." : VISIT_PHONE_INTRO}</p>
           <p className="mt-4 text-sm font-medium leading-6">견본주택 위치 · 인천광역시 서해구 청라동 87-1 · 별도 공지 시까지 운영</p>
-          {done ? (
+          {!VISIT_ONLINE ? (
+            <PhoneVisitPanel />
+          ) : done ? (
             <div className="mt-8 space-y-4" role="status">
               <h2 className="ak-h2">{done.duplicate ? "이미 접수되었습니다" : "방문예약 신청이 접수되었습니다."}</h2>
               <p className="text-sm leading-6">
