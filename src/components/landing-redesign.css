@@ -28,3 +28,8 @@
 
 /* 작업지시서 18 (2026-11-17): 사전고객등록 전화 접수 안내 */
 .rd-phone-reg h3{margin:14px 0 22px}.rd-phone-reg .rd-submit{margin-top:4px}.rd-phone-reg-notes{margin:22px 0 0;padding:0;list-style:none;font-size:13px;line-height:1.8;color:#4f6152}.rd-phone-reg-notes li{position:relative;padding-left:14px}.rd-phone-reg-notes li+li{margin-top:6px}.rd-phone-reg-notes li::before{content:"·";position:absolute;left:2px}
+
+/* 작업지시서 22 (2026-11-21): 헤더의 방문고객등록 버튼(PC). 1100px 이하에서는 헤더 버튼 전체가 숨는 기존 규칙을 따른다. */
+.rd-header .rd-header-visit{display:inline-flex;background:transparent;border-color:#ffffff73;color:#fff}
+.rd-header .rd-header-visit:hover{border-color:#fff}
+@media(max-width:1100px){.rd-header .rd-header-visit{display:none}}

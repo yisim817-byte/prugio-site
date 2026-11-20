@@ -12,29 +12,29 @@ import "./landing-redesign.css";
 
 type Product = "apt" | "officetel" | "commercial";
 const labels = { apt: "아파트", officetel: "오피스텔", commercial: "상가" };
-const Arrow = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" /></svg>;
-const Phone = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="m7 3 3 5-3 3c1.6 3.5 3.5 5.3 7 7l3-3 5 3c-1 4-4 4-7 3C8 18 3 13 2 7c0-2 1-4 5-4Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg>;
+export const Arrow = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" /></svg>;
+export const Phone = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="m7 3 3 5-3 3c1.6 3.5 3.5 5.3 7 7l3-3 5 3c-1 4-4 4-7 3C8 18 3 13 2 7c0-2 1-4 5-4Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg>;
 
 const SITE_MENU = [
   ["사업개요", "/overview"], ["히스토리", "/brand"], ["오시는길", "/contact"],
   ["입지환경", "/location"], ["프리미엄", "/premium"], ["평면", "/plans"], ["분양가", "/plans"],
   ["청약안내", "/changeinfo"], ["특별공급", "/docspecial"], ["일반공급", "/docnormal"],
   ["103㎡B", "/103b"], ["언론보도", "/news"], ["홍보영상", "/video"],
-  ["사전고객등록", "/register"], ["방문예약", "/visit"],
+  ["사전고객등록", "/register"], ["방문고객등록", "/visit"],
 ];
 
-function SiteMap() {
+export function SiteMap() {
   return <nav className="rd-sitemap rd-container" aria-label="전체 사이트맵">{SITE_MENU.map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav>;
 }
 
-function Header({ register }: { register: () => void }) {
+export function Header({ register }: { register: () => void }) {
   const menu = useRef<HTMLDialogElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => { menu.current?.close(); setMenuOpen(false); };
-  return <header className="rd-header"><a className="rd-logo" href="/" aria-label="청라 아크원 푸르지오 홈"><span>ARK-ONE</span><small>청라 아크원 푸르지오</small></a><nav className="rd-nav" aria-label="주요 메뉴"><a href="/#location">입지</a><a href="/#products">상품</a><a href="/#brand">브랜드</a><a href="/#faq">자주 묻는 질문</a></nav><div className="rd-header-actions"><a href={TEL} className="rd-header-phone"><Phone /><span>{PHONE}</span></a><button className="rd-btn rd-btn-gold" onClick={register}>사전고객등록<Arrow /></button><button className="rd-menu-toggle" aria-label="전체 메뉴 열기" aria-controls="rd-menu" aria-expanded={menuOpen} onClick={() => { menu.current?.showModal(); setMenuOpen(true); }}><span aria-hidden="true">☰</span></button></div><dialog ref={menu} id="rd-menu" className="rd-menu" aria-label="전체 메뉴" onCancel={() => setMenuOpen(false)} onClick={e => { if (e.target === e.currentTarget) closeMenu(); }}><div className="rd-menu-inner"><button className="rd-close" onClick={closeMenu} aria-label="메뉴 닫기">×</button><p className="rd-kicker">CHEONGNA ARK-ONE PRUGIO</p><h2>전체 메뉴</h2><nav>{SITE_MENU.map(([label, href]) => <a key={label} href={href} onClick={closeMenu}>{label}<Arrow /></a>)}</nav></div></dialog></header>;
+  return <header className="rd-header"><a className="rd-logo" href="/" aria-label="청라 아크원 푸르지오 홈"><span>ARK-ONE</span><small>청라 아크원 푸르지오</small></a><nav className="rd-nav" aria-label="주요 메뉴"><a href="/#location">입지</a><a href="/#products">상품</a><a href="/#brand">브랜드</a><a href="/#faq">자주 묻는 질문</a></nav><div className="rd-header-actions"><a href={TEL} className="rd-header-phone"><Phone /><span>{PHONE}</span></a><a className="rd-btn rd-btn-outline rd-header-visit" href="/visit">방문고객등록</a><button className="rd-btn rd-btn-gold" onClick={register}>사전고객등록<Arrow /></button><button className="rd-menu-toggle" aria-label="전체 메뉴 열기" aria-controls="rd-menu" aria-expanded={menuOpen} onClick={() => { menu.current?.showModal(); setMenuOpen(true); }}><span aria-hidden="true">☰</span></button></div><dialog ref={menu} id="rd-menu" className="rd-menu" aria-label="전체 메뉴" onCancel={() => setMenuOpen(false)} onClick={e => { if (e.target === e.currentTarget) closeMenu(); }}><div className="rd-menu-inner"><button className="rd-close" onClick={closeMenu} aria-label="메뉴 닫기">×</button><p className="rd-kicker">CHEONGNA ARK-ONE PRUGIO</p><h2>전체 메뉴</h2><nav>{SITE_MENU.map(([label, href]) => <a key={label} href={href} onClick={closeMenu}>{label}<Arrow /></a>)}</nav></div></dialog></header>;
 }
 
-function MobileBar({ register }: { register: () => void }) {
+export function MobileBar({ register }: { register: () => void }) {
   return <nav className="rd-mobile-bar" aria-label="전화와 사전고객등록"><a href={TEL}><Phone /><span>전화 상담<small>{PHONE}</small></span></a><button onClick={register}>사전고객등록<Arrow /></button></nav>;
 }
 
@@ -159,7 +159,7 @@ export function LandingPage() {
     </div><div className="rd-section-end"><p>상품별 분양가·공급 조건은 최신 공식 공고와 상담으로 확인해 주세요.<br />미확정 일정은 추후 공지합니다.</p><span>사업주체 공식 사업개요 기준</span></div></div></section>
     <section className="rd-brand rd-section" id="brand" aria-labelledby="rd-brand-title"><div className="rd-container"><div className="rd-section-top"><p className="rd-kicker">03 / THE BRAND TOWN</p><span>B1 PEAK-ONE + M5 ARK-ONE</span></div><div className="rd-brand-heading"><h2 id="rd-brand-title">두 블록이 만드는<br />푸르지오 브랜드타운.</h2><p>청라 피크원 푸르지오 B1블록과<br />청라 아크원 푸르지오 M5블록의 만남.</p></div><p className="rd-scale"><span>2,911</span><small>세대·실 합산</small></p><p className="rd-scale-note">기존 홈페이지 기재 기준 · B1 + M5 합산 규모이며, 단일 단지가 아닙니다.</p><div className="rd-brand-facts"><div><span>M5 아크원</span><strong>1,855<small>세대·실</small></strong></div><div><span>건축규모</span><strong>6<small>개 동</small></strong></div><div><span>지하 5층 ~ 지상 최고</span><strong>49<small>층</small></strong></div><div><span>시공</span><strong className="rd-builder">대우건설</strong></div></div><p className="rd-brand-summary">{LANDING_ANSWER}</p><div className="rd-section-end"><a href="/overview">사업개요 자세히 보기 ↗</a><button className="rd-text-link" onClick={() => register()}>브랜드타운 상담 등록<Arrow /></button></div></div></section>
     <section className="rd-faq rd-section" id="faq" aria-labelledby="rd-faq-title"><div className="rd-container rd-faq-grid"><div><p className="rd-kicker">04 / GOOD TO KNOW</p><h2 id="rd-faq-title">궁금한 점부터,<br /><em>명확하게.</em></h2><p>계약 전 확인할 정보를 모았습니다.</p><button className="rd-text-link" onClick={() => register()}>더 궁금한 점 상담하기<Arrow /></button></div><div className="rd-faq-list">{LANDING_FAQS.map((item, i) => <details key={item.q}><summary><span>{String(i + 1).padStart(2, "0")}</span>{item.q}<b aria-hidden="true">+</b></summary><p>{item.a}</p></details>)}</div></div></section>
-    <section className="rd-contact rd-section" id="consult" aria-labelledby="rd-consult-title"><div className="rd-container rd-contact-grid"><div><p className="rd-kicker">05 / YOUR NEXT STEP</p><h2 id="rd-consult-title">청라의 다음 일상,<br /><em>직접 확인하세요.</em></h2><p className="rd-lead">관심을 남겨주시면<br />궁금한 상품을 안내해 드립니다.</p><a className="rd-contact-phone" href={TEL}>{PHONE}<Arrow /></a><p>청라 아크원 푸르지오 상담 대표번호</p><dl className="rd-contact-address"><dt>견본주택</dt><dd>인천광역시 서해구 청라동 87-1번지<br /><small>견본주택 방문은 사전 예약제입니다. 방문 전 반드시 대표번호로 전화 예약해 주세요.</small></dd></dl><a className="rd-text-link" href="/visit">견본주택 방문예약<Arrow /></a></div><div className="rd-form-panel"><h3>사전고객등록</h3><p>{PREREG_ONLINE ? "상품 선택 후 이름·생년월일 앞 6자리·휴대전화를 입력해 주세요." : "오피스텔 · 상가 · 아파트 사전고객등록을 전화로 받습니다."}</p><PreRegistrationForm /></div></div></section>
+    <section className="rd-contact rd-section" id="consult" aria-labelledby="rd-consult-title"><div className="rd-container rd-contact-grid"><div><p className="rd-kicker">05 / YOUR NEXT STEP</p><h2 id="rd-consult-title">청라의 다음 일상,<br /><em>직접 확인하세요.</em></h2><p className="rd-lead">관심을 남겨주시면<br />궁금한 상품을 안내해 드립니다.</p><a className="rd-contact-phone" href={TEL}>{PHONE}<Arrow /></a><p>청라 아크원 푸르지오 상담 대표번호</p><dl className="rd-contact-address"><dt>견본주택</dt><dd>인천광역시 서해구 청라동 87-1번지<br /><small>견본주택 방문은 사전 예약제입니다. 방문 전 반드시 대표번호로 전화 예약해 주세요.</small></dd></dl><a className="rd-text-link" href="/visit">방문고객등록<Arrow /></a></div><div className="rd-form-panel"><h3>사전고객등록</h3><p>{PREREG_ONLINE ? "상품 선택 후 이름·생년월일 앞 6자리·휴대전화를 입력해 주세요." : "오피스텔 · 상가 · 아파트 사전고객등록을 전화로 받습니다."}</p><PreRegistrationForm /></div></div></section>
     <aside className="rd-sources rd-container" aria-label="정보 출처와 유의사항"><p>정보 확인 기준일 · 2026.11.14</p><p>사업주체 공식 사업개요 기준</p><p>본 홈페이지에 사용된 CG 및 일러스트, 이미지 등은 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있습니다. 일부 영상과 연출 이미지는 AI로 제작되었습니다. 개발계획은 변경·지연·취소될 수 있으며 계약 전 주요 내용을 확인하시기 바랍니다.</p></aside>
   </main><SiteMap /><Footer /><MobileBar register={() => register()} /><RegistrationDialog open={open} product={product} close={() => setOpen(false)} /></div></>;
 }
