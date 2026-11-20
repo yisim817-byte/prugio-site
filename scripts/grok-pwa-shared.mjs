@@ -447,7 +447,7 @@ export function injectGrokPwaHead(html, ctx = {}) {
   );
   // Keep route-level og:title/description/url/type emitted by pageHead (per-page share cards).
   const pageOg = new Map();
-  for (const m of String(html).matchAll(/<meta\b[^>]*\bproperty\s*=\s*["'](og:(?:title|description|url|type))["'][^>]*>/gi)) {
+  for (const m of String(html).matchAll(/<meta\b[^>]*\b(?:property|name)\s*=\s*["']((?:og|twitter):[\w:]+)["'][^>]*>/gi)) {
     if (!pageOg.has(m[1].toLowerCase())) pageOg.set(m[1].toLowerCase(), m[0]);
   }
   let next = stripShareMetaTags(html);
@@ -465,7 +465,7 @@ export function injectGrokPwaHead(html, ctx = {}) {
     next,
     [
       ...grokOgHeadTags({ host, appName, site, documentTitle, cwd }).filter((tag) => {
-        const k = tag.match(/property="([^"]+)"/);
+        const k = tag.match(/(?:property|name)="([^"]+)"/);
         return !(k && pageOg.has(k[1].toLowerCase()));
       }),
       ...pageOg.values(),

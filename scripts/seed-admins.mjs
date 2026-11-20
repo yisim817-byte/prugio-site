@@ -104,6 +104,10 @@ export async function seedAccounts(client, siteId, accounts) {
 }
 
 async function main() {
+  if (process.env.VERCEL_ENV === "preview") {
+    console.log("[seed] preview deployment — skipping account changes.");
+    return;
+  }
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     console.log("[seed] DATABASE_URL not set — skipping.");

@@ -19,6 +19,10 @@ import pg from "pg";
 import { pendingMigrations } from "./migration-plan.mjs";
 
 const databaseUrl = process.env.DATABASE_URL;
+if (process.env.VERCEL_ENV === "preview") {
+  console.log("[migrate] preview deployment — skipping live database changes.");
+  process.exit(0);
+}
 if (!databaseUrl) {
   console.log(
     "[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).",

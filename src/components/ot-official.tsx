@@ -166,7 +166,7 @@ export function OtPopups() {
         <p className="otp__hint" aria-hidden="true">‹ 옆으로 넘겨 보기 ›</p>
         <label className="otp__today">
           <input type="checkbox" checked={today} onChange={(e) => setToday(e.target.checked)} />
-          오늘 하루동안 보지 않기
+          오늘 하루 보지 않기
         </label>
       </div>
     </div>

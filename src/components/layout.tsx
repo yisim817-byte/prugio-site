@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PhaseBand } from "@/components/phase-band";
 import { Footer, Header, MobileBar } from "@/components/chrome";
 import { SoonPopups } from "@/components/soon-popups";
 import { SEO_FAQS, SEO_ORIGIN, SEO_PAGES } from "@/data/seo";
 import { IMAGE_SIZES } from "@/data/image-sizes";
+import { trackFunnel } from "@/lib/funnel-client";
 import { PREREG_ONLINE } from "@/data/prereg-mode";
 
 // 헤더·푸터·상세 페이지 머리·「한눈에 보기」는 chrome.tsx 로 옮겼다. 기존 import 경로는 그대로 쓸 수 있다.
@@ -48,6 +49,7 @@ export function Photo({
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper text-ink">
+      <FunnelBeacon />
       {/* 작업지시서 13: 아크원푸르지오.site(A)와 같은 순서 — 헤더 → 단계 띠 → 본문. 홈 헤더는 불투명(검정)이고 히어로는 띠 아래에서 시작한다(styles.css 끝 WO13 블록) */}
       <Header />
       <PhaseBand />
@@ -57,6 +59,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <SoonPopups />
     </div>
   );
+}
+
+export function FunnelBeacon() {
+  useEffect(() => {
+    trackFunnel("page_view");
+    const onClick = (event: MouseEvent) => {
+      const node = event.target instanceof Element ? event.target : null;
+      const link = node?.closest("a");
+      const href = link?.getAttribute("href") ?? "";
+      if (href.startsWith("tel:")) trackFunnel("phone_click");
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+  return null;
 }
 
 export function SourceNote({ children }: { children?: React.ReactNode }) {
@@ -92,7 +109,7 @@ const PAGE_DESCRIPTION: Record<string, string> = {
  * path가 SEO_PAGES(역할 페이지)에 있으면 index,follow + 전용 title·description + JSON-LD.
  * 그 밖의 페이지는 기존대로 noindex, nofollow.
  */
-export function pageHead(title: string, path?: string) {
+export function pageHead(title: string, path?: string, _legacyOptions?: { canonical?: boolean }) {
   const seo = path ? SEO_PAGES[path] : undefined;
   const url = path === undefined ? undefined : path === "/" ? SEO_ORIGIN : `${SEO_ORIGIN}${path}`;
   const full = seo?.title ?? `${title} | 청라 아크원 푸르지오`;
@@ -111,19 +128,44 @@ export function pageHead(title: string, path?: string) {
             { property: "og:description", content: description },
             { property: "og:url", content: url },
             { property: "og:type", content: "website" },
+            { property: "og:locale", content: "ko_KR" },
+            { property: "og:image", content: `${SEO_ORIGIN}/og.jpg` },
+            { property: "og:image:alt", content: "청라 아크원 푸르지오 · 청라국제도시 M5블록 · 상담 1533-9014" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+            { name: "twitter:card", content: "summary_large_image" },
+            { name: "twitter:title", content: full },
+            { name: "twitter:description", content: description },
+            { name: "twitter:image", content: `${SEO_ORIGIN}/og.jpg` },
           ]
         : []),
     ],
-    links: url ? [{ rel: "canonical", href: url }] : [],
+    links: url ? [{ rel: "canonical", href: url }, ...(path === "/" ? [{ rel: "preload", as: "font", type: "font/woff2", href: "/redesign/editorial.woff2", crossOrigin: "anonymous" as const }] : [])] : [],
     scripts:
       seo && url && path
         ? [
             { type: "application/ld+json", children: JSON.stringify(pageJsonLd(full, seo.answer, url, path, seo.crumb)) },
+            ...(path === "/"
+              ? [{ type: "application/ld+json", children: JSON.stringify(homeOfferList()) }]
+              : []),
             ...(SEO_FAQS[path]?.length
-              ? [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(SEO_FAQS[path])) }]
+              ? [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(SEO_FAQS[path], url)) }]
               : []),
           ]
         : [],
+  };
+}
+
+function homeOfferList() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "청라 아크원 푸르지오 상담 상품",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "오피스텔", description: "987실. 전용 105㎡·121㎡·136㎡. 오피스텔 · 상가 11월말 분양예정.", url: `${SEO_ORIGIN}/register?product=officetel` },
+      { "@type": "ListItem", position: 2, name: "상가", description: "근린생활시설 1~2층. 오피스텔 · 상가 11월말 분양예정.", url: `${SEO_ORIGIN}/register?product=commercial` },
+      { "@type": "ListItem", position: 3, name: "아파트", description: "868세대. 전용 84㎡·103㎡.", url: `${SEO_ORIGIN}/register?product=apt` },
+    ],
   };
 }
 
@@ -135,9 +177,18 @@ function pageJsonLd(name: string, description: string, url: string, path: string
     description,
     url,
     inLanguage: "ko-KR",
-    dateModified: "2026-10-09",
+    dateModified: "2026-11-20",
   };
-  if (path === "/") return { "@context": "https://schema.org", "@graph": [page] };
+  if (path === "/") return { "@context": "https://schema.org", "@graph": [
+    { ...page, about: { "@id": `${url}#property` }, mainEntity: { "@id": `${url}#faq` } },
+    { "@type": "Place", "@id": `${url}#property`, name: "청라 아크원 푸르지오", description,
+      address: { "@type": "PostalAddress", addressCountry: "KR", addressRegion: "인천광역시", addressLocality: "서해구", streetAddress: "청라동 86-1번지 (청라국제도시 M5블록)" },
+      additionalProperty: [
+        { "@type": "PropertyValue", name: "아파트", value: "868세대 · 전용 84㎡·103㎡" },
+        { "@type": "PropertyValue", name: "오피스텔", value: "987실 · 전용 105㎡·121㎡·136㎡" },
+        { "@type": "PropertyValue", name: "근린생활시설", value: "1~2층" }
+      ] }
+  ] };
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -154,10 +205,11 @@ function pageJsonLd(name: string, description: string, url: string, path: string
   };
 }
 
-function faqJsonLd(items: { q: string; a: string }[]) {
+function faqJsonLd(items: { q: string; a: string }[], url: string) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${url}#faq`,
     mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.q,

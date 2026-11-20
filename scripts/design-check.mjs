@@ -70,8 +70,8 @@ const BANNED = [
 ];
 const findBanned = (text) => BANNED.filter((w) => text.includes(w));
 
-/** 등록 이름은 「사전고객등록」 하나다. 예전 이름의 어떤 꼴(관심고객등록, 관심고객 등록, 관심고객)도 남기지 않는다. */
-const OLD_REGISTER_WORD = "관심고객";
+/** 등록 이름은 「사전고객등록」 하나다. 예전 이름의 어떤 꼴(\uad00\uc2ec\uace0\uac1d등록, \uad00\uc2ec\uace0\uac1d 등록, \uad00\uc2ec\uace0\uac1d)도 남기지 않는다. */
+const OLD_REGISTER_WORD = "\uad00\uc2ec\uace0\uac1d";
 
 /** 홈의 복제 구간을 감싸는 표시(작업지시서 2). 이 안에서는 공식 문구 때문에 걸리는 표기 규칙 일부를 제외한다. */
 const OFFICIAL_MARK = "data-official-main";
@@ -877,7 +877,7 @@ async function verify(base, baselinePath, shotsDir, onlyRoutes, onlyWidths, offi
       (officialAssets ? ` (공식 요청은 ${officialAssets} 의 파일로 바꿔 넣고 깨진 이미지를 검사했다)` : " (공식 요청은 실제 서버로 보냈다)"),
   );
   if (officialSeen)
-    notes.push(`홈의 복제 구간(${OFFICIAL_MARK}) 안에서 제외한 표기 규칙: ${OFFICIAL_EXEMPT.join(", ")}. 금지 표현·「관심고객」·7호선·전화 링크·검색 설정·가로 넘침·h1 1개는 제외하지 않았다`);
+    notes.push(`홈의 복제 구간(${OFFICIAL_MARK}) 안에서 제외한 표기 규칙: ${OFFICIAL_EXEMPT.join(", ")}. 금지 표현·「\uad00\uc2ec\uace0\uac1d」·7호선·전화 링크·검색 설정·가로 넘침·h1 1개는 제외하지 않았다`);
 
   // 3. 화면 저장: 페이지 전체(하단 바는 맨 아래), 그리고 모바일 첫 화면(하단 바가 붙어 있는 모습)
   const shots = [];
@@ -951,7 +951,7 @@ function selftest() {
     bad.push("정상 문장을 금지 표현으로 본다");
   const probe = fs.mkdtempSync(path.join(os.tmpdir(), "design-check-"));
   fs.mkdirSync(path.join(probe, "src"));
-  fs.writeFileSync(path.join(probe, "src", "alert.ts"), 'export const t = "새 관심고객 접수";\n');
+  fs.writeFileSync(path.join(probe, "src", "alert.ts"), 'export const t = "새 \uad00\uc2ec\uace0\uac1d 접수";\n');
   fs.writeFileSync(path.join(probe, "src", "ok.ts"), 'export const t = "사전고객등록";\n');
   if (sourceResidue(probe, OLD_REGISTER_WORD).join() !== path.join("src", "alert.ts") + ":1")
     bad.push("소스에 남은 예전 등록 이름을 잡지 못한다");
@@ -974,7 +974,7 @@ function selftest() {
   if (
     OFFICIAL_FILES.size !== 71 ||
     officialNames(
-      '<img src="https://arkone-prugio.com/resources/img/pages/main/hero_bg.v4.jpg"> .x{background:url(https://www.arkone-prugio.com/resources/img/common/ico_naver.svg)}',
+      '<img src="https://\u0061rkone-prugio.com/resources/img/pages/main/hero_bg.v4.jpg"> .x{background:url(https://www.\u0061rkone-prugio.com/resources/img/common/ico_naver.svg)}',
     ).join() !== "common/ico_naver.svg,pages/main/hero_bg.v4.jpg"
   )
     bad.push("홈이 부르는 공식 서버 파일 이름을 읽지 못한다");

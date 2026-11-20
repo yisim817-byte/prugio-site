@@ -57,7 +57,48 @@ type Snap = {
     interest: string | null; created_at: string; is_test: boolean; notify_status: string | null; status: string;
   }[];
   accounts: Account[];
+  funnel: { name: string; form: string; n: number }[] | null;
 };
+
+function countOf(rows: { name: string; form: string; n: number }[], name: string, form = "") {
+  return rows.find((row) => row.name === name && row.form === form)?.n ?? 0;
+}
+
+function rate(part: number, whole: number) {
+  if (whole <= 0) return "산출 불가";
+  return `${Math.round((part / whole) * 1000) / 10}%`;
+}
+
+function FunnelReport({ rows }: { rows: { name: string; form: string; n: number }[] | null }) {
+  if (!rows) {
+    return (
+      <section className="mt-6 border border-line p-4 text-sm leading-6">
+        <h2 className="font-medium">전환 측정</h2>
+        <p className="mt-2">측정 기록이 아직 저장되지 않습니다. 공개 화면에는 인원 수를 표시하지 않습니다.</p>
+      </section>
+    );
+  }
+  const views = countOf(rows, "page_view");
+  const phone = countOf(rows, "phone_click");
+  const regStart = countOf(rows, "form_start", "register");
+  const regDone = countOf(rows, "form_complete", "register");
+  const visitStart = countOf(rows, "form_start", "visit");
+  const visitDone = countOf(rows, "form_complete", "visit");
+  const empty = views + phone + regStart + regDone + visitStart + visitDone === 0;
+  return (
+    <section className="mt-6 border border-line p-4 text-sm leading-6">
+      <h2 className="font-medium">전환 측정</h2>
+      <p className="mt-2 text-muted">이 사이트에 실제로 쌓인 기록만 보여 줍니다. 공개 페이지에는 숫자를 올리지 않습니다.</p>
+      {empty ? <p className="mt-2">기록 없음. 비율은 산출하지 않습니다.</p> : null}
+      <dl className="mt-3 grid gap-2 sm:grid-cols-2">
+        <div><dt>페이지 열람</dt><dd className="font-medium">{views}</dd></div>
+        <div><dt>전화 클릭 / 열람</dt><dd className="font-medium">{phone} · {rate(phone, views)}</dd></div>
+        <div><dt>사전등록 완료 / 작성 시작</dt><dd className="font-medium">{regDone} / {regStart} · {rate(regDone, regStart)}</dd></div>
+        <div><dt>방문예약 완료 / 작성 시작</dt><dd className="font-medium">{visitDone} / {visitStart} · {rate(visitDone, visitStart)}</dd></div>
+      </dl>
+    </section>
+  );
+}
 
 const CHANNEL = { telegram: "텔레그램(무료)", kakao: "카카오 알림톡", sms: "문자(SMS·LMS)" };
 
@@ -149,6 +190,7 @@ function Page() {
                 </div>
               ) : null}
             </section>
+            <FunnelReport rows={snap.funnel} />
             {snap.role === "owner" ? (
               <section className="mt-6 border border-line p-4 text-sm leading-6">
                 <h2 className="font-medium">계정 관리</h2>
