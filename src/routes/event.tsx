@@ -66,7 +66,6 @@ function EventArticle() {
           <i className="oe-rule" aria-hidden="true" />
           <ul className="oe-notice">
             <li>이벤트 내용은 사업주체 사정에 따라 변경되거나 조기 종료될 수 있습니다.</li>
-            <li>이 페이지의 이벤트는 견본주택 현장 이벤트로, 홈페이지 사전고객등록 이벤트와는 별개입니다(상가·오피스텔 백화점 상품권 50만원·코스트코 1년 회원권은 사전고객등록 페이지에서 안내).</li>
           </ul>
         </section>
 
