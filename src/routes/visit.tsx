@@ -1,10 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { pageHead } from "@/components/layout";
+import { Shell, SubHero, pageHead } from "@/components/layout";
 import { VisitRegisterPage } from "@/components/visit-register";
+import { PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
+import { VISIT_ONLINE } from "@/data/prereg-mode";
 
-// 작업지시서 22 (2026-11-21): 방문고객등록 상세페이지. 화면은 src/components/visit-register.tsx, 문구는 src/data/visit-register.ts.
-// 접수는 작업지시서 13(2026-10-22)의 /api/visit → visit_reservations 를 그대로 쓴다. 예전 「모델하우스 방문예약」 화면 코드는 git 기록(2f4c266)에 있다.
+// 방문 폼은 VISIT_ONLINE 이 true 일 때만 붙인다. 폼 코드는 visit-register.tsx 에 그대로 둔다.
 export const Route = createFileRoute("/visit")({
-  head: () => pageHead("방문고객등록"),
-  component: VisitRegisterPage,
+  head: () => pageHead("방문예약"),
+  component: Page,
 });
+
+function Page() {
+  if (!VISIT_ONLINE) return <PhoneVisit />;
+  return <VisitRegisterPage />;
+}
+
+function PhoneVisit() {
+  return (
+    <Shell>
+      <SubHero title="방문예약" crumbs="방문예약" />
+      <main className="ak-wrap ak-page">
+        <p className="ak-lead">견본주택 방문예약은 전화로만 받습니다.</p>
+        <p>
+          <a className="ak-btn ak-btn--primary visit-phone__cta" href={PROJECT_PHONE_TEL}>전화로 방문예약 {PROJECT_PHONE_DISPLAY}</a>
+        </p>
+        <p>방문예약 후 모델하우스 방문 시 스타벅스 커피 쿠폰 2장</p>
+        <p>인천광역시 서해구 청라동 87-1</p>
+      </main>
+    </Shell>
+  );
+}

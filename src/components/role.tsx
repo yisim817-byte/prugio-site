@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Nb, PageFaq, QuickAnswer } from "@/components/chrome";
 import { OfficialMain } from "@/components/official-main";
 import { DEPOSIT, OVERVIEW_ROWS, PLACES, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
-import { REGISTER_LABEL } from "@/data/labels";
 import { ROLE } from "@/data/role";
 import type { Chip, RoleFigure, RoleMain as RoleMainData, SourceItem } from "@/data/role-types";
 
@@ -346,9 +345,9 @@ function InfoHead() {
           <QuickAnswer path="/" bare />
           <PageFaq path="/" />
           <div className="ak-hero__cta">
-            <Link to="/register" className="ak-btn ak-btn--primary">
-              {REGISTER_LABEL}
-            </Link>
+            <a href={PROJECT_PHONE_TEL} className="ak-btn ak-btn--primary">
+              전화로 방문예약
+            </a>
             <a href={PROJECT_PHONE_TEL} className="ak-btn ak-btn--line ak-num">
               전화 상담 {PROJECT_PHONE_DISPLAY}
             </a>

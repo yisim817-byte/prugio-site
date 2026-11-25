@@ -7,7 +7,7 @@ import { B103Notice, B103_FAQ, B103_H1 } from "@/components/b103-notice";
 // 작업지시서 17 (2026-11-13): 103㎡B 선착순 공급 참여의향서 접수 안내. 주소는 7개 도메인 공통 /103b.
 const TITLE = `${B103_H1} | 11.17부터 견본주택 접수`;
 const DESCRIPTION =
-  "청라 아크원 푸르지오 103㎡B 선착순 공급 참여의향서는 2026.11.17(화)부터 견본주택에서 신청자 본인이 신분증 원본으로 접수합니다. 대리접수 불가 · 1인 1건. 공급 일정·방식은 미정이며 확정 후 접수 고객에게 안내합니다.";
+  "청라 아크원 푸르지오 103㎡B 선착순 공급 참여의향서는 2026.11.17(화)부터 견본주택에서 신청자 본인이 신분증 원본으로 접수합니다. 대리접수 불가 · 1인 1건. 11.28(토) 진행 예정.";
 const URL = `${SEO_ORIGIN}/103b`;
 
 export const Route = createFileRoute("/103b")({
@@ -32,6 +32,18 @@ export const Route = createFileRoute("/103b")({
           "@context": "https://schema.org",
           "@type": "FAQPage",
           mainEntity: B103_FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: TITLE,
+          description: DESCRIPTION,
+          url: URL,
+          inLanguage: "ko-KR",
+          dateModified: "2026-11-25",
         }),
       },
     ],

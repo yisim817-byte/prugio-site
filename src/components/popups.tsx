@@ -15,8 +15,8 @@ const CARDS = [
   {
     src: img("/upload/popup/20260921144204_6313.jpg"),
     alt: "사전고객 이벤트. 기간 2026.9.30–11.29.",
-    href: "/register",
-    label: "사전고객등록",
+    href: "/visit",
+    label: "전화로 방문예약",
     phone: false,
   },
   {

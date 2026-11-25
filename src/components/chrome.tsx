@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
-import { PROJECT_NAME, REGISTER_LABEL } from "@/data/labels";
+import { PROJECT_NAME } from "@/data/labels";
 import { SEO_FAQS, SEO_PAGES } from "@/data/seo";
 
 /**
@@ -122,7 +122,7 @@ export function Footer() {
           </dl>
           <div className="ak-ft__links">
             <Link to="/privacy">개인정보처리방침</Link>
-            <Link to="/register">{REGISTER_LABEL}</Link>
+            <a href={PROJECT_PHONE_TEL}>전화로 방문예약</a>
             <Link to="/login" rel="nofollow">관리자 로그인</Link>
           </div>
         </div>
@@ -141,7 +141,7 @@ export function MobileBar() {
   return (
     <nav className="ak-mbar" aria-label="빠른 연결">
       <a href={PROJECT_PHONE_TEL}>전화상담 {PROJECT_PHONE_DISPLAY}</a>
-      <Link to="/register">{REGISTER_LABEL}</Link>
+      <a href={PROJECT_PHONE_TEL}>전화로 방문예약</a>
     </nav>
   );
 }

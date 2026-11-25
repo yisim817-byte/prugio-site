@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { PROJECT_PHONE_TEL } from "@/data/content";
 
 type Kind = "officetel" | "commercial" | "";
 
@@ -87,11 +88,11 @@ function Officetel({ open, close, closeRef }: { open: boolean; close: () => void
           <p className="popup_soon__tagline">멀티 발코니 오피스텔</p>
           <p className="popup_soon__coming" lang="en">COMING<br className="m-only" /> SOON</p>
         </div>
-        <a className="popup_soon__cta" href="/register?product=officetel">
-          <span className="popup_soon__cta_text"><strong>사전고객등록</strong> 바로가기</span>
+        <a className="popup_soon__cta" href={PROJECT_PHONE_TEL}>
+          <span className="popup_soon__cta_text"><strong>전화로 방문예약</strong></span>
           <i className="popup_soon__cta_arrow" aria-hidden="true" />
         </a>
-        <p className="blind">청라 아크원 푸르지오 오피스텔 오픈 예정입니다. 사전고객등록을 하시면 분양 소식을 받아보실 수 있습니다.</p>
+        <p className="blind">청라 아크원 푸르지오 오피스텔 오픈 예정입니다. 전화로 방문예약 후 견본주택에서 상담받으실 수 있습니다.</p>
         <p className="popup_soon__note">※본 홈페이지에 사용된 CG 및 일러스트, 이미지 등은 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있습니다.</p>
         <button type="button" className="popup_soon__close" aria-label="오피스텔 안내 닫기" ref={open ? closeRef : undefined} onClick={close}>오피스텔 안내 닫기</button>
       </div>
@@ -120,11 +121,11 @@ function Commercial({ open, close, closeRef }: { open: boolean; close: () => voi
             <p className="popup_soon__coming" lang="en">COMING<br />SOON</p>
           </div>
         </div>
-        <a className="popup_soon__cta" href="/register?product=commercial">
-          <span className="popup_soon__cta_text"><strong>사전고객등록</strong> 바로가기</span>
+        <a className="popup_soon__cta" href={PROJECT_PHONE_TEL}>
+          <span className="popup_soon__cta_text"><strong>전화로 방문예약</strong></span>
           <i className="popup_soon__cta_arrow" aria-hidden="true" />
         </a>
-        <p className="blind">청라 아크원 푸르지오 상업시설 오픈 예정입니다. 사전고객등록을 하시면 분양 소식을 받아보실 수 있습니다.</p>
+        <p className="blind">청라 아크원 푸르지오 상업시설 오픈 예정입니다. 전화로 방문예약 후 견본주택에서 상담받으실 수 있습니다.</p>
         <p className="popup_soon__note">※본 홈페이지에 사용된 CG 및 일러스트, 이미지 등은 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있습니다.</p>
         <button type="button" className="popup_soon__close" aria-label="상업시설 안내 닫기" ref={open ? closeRef : undefined} onClick={close}>상업시설 안내 닫기</button>
       </div>

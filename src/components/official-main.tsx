@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { OtFeature } from "@/components/ot-official";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PLACES, img } from "@/data/content";
-import { REGISTER_LABEL } from "@/data/labels";
+import { PLACES, PROJECT_PHONE_TEL, img } from "@/data/content";
 import { ROLE } from "@/data/role";
 import { PlansBanner } from "@/components/notice-sections";
 
@@ -507,7 +506,7 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                   <img className="om-hero__quick_orbit" src="/official/badge/hero_circle_text.v100.svg" alt="" aria-hidden="true" />
                   <img className="om-hero__quick_content" src="/official/badge/hero_circle_01.v100.svg" alt="분양가 상한제 적용단지" />
                 </p>
-                <Link to="/register" className="om-hero__quick_item om-hero__quick_item-regist" aria-label={REGISTER_LABEL}>
+                <a href={PROJECT_PHONE_TEL} className="om-hero__quick_item om-hero__quick_item-regist" aria-label="전화로 방문예약">
                   <img className="om-hero__quick_orbit" src="/official/badge/hero_circle_text.v100.svg" alt="" aria-hidden="true" />
                   <span className="om-hero__quick_register" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -515,10 +514,10 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
                       <path d="M3.5 19.5c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" />
                       <path d="M18.5 6v6M15.5 9h6" />
                     </svg>
-                    <b>{REGISTER_LABEL}</b>
-                    <small lang="en">REGISTER</small>
+                    <b>전화로 방문예약</b>
+                    <small lang="en">VISIT</small>
                   </span>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -745,15 +744,15 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
             <img className="om-history__promotion_image om-history__promotion_image-01" src={asset("history_img_01.v4.jpg")} alt="" loading="lazy" />
           </div>
           <img className="om-history__promotion_logo" src={asset("history_logo.svg")} alt="푸르지오" loading="lazy" />
-          <Link to="/register" className="om-history__promotion_link" aria-label={`청라 아크원 푸르지오 ${REGISTER_LABEL}`}>
+          <a href={PROJECT_PHONE_TEL} className="om-history__promotion_link" aria-label="청라 아크원 푸르지오 전화로 방문예약">
             <span className="om-history__promotion_link_copy">
               <small>청라 아크원 푸르지오</small>
-              <strong>{REGISTER_LABEL}</strong>
+              <strong>전화로 방문예약</strong>
             </span>
             <span className="om-history__promotion_link_icon" aria-hidden="true">
               <img src={asset("history_arrow.svg")} alt="" />
             </span>
-          </Link>
+          </a>
           <div className="om-history__marquee" aria-hidden="true">
             <div className="om-history__marquee_track">
               <span lang="en">MASTERPLAN PROGRESS — ARKONE</span>

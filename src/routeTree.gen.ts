@@ -14,6 +14,7 @@ import { Route as R103bRouteImport } from './routes/103b'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ChangeinfoRouteImport } from './routes/changeinfo'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DocnormalRouteImport } from './routes/docnormal'
 import { Route as DocspecialRouteImport } from './routes/docspecial'
@@ -55,6 +56,11 @@ const BrandRoute = BrandRouteImport.update({
 const ChangeinfoRoute = ChangeinfoRouteImport.update({
   id: '/changeinfo',
   path: '/changeinfo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/brand': typeof BrandRoute
   '/changeinfo': typeof ChangeinfoRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/docnormal': typeof DocnormalRoute
   '/docspecial': typeof DocspecialRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/brand': typeof BrandRoute
   '/changeinfo': typeof ChangeinfoRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/docnormal': typeof DocnormalRoute
   '/docspecial': typeof DocspecialRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/brand': typeof BrandRoute
   '/changeinfo': typeof ChangeinfoRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/docnormal': typeof DocnormalRoute
   '/docspecial': typeof DocspecialRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/brand'
     | '/changeinfo'
+    | '/compare'
     | '/contact'
     | '/docnormal'
     | '/docspecial'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/brand'
     | '/changeinfo'
+    | '/compare'
     | '/contact'
     | '/docnormal'
     | '/docspecial'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/brand'
     | '/changeinfo'
+    | '/compare'
     | '/contact'
     | '/docnormal'
     | '/docspecial'
@@ -297,6 +309,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BrandRoute: typeof BrandRoute
   ChangeinfoRoute: typeof ChangeinfoRoute
+  CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   DocnormalRoute: typeof DocnormalRoute
   DocspecialRoute: typeof DocspecialRoute
@@ -350,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/changeinfo'
       fullPath: '/changeinfo'
       preLoaderRoute: typeof ChangeinfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -490,6 +510,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   BrandRoute: BrandRoute,
   ChangeinfoRoute: ChangeinfoRoute,
+  CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   DocnormalRoute: DocnormalRoute,
   DocspecialRoute: DocspecialRoute,
