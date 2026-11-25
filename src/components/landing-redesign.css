@@ -24,7 +24,7 @@
 @media(max-width:760px){.rd-header{padding-inline:16px}.rd-header-actions{gap:10px}.rd-logo>span{font-size:19px}.rd-header-phone{font-size:13px;gap:5px}.rd-header-phone svg{display:none}.rd-hero{min-height:700px}.rd-hero-inner{padding-top:30px}.rd-hero .rd-kicker{margin-bottom:18px}.rd-hero-desc{margin-top:17px!important}.rd-hero-actions{margin-top:20px}.rd-hero-presale{font-size:12px;margin-top:12px!important}.rd-hero-notice{display:block;font-size:11px;max-width:330px}.rd-menu-inner{padding:28px 22px}.rd-menu nav{gap:0 20px}.rd-menu nav a{font-size:13px}.rd-sitemap{gap:3px 22px}.rd-sitemap a{font-size:12px}.rd-product-cta{grid-column:1/-1;justify-self:start;font-size:13px!important}.rd-presale-note{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.rd *{scroll-behavior:auto!important}}
 /* Reserve the fixed call/register bar while the production popup is open. */
-@media(max-width:760px){.otp{bottom:calc(64px + env(safe-area-inset-bottom));padding:66px 0 12px}.otp-row .popup_soon{--pf-unit:min(0.7px,calc(66vw / 390),calc((100dvh - 308px) / 800))}.otp__wrap{flex-shrink:0}.otp__close,.otp__today{flex-shrink:0}}
+@media(max-width:760px){.otp{bottom:calc(64px + env(safe-area-inset-bottom));padding:66px 0 12px}.otp-row .popup_soon{--pf-unit:min(0.5436px,calc((100vw - 32px) / 390))}.otp__wrap{flex-shrink:0}.otp__close,.otp__today{flex-shrink:0}}
 
 /* 작업지시서 18 (2026-11-17): 사전고객등록 전화 접수 안내 */
 .rd-phone-reg h3{margin:14px 0 22px}.rd-phone-reg .rd-submit{margin-top:4px}.rd-phone-reg-notes{margin:22px 0 0;padding:0;list-style:none;font-size:13px;line-height:1.8;color:#4f6152}.rd-phone-reg-notes li{position:relative;padding-left:14px}.rd-phone-reg-notes li+li{margin-top:6px}.rd-phone-reg-notes li::before{content:"·";position:absolute;left:2px}
