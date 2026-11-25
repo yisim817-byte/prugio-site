@@ -67,12 +67,12 @@ function B103Card() {
           <span className="otp-b103__type">103㎡B</span>
           <span className="otp-b103__kind">선착순 공급</span>
         </h2>
-        <p className="otp-b103__label">참여의향서 접수</p>
-        <p className="otp-b103__date">11.17</p>
-        <p className="otp-b103__when">2026년 11월 17일(화)부터 · 견본주택</p>
-        <p className="otp-b103__cond">신청자 본인 방문 · 신분증 원본 · 1인 1건</p>
+        <p className="otp-b103__label">선착순 공급</p>
+        <p className="otp-b103__date">11.28</p>
+        <p className="otp-b103__when">2026년 11월 28일(토) 진행 예정</p>
+        <p className="otp-b103__cond">참여의향서는 11.17(화)부터 견본주택</p>
         <a className="otp-b103__cta" href="/103b"><strong>접수 안내</strong> 보기 ›</a>
-        <p className="otp-b103__note">※ 2026년 11월 28일(토) 진행 예정입니다. 시간·장소 등 세부 사항은 참여의향서를 접수한 고객에게 문자·전화로 개별 안내합니다.</p>
+        <p className="otp-b103__note">※ 시간·장소 등 세부 사항은 참여의향서를 접수한 고객에게 문자·전화로 개별 안내합니다.</p>
       </div>
     </div>
   );
