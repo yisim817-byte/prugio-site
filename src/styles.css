@@ -5969,7 +5969,7 @@ body.prereg-lock { overflow: hidden; }
   .otp__wrap { width: 100%; }
   .otp-row { flex-direction: row; width: 100%; padding: 0 17vw; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; box-sizing: border-box; }
   .otp-row::-webkit-scrollbar { display: none; }
-  .otp-row .popup_soon { scroll-snap-align: center; --pf-unit: min(1px, calc(66vw / 390), calc((100vh - 230px) / 800)); }
+  .otp-row .popup_soon { scroll-snap-align: center; --pf-unit: min(0.5436px, calc((100vw - 32px) / 390)); }
   .otp__hint { display: block; }
 }
 
