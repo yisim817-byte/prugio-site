@@ -79,37 +79,15 @@ function B103Card() {
 }
 
 
-function StarbucksCard() {
-  return (
-    <div className="popup_soon otp-b103 otp-starbucks">
-      <div className="otp-b103__dialog">
-        <p className="otp-b103__logo"><img src="/official/soon/logo.svg" alt="PRUGIO" width={257} height={45} /></p>
-        <span className="otp-starbucks__icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none">
-            <path d="M14 20h16v10a8 8 0 0 1-8 8h0a8 8 0 0 1-8-8V20z" stroke="currentColor" strokeWidth="1.7" />
-            <path d="M30 23h4.2a5.2 5.2 0 0 1 0 10.4H30" stroke="currentColor" strokeWidth="1.7" />
-            <path d="M18 14c1 2-.6 2.6.6 4.4M24 12c1 2-.6 2.6.6 4.4M30 14c1 2-.6 2.6.6 4.4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-          </svg>
-        </span>
-        <h2 id="otp-starbucks-title" className="otp-b103__title">
-          <span className="otp-b103__brand">청라 아크원 푸르지오</span>
-        </h2>
-        <p className="otp-b103__label">방문 혜택</p>
-        <p className="otp-b103__when">방문예약 후 모델하우스 방문 시</p>
-        <p className="otp-starbucks__coupon">스타벅스 커피 쿠폰 2장</p>
-        <p className="otp-b103__cond">전화로 방문예약을 하신 뒤 견본주택을 방문하시면 드립니다.</p>
-        <a className="otp-b103__cta" href={PROJECT_PHONE_TEL}>전화로 방문예약 {PROJECT_PHONE_DISPLAY}</a>
-        <p className="otp-b103__note">※ 쿠폰 지급 기준·기간은 {PROJECT_PHONE_DISPLAY}로 확인해 주세요. 사전 공지 후 변경·조기 종료될 수 있습니다.</p>
-      </div>
-    </div>
-  );
-}
-
-/** PM 지시(2026-11-18): 견본주택 방문 사전 예약제 안내 카드. 직원 사이트는 고객등록란이 없으므로 전화 예약만 안내한다. 11-15 의 예비당첨자 사전고객등록 카드 자리(맨 앞)를 대신한다. 103㎡B 카드와 같은 글자 카드. */
+/** 작업지시서 25 수정: 스타벅스 쿠폰은 별도 카드가 아니라 방문예약 카드 맨 위 한 칸이다. 전화 예약만. */
 function VisitCard() {
   return (
     <div className="popup_soon otp-b103 otp-visit">
       <div className="otp-b103__dialog">
+        <div className="otp-visit__benefit">
+          <p className="otp-visit__benefit-kicker">방문 혜택 · 방문예약 후 모델하우스 방문 시</p>
+          <p className="otp-visit__benefit-lg">스타벅스 커피 쿠폰 2장</p>
+        </div>
         <p className="otp-b103__logo"><img src="/official/soon/logo.svg" alt="PRUGIO" width={257} height={45} /></p>
         <h2 id="otp-visit-title" className="otp-b103__title">
           <span className="otp-b103__brand">청라 아크원 푸르지오</span>
@@ -121,6 +99,7 @@ function VisitCard() {
         <p className="otp-b103__when">예약 없이 방문하시면 입장·상담이 제한될 수 있습니다</p>
         <p className="otp-b103__cond">방문 전 반드시 대표번호로 전화 예약해 주세요</p>
         <a className="otp-b103__cta" href={PROJECT_PHONE_TEL}><strong>전화 예약</strong> {PROJECT_PHONE_DISPLAY} ›</a>
+        <p className="otp-b103__note">※ 쿠폰 지급 기준·기간은 분양문의 {PROJECT_PHONE_DISPLAY}로 확인해 주세요. 사전 공지 후 변경·조기 종료될 수 있습니다.</p>
         <p className="otp-b103__note">※ 방문예약은 담당자 확인 후 확정됩니다. 방문예약은 청약 신청이 아니며, 청약 자격·순위와 관계없습니다.</p>
       </div>
     </div>
@@ -187,7 +166,6 @@ export function OtPopups() {
       <div className="otp__wrap">
         <button type="button" className="otp__close" onClick={close}>팝업닫기 ✕</button>
         <div className="otp-row">
-          <StarbucksCard />
           <VisitCard />
           {showB103 ? <B103Card /> : null}
           <SoonCard kind="officetel" portrait headingId="otp-officetel-title" />

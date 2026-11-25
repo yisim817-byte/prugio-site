@@ -163,8 +163,8 @@ function homeOfferList() {
     "@type": "ItemList",
     name: "청라 아크원 푸르지오 상담 상품",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "오피스텔", description: "987실. 전용 105㎡·121㎡·136㎡. 오피스텔 · 상가 11월말 분양예정.", url: `${SEO_ORIGIN}/register?product=officetel` },
-      { "@type": "ListItem", position: 2, name: "상가", description: "근린생활시설 1~2층. 오피스텔 · 상가 11월말 분양예정.", url: `${SEO_ORIGIN}/register?product=commercial` },
+      { "@type": "ListItem", position: 1, name: "오피스텔", description: "987실. 전용 105㎡·121㎡·136㎡. 오피스텔 청약 12.7(월).", url: `${SEO_ORIGIN}/register?product=officetel` },
+      { "@type": "ListItem", position: 2, name: "상가", description: "근린생활시설 1~2층. 분양 예정.", url: `${SEO_ORIGIN}/register?product=commercial` },
       { "@type": "ListItem", position: 3, name: "아파트", description: "868세대. 전용 84㎡·103㎡.", url: `${SEO_ORIGIN}/register?product=apt` },
     ],
   };

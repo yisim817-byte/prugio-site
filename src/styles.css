@@ -6004,3 +6004,19 @@ body.prereg-lock { overflow: hidden; }
 .cmp-scroll table { min-width: 720px; }
 .cmp-caption { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .visit-phone__cta { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 14px 22px; font-size: 22px; font-weight: 700; }
+
+/* 작업지시서 25 수정: 쿠폰은 방문예약 카드 맨 위. 카드 안은 스크롤하지 않는다. */
+.otp-visit .otp-b103__dialog { justify-content: flex-start; overflow: hidden; padding: calc(12 * var(--pf-unit)) calc(12 * var(--pf-unit)) calc(10 * var(--pf-unit)); box-sizing: border-box; }
+.otp-visit__benefit { width: 100%; margin: 0 0 calc(6 * var(--pf-unit)); padding: calc(12 * var(--pf-unit)) calc(8 * var(--pf-unit)); background: #032B20; box-sizing: border-box; }
+.otp-visit__benefit-kicker { font-size: calc(12.5 * var(--pf-unit)); font-weight: 700; line-height: 1.35; }
+.otp-visit__benefit-lg { margin-top: calc(3 * var(--pf-unit)) !important; font-size: calc(24 * var(--pf-unit)); font-weight: 800; line-height: 1.2; letter-spacing: -0.03em; }
+.otp-visit .otp-b103__logo { margin-top: calc(6 * var(--pf-unit)) !important; }
+.otp-visit .otp-b103__logo img { width: calc(140 * var(--pf-unit)); }
+.otp-visit .otp-b103__title { margin-top: calc(4 * var(--pf-unit)) !important; }
+.otp-visit .otp-b103__type { margin-top: calc(2 * var(--pf-unit)); font-size: calc(30 * var(--pf-unit)); }
+.otp-visit .otp-b103__kind { font-size: calc(18 * var(--pf-unit)); }
+.otp-visit .otp-b103__label { margin-top: calc(6 * var(--pf-unit)) !important; font-size: calc(12.5 * var(--pf-unit)); padding: calc(3 * var(--pf-unit)) calc(8 * var(--pf-unit)); }
+.otp-visit .otp-b103__date { margin-top: calc(2 * var(--pf-unit)) !important; font-size: calc(28 * var(--pf-unit)) !important; }
+.otp-visit .otp-b103__when, .otp-visit .otp-b103__cond { margin-top: calc(3 * var(--pf-unit)) !important; font-size: calc(12.5 * var(--pf-unit)); line-height: 1.3; }
+.otp-visit .otp-b103__cta { position: static; transform: none; margin-top: calc(8 * var(--pf-unit)); width: calc(240 * var(--pf-unit)); height: calc(40 * var(--pf-unit)); font-size: calc(14 * var(--pf-unit)); }
+.otp-visit .otp-b103__note { position: static; left: auto; right: auto; top: auto; margin-top: calc(4 * var(--pf-unit)) !important; font-size: calc(10.5 * var(--pf-unit)); line-height: 1.3; }
