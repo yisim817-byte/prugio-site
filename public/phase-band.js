@@ -44,6 +44,8 @@
       .then(function (n) { clearTimeout(timer); return n; });
   }
   function build(phase) {
+    // 작업지시서 25 후속: 지난 아파트 청약 일정 띠(공고 10.22·특별공급 11.02·1·2순위·발표·계약)는 그리지 않는다. 방문예약(1)만 유지.
+    if (phase === 0 || phase === 2 || phase === 3 || phase === 4) return null;
     var p = PHASES[phase];
     if (!p) return null;                                                 // 단계 5 = 띠 숨김
     var el = document.createElement('div');
