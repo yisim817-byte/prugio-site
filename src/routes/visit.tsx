@@ -24,7 +24,7 @@ function PhoneVisit() {
         <p>
           <a className="ak-btn ak-btn--primary visit-phone__cta" href={PROJECT_PHONE_TEL}>전화로 방문예약 {PROJECT_PHONE_DISPLAY}</a>
         </p>
-        <p>전화로 방문고객등록 후 모델하우스 방문 시 스타벅스 커피 쿠폰 2장 증정</p>
+        <p>전화로 방문고객등록 후 모델하우스 방문 시 스타벅스 커피 쿠폰 증정</p>
         <p>인천광역시 서해구 청라동 87-1</p>
       </main>
     </Shell>

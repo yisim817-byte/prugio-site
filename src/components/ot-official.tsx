@@ -91,7 +91,7 @@ function VisitCard() {
         </svg>
         <p className="otp-b103__label">방문 혜택</p>
         <p className="otp-starbucks__line">전화로 방문고객등록 후 모델하우스 방문 시</p>
-        <p className="otp-starbucks__coupon">스타벅스 커피 쿠폰 2장 증정</p>
+        <p className="otp-starbucks__coupon">스타벅스 커피 쿠폰 증정</p>
         <p className="otp-starbucks__body">견본주택 방문은 사전 예약제입니다. 대표번호로 전화해 방문고객등록을 해 주세요.</p>
         <a className="otp-b103__cta" href={PROJECT_PHONE_TEL}>전화로 방문고객등록 {PROJECT_PHONE_DISPLAY}</a>
         <p className="otp-b103__note">
@@ -117,7 +117,7 @@ export function OtFeature() {
 }
 
 // 17-1: 카드 구성이 바뀌어 키를 새로 쓴다(전에 「오늘 하루 보지 않기」를 누른 방문자에게도 한 번 보인다).
-const KEY = "popup_20261127";
+const KEY = "popup_20261128";
 
 /** 첫 화면 팝업: 스타벅스 커피 쿠폰 카드 1장. */
 export function OtPopups() {
