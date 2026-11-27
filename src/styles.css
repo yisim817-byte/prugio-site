@@ -6020,3 +6020,21 @@ body.prereg-lock { overflow: hidden; }
 .otp-visit .otp-b103__when, .otp-visit .otp-b103__cond { margin-top: calc(3 * var(--pf-unit)) !important; font-size: calc(12.5 * var(--pf-unit)); line-height: 1.3; }
 .otp-visit .otp-b103__cta { position: static; transform: none; margin-top: calc(8 * var(--pf-unit)); width: calc(240 * var(--pf-unit)); height: calc(40 * var(--pf-unit)); font-size: calc(14 * var(--pf-unit)); }
 .otp-visit .otp-b103__note { position: static; left: auto; right: auto; top: auto; margin-top: calc(4 * var(--pf-unit)) !important; font-size: calc(10.5 * var(--pf-unit)); line-height: 1.3; }
+
+/* 작업지시서 26: 첫 화면 팝업은 쿠폰 카드 1장. 점·화살표·가로 스크롤 없음. */
+.otp-row--one { overflow: hidden !important; justify-content: center; scroll-snap-type: none; padding: 0 !important; width: auto; max-width: 100%; }
+.otp-row--one .popup_soon { scroll-snap-align: none; }
+@media screen and (max-width: 1024px) {
+  .otp-row--one { flex-direction: row; overflow: hidden !important; padding: 0 !important; width: auto; }
+  .otp-row--one .popup_soon { --pf-unit: min(0.5436px, calc((100vw - 32px) / 390), calc((100vh - 220px) / 800)); }
+}
+
+.otp-starbucks .otp-b103__dialog { background: #032B20; }
+.otp-starbucks .otp-b103__label { margin-top: calc(28 * var(--pf-unit)) !important; }
+.otp-starbucks__line { margin-top: calc(16 * var(--pf-unit)) !important; padding: 0 calc(28 * var(--pf-unit)); font-size: calc(18 * var(--pf-unit)); font-weight: 600; line-height: 1.4; }
+.otp-starbucks__coupon { margin-top: calc(10 * var(--pf-unit)) !important; padding: 0 calc(28 * var(--pf-unit)); font-family: "Eulyoo1945", serif; font-size: calc(40 * var(--pf-unit)); font-weight: 400; line-height: 1.25; letter-spacing: -0.03em; white-space: normal; word-break: keep-all; }
+.otp-starbucks__cup { width: calc(44 * var(--pf-unit)); height: calc(44 * var(--pf-unit)); margin-top: calc(36 * var(--pf-unit)); stroke: #fff; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.otp-starbucks__body { margin-top: calc(10 * var(--pf-unit)) !important; padding: 0 calc(32 * var(--pf-unit)); font-size: calc(15 * var(--pf-unit)); line-height: 1.45; word-break: keep-all; }
+.otp-starbucks .otp-b103__cta { top: calc(590 * var(--pf-unit)); width: calc(330 * var(--pf-unit)); height: auto; min-height: calc(52 * var(--pf-unit)); font-size: calc(15 * var(--pf-unit)); white-space: normal; line-height: 1.25; padding: calc(6 * var(--pf-unit)) calc(10 * var(--pf-unit)); }
+.otp-starbucks .otp-b103__note { top: calc(700 * var(--pf-unit)); font-size: calc(11.5 * var(--pf-unit)); line-height: 1.35; }
+.otp:has(.otp-row--one) .otp__wrap { overflow: hidden; }

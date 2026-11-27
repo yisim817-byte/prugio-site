@@ -24,9 +24,9 @@
     var rows = [];
     if (p !== '/visit') {
       if (MODE === 'staff') {
-        rows.push({ cls: 'pob-lg', href: TEL, text: '방문예약은 전화로만 · 방문 시 스타벅스 커피 쿠폰 2장 · ' + PHONE + ' ›' });
+        rows.push({ cls: 'pob-lg', href: TEL, text: '전화로 방문고객등록 후 모델하우스 방문 시 스타벅스 커피 쿠폰 2장 증정 · ' + PHONE + ' ›' });
       } else {
-        rows.push({ cls: 'pob-lg', href: '/visit', text: '방문고객등록 · 방문예약 후 모델하우스 방문 시 스타벅스 커피 쿠폰 2장 · 등록하기 ›' });
+        rows.push({ cls: 'pob-lg', href: '/visit', text: '방문고객등록 후 모델하우스 방문 시 스타벅스 커피 쿠폰 2장 증정 · 등록하기 ›' });
       }
     }
     if (p !== '/103b' && !hideLine2()) {
