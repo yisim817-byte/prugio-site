@@ -178,12 +178,14 @@ export const adminSnapshot = createServerFn({ method: "GET" })
         : [];
     // 작업지시서 13: 모델하우스 방문예약(사전고객등록과 별도 표). 표가 아직 없으면 빈 목록.
     let visits: {
-      receipt_no: string; name: string; phone: string; visit_date: string | null; visit_slot: string;
+      receipt_no: string; name: string; phone: string; visit_date: string | null; visit_slot: string | null;
       interest: string | null; created_at: string; is_test: boolean; notify_status: string | null; status: string;
+      age14: boolean; consent_privacy: boolean; consent_marketing: boolean; consent_call: boolean; consent_sms: boolean;
     }[] = [];
     try {
       visits = await sql`
-        select receipt_no, name, phone, visit_date, visit_slot, interest, created_at::text as created_at, is_test, notify_status, status
+        select receipt_no, name, phone, visit_date, visit_slot, interest, created_at::text as created_at, is_test, notify_status, status,
+               age14, consent_privacy, consent_marketing, consent_call, consent_sms
         from visit_reservations
         where site_id = ${SITE}
         order by id desc

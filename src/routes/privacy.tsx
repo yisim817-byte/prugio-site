@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Shell, SubHero, pageHead } from "@/components/layout";
 import { PROJECT_PHONE_DISPLAY } from "@/data/content";
 import { REGISTER_LABEL } from "@/data/labels";
+import { VISIT_STORAGE_LABEL } from "@/data/visit-apply";
 
 export const Route = createFileRoute("/privacy")({
   head: () => pageHead("개인정보처리방침"),
@@ -17,12 +18,18 @@ function Page() {
         <section>
           <h2 className="ak-h3">항목과 목적</h2>
           <p className="mt-3">관심 상품(아파트·오피스텔·상가), 성명, 휴대전화, 생년월일 앞 6자리, 주소(시·도, 시·군·구, 동), 방문 희망일·시간대(선택). 주민등록번호 전체와 뒷자리, 신분증은 받지 않습니다.</p>
-          <p className="mt-3">모델하우스 방문예약: 이름, 휴대폰번호, 방문 희망일·시간대, 관심 상품(선택). 목적은 견본주택 방문 일정 안내이며, 사전고객등록과 같은 기간(분양 종료 시 파기) 보유합니다.</p>
+          <p className="mt-3">
+            모델하우스 방문예약 수집 항목: 이름, 휴대폰번호, 동의 기록(만 14세 이상 여부, 개인정보 수집·이용 동의, 마케팅 활용 및 광고성 정보 수신 동의 여부). 방문 희망일·시간대·관심 상품은 받지 않습니다.
+            목적: 견본주택 방문 일시 안내. 마케팅 동의자에 한해 광고성 정보 안내.
+            보유 기간: 방문 안내 완료 등 목적 달성 시 지체 없이 파기하며, 최장 수집일로부터 1년까지 보유합니다. 동의를 철회하시면 지체 없이 파기합니다. 마케팅·광고성 정보 수신은 동의 철회 시 또는 수집일로부터 1년까지 보유합니다.
+            보관 위치: {VISIT_STORAGE_LABEL}.
+            수신 거부·동의 철회: {PROJECT_PHONE_DISPLAY}.
+          </p>
           <p className="mt-3">목적: 이 사이트로 들어온 사전고객을 구분하고, 등록 사실을 이 사이트 담당자에게 알리기 위해서입니다. 계약, 분양가 안내, 세대 지정은 하지 않습니다.</p>
         </section>
         <section>
           <h2 className="ak-h3">보유</h2>
-          <p className="mt-3">분양 종료 시 파기합니다. 파기하면 이 사이트의 저장본에서 지웁니다.</p>
+          <p className="mt-3">사전고객등록 정보는 분양 종료 시 파기합니다. 파기하면 이 사이트의 저장본에서 지웁니다. 모델하우스 방문예약은 위의 방문예약 항목에 적은 기간을 따릅니다.</p>
         </section>
         <section>
           <h2 className="ak-h3">알림</h2>

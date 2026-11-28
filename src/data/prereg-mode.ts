@@ -7,8 +7,8 @@ import { PROJECT_PHONE_DISPLAY } from "@/data/content";
  */
 export const PREREG_ONLINE = false;
 
-/** 작업지시서 25: 직원 사이트는 방문예약 입력 폼을 닫고 전화로만 받는다. */
-export const VISIT_ONLINE = false;
+/** 작업지시서 32: 푸르지오.site 만 방문예약 온라인 신청을 연다. 사전고객등록은 계속 닫는다. */
+export const VISIT_ONLINE = true;
 
 /** 닫혀 있는 동안 서버 함수가 돌려주는 안내 (예전 화면이 열린 채 남아 전송한 경우). */
 export const PREREG_CLOSED_MESSAGE = `현재 사전고객등록은 전화로만 접수합니다. 대표번호 ${PROJECT_PHONE_DISPLAY}로 전화 주세요.`;

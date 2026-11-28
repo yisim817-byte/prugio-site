@@ -158,42 +158,30 @@ export async function sendStaffAlert(input: AlertInput): Promise<AlertResult> {
   }
 }
 
-// ── 작업지시서 13 (2026-10-22): 모델하우스 방문예약 알림 ─────────────────────
-// 사전고객등록 알림과 같은 경로(텔레그램 → 알림톡 → 문자)로 보내고, 제목 앞에 「[방문예약]」을 붙인다.
-// 텔레그램에는 사전고객등록과 같이 이름·휴대폰을 싣지 않는다(관리화면 방문예약 목록에서 확인). 알림톡·문자에는 이름·휴대폰을 싣는다.
+// ── 작업지시서 13·32: 방문예약 담당자 알림. 고객에게는 보내지 않는다.
+// 내용: 사이트명·접수번호·접수시각·이름·휴대폰·광고 수신 동의. 미리보기는 [테스트].
 export type VisitAlertInput = {
   receiptNo: string;
   createdAt: string;
   name: string;
   phone: string;
-  visit: string;
-  interest: string | null;
+  marketing: string;
   test: boolean;
 };
-
-export function visitTelegramText(input: VisitAlertInput): string {
-  return [
-    `${input.test ? "[테스트] " : ""}[방문예약] ${SITE_LABEL}`,
-    `접수번호 ${input.receiptNo}`,
-    `방문희망 ${input.visit}`,
-    `관심상품 ${input.interest || "미선택"}`,
-    `사이트 ${SITE_HOST.replace("https://", "")}`,
-    input.createdAt,
-    `관리화면 ${SITE_HOST}/admin?visit=${encodeURIComponent(input.receiptNo)}`,
-  ].join("\n");
-}
 
 export function visitAlertText(input: VisitAlertInput): string {
   return [
     `${input.test ? "[테스트] " : ""}[방문예약] ${SITE_LABEL}`,
     `접수번호 ${input.receiptNo}`,
+    `접수시각 ${input.createdAt}`,
     `이름 ${input.name}`,
     `휴대폰 ${input.phone}`,
-    `방문희망 ${input.visit}`,
-    `관심상품 ${input.interest || "미선택"}`,
-    `사이트 ${SITE_HOST.replace("https://", "")}`,
-    input.createdAt,
+    `광고 수신 동의: ${input.marketing}`,
   ].join("\n");
+}
+
+export function visitTelegramText(input: VisitAlertInput): string {
+  return visitAlertText(input);
 }
 
 export async function sendVisitAlert(input: VisitAlertInput): Promise<AlertResult> {

@@ -53,8 +53,9 @@ type Snap = {
   };
   leads: Lead[];
   visits: {
-    receipt_no: string; name: string; phone: string; visit_date: string | null; visit_slot: string;
+    receipt_no: string; name: string; phone: string; visit_date: string | null; visit_slot: string | null;
     interest: string | null; created_at: string; is_test: boolean; notify_status: string | null; status: string;
+    age14: boolean; consent_privacy: boolean; consent_marketing: boolean; consent_call: boolean; consent_sms: boolean;
   }[];
   accounts: Account[];
   funnel: { name: string; form: string; n: number }[] | null;
@@ -249,7 +250,12 @@ function Page() {
                     <li key={v.receipt_no} className="py-3">
                       <p className="font-medium">{v.receipt_no} · {v.name}{v.is_test ? " · 테스트" : ""}</p>
                       <p className="mt-1 text-muted">
-                        {formatPhone(v.phone)} · 방문희망 {v.visit_date ?? "날짜 미선택(전화 확인)"} {({ AM: "오전", PM: "오후", ANY: "시간 상관없음" } as Record<string, string>)[v.visit_slot] ?? v.visit_slot} · 관심 {v.interest ?? "미선택"}
+                        {formatPhone(v.phone)} · 방문희망 {v.visit_date ?? "전화 확인"}{v.visit_slot ? ` ${({ AM: "오전", PM: "오후", ANY: "시간 상관없음" } as Record<string, string>)[v.visit_slot] ?? v.visit_slot}` : ""}{v.interest ? ` · 관심 ${v.interest}` : ""}
+                      </p>
+                      <p className="mt-1 text-muted">
+                        {v.age14 && v.consent_privacy ? "필수 동의" : "필수 동의 기록 없음"}
+                        {" · 광고 수신: "}
+                        {v.consent_marketing ? `전화${v.consent_call ? "○" : "×"} 문자${v.consent_sms ? "○" : "×"}` : "미동의"}
                       </p>
                       <p className="mt-1 text-muted">{v.created_at} · 알림 {v.notify_status ?? "-"}</p>
                     </li>

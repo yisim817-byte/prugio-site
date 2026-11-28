@@ -19,10 +19,8 @@ import pg from "pg";
 import { pendingMigrations } from "./migration-plan.mjs";
 
 const databaseUrl = process.env.DATABASE_URL;
-if (process.env.VERCEL_ENV === "preview") {
-  console.log("[migrate] preview deployment — skipping live database changes.");
-  process.exit(0);
-}
+// 작업지시서 32: 미리보기도 같은 Neon 에 동의 칸 마이그레이션을 적용한다.
+// 적용은 파일당 한 번(_migrations)이고, 기존 행은 바꾸지 않는다.
 if (!databaseUrl) {
   console.log(
     "[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).",
