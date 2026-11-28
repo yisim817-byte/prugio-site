@@ -1,0 +1,70 @@
+/* 작업지시서 30 · 본사 팝업 5장. 공식 홈페이지 카드 비율 300:433 */
+.akp-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2147483000}
+.akp{position:fixed;left:50%;top:calc(var(--pob-h,72px) + 8px);bottom:8px;transform:translateX(-50%);z-index:2147483001;width:100%;max-width:100vw;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;color:#fff}
+.akp-close{color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px;padding:8px 20px;background:none;border:0;cursor:pointer;font-family:inherit}
+.akp-close i{font-style:normal;font-size:22px;line-height:1}
+.akp-stage{position:relative;width:100%;display:flex;align-items:center;justify-content:center;min-width:0}
+.akp-list{display:flex;gap:4px;justify-content:center;list-style:none;margin:0;padding:0;max-width:100%;scrollbar-width:none}
+.akp-list::-webkit-scrollbar{display:none}
+.akp-today{margin-top:14px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;cursor:pointer}
+.akp-today input{width:22px;height:22px;margin:0;accent-color:#fff}
+.akp-dots{display:none;gap:8px;margin-top:12px;padding:0}
+.akp-dots button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer}
+.akp-dots button.is-on{background:#fff}
+.akp-nav{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#1c2b28;font-size:22px;line-height:1;cursor:pointer}
+.akp-prev{left:8px}.akp-next{right:8px}
+.card{--w:clamp(250px,calc((100vw - 96px)/5),300px);width:min(var(--w),calc((100vh - var(--pob-h,72px) - 150px) * 300 / 433));aspect-ratio:300/433;position:relative;overflow:hidden;container-type:inline-size;display:flex;flex-direction:column;align-items:center;text-align:center;color:#fff;text-decoration:none;background-size:cover;background-position:center;flex:0 0 auto}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+.logo{position:absolute;top:5.3cqw;right:5.3cqw;width:27cqw;height:auto;z-index:2}
+.k{margin:17cqw 0 0;font-size:4.6cqw;letter-spacing:-.01em;opacity:.92;position:relative;z-index:2}
+.h{font-size:9.6cqw;font-weight:800;letter-spacing:-.04em;line-height:1.12;margin:1.6cqw 0 0;position:relative;z-index:2}
+.sub{font-size:5.6cqw;font-weight:700;margin:2.4cqw 0 0;position:relative;z-index:2}
+.big{font-size:17cqw;font-weight:800;letter-spacing:-.05em;line-height:1;margin:4cqw 0 0;position:relative;z-index:2}
+.big small{font-size:7cqw;font-weight:700;margin-left:.6cqw}
+.chip{display:inline-block;margin-top:3cqw;padding:1.4cqw 3.4cqw;border-radius:99px;font-size:4.2cqw;font-weight:700;position:relative;z-index:2}
+.tbl{width:86cqw;margin-top:5cqw;position:relative;z-index:2;display:grid;gap:1.4cqw}
+.tr{display:grid;grid-template-columns:24cqw 1fr;background:#fff;color:#1b1b1b;border-radius:1cqw;overflow:hidden;min-height:11.5cqw}
+.tr b{display:flex;align-items:center;justify-content:center;font-size:3.5cqw;font-weight:700;color:#3b3b3b;line-height:1.15;padding:0 1cqw;text-align:center}
+.tr span{display:flex;align-items:center;justify-content:center;font-size:4.3cqw;font-weight:800;letter-spacing:-.02em;line-height:1.15;padding:0 1cqw}
+.tr span small{font-size:3.2cqw;font-weight:600;margin-left:.4cqw;color:#555}
+.c-peach{background:#f2d4bd}.c-rose{background:#f3c6c9}.c-mint{background:#c2e3d0}.c-sand{background:#e7dccb}
+.note{position:relative;z-index:2;width:86cqw;margin-top:3.4cqw;font-size:3.05cqw;line-height:1.45;text-align:left;opacity:.86}
+.cta{position:absolute;left:0;right:0;bottom:0;height:12.5cqw;display:flex;align-items:center;justify-content:center;gap:2cqw;font-size:4.4cqw;font-weight:800;z-index:3}
+.cta i{font-style:normal;width:5.4cqw;height:5.4cqw;border-radius:50%;background:currentColor;display:inline-flex;align-items:center;justify-content:center}
+.cta i::after{content:"→";color:var(--ctabg);font-size:3.6cqw;font-weight:900}
+.disc{position:absolute;left:0;right:0;bottom:13.6cqw;font-size:2.5cqw;opacity:.7;z-index:2}
+.c1{background:radial-gradient(120% 80% at 50% 10%,#2f5a50 0%,#183a33 55%,#0e2622 100%)}
+.c1 .chip{background:#e8c98f;color:#2a2010}
+.c1 .cta{--ctabg:#e8c98f;background:#e8c98f;color:#1d2a25}
+.cup{width:22cqw;height:22cqw;margin-top:4cqw;position:relative;z-index:2}
+.c2{background:linear-gradient(180deg,rgba(28,58,62,.2),rgba(20,45,50,.88) 62%,#173238),url(/official/soon/officetel_bg_m.png) center top/cover}
+.c2 .cta{--ctabg:#cfe7da;background:#cfe7da;color:#173238}
+.c3{background:radial-gradient(140% 90% at 30% 0%,#6b5442 0%,#463328 55%,#33251d 100%)}
+.c3 .cta{--ctabg:#e9d5b8;background:#e9d5b8;color:#33251d}
+.steps{width:86cqw;margin-top:5cqw;display:grid;gap:1.4cqw;position:relative;z-index:2}
+.st{display:grid;grid-template-columns:13cqw 1fr;align-items:center;background:rgba(255,255,255,.95);color:#2a211b;border-radius:1cqw;min-height:12cqw;text-align:left}
+.st b{font-size:4.4cqw;font-weight:800;color:#a0785a;text-align:center}
+.st span{font-size:4.1cqw;font-weight:700}
+.tel{font-size:9.6cqw;font-weight:800;letter-spacing:-.02em;margin-top:4cqw;position:relative;z-index:2;color:#f3dcb9}
+.c4{background:linear-gradient(180deg,rgba(40,36,92,.15),rgba(34,30,80,.86) 60%,#221f52),url(/official/soon/commercial_bg_m.png) center top/cover}
+.c4 .cta{--ctabg:#d9d6ff;background:#d9d6ff;color:#221f52}
+.c5{background:radial-gradient(120% 90% at 50% 0%,#d8506f 0%,#c3395a 55%,#a92b4b 100%)}
+.c5 .cta{--ctabg:#f6bfcd;background:#f6bfcd;color:#a92b4b}
+.c5 .line{width:60cqw;height:1px;background:rgba(255,255,255,.45);margin-top:5cqw;position:relative;z-index:2}
+.c5 .chip{background:rgba(255,255,255,.18)}
+.c3 .chip{background:rgba(255,255,255,.14)}
+@media (max-width:1399px){
+  .akp-nav{display:block}
+  .akp-list{overflow-x:auto;justify-content:flex-start;padding:0 48px;scroll-snap-type:x mandatory;max-width:100vw}
+  .card{--w:300px;scroll-snap-align:center}
+}
+@media (max-width:768px){
+  .akp-nav{display:none}
+  .akp{top:calc(var(--pob-h,64px) + 4px)}
+  .card{--w:min(90vw,351px)}
+  .akp-list{gap:10px;padding:0 5vw}
+  .akp-dots{display:flex}
+}
+@media (min-width:1400px){
+  .akp-list{overflow:visible}
+}

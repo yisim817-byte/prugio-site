@@ -64,7 +64,8 @@ export const Route = createRootRoute({
           <Outlet />
         </AuthProvider>
         <Scripts />
-        <script src="/plan-open-bar.js" data-mode="staff" data-phone="1533-9014" defer />
+        <script src="/ark-popup-wo30.js" data-phone="1533-9014" data-visit="on" defer />
+        <script src="/plan-open-bar.js" data-mode="staff" data-phone="1533-9014" data-visit="on" defer />
       </body>
     </html>
   ),

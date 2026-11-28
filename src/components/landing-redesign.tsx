@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { OtPopups } from "@/components/ot-official";
 import { validBirth } from "@/lib/lead-input";
 import { Footer } from "@/components/chrome";
 import { FunnelBeacon } from "@/components/layout";
@@ -148,7 +147,7 @@ export function LandingPage() {
   const [open, setOpen] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const register = (next: Product | null = null) => { setProduct(next); setOpen(true); };
-  return <><OtPopups /><div className="rd" data-redesign-home><FunnelBeacon /><a className="rd-skip" href="#main">본문으로 바로가기</a><Header register={() => register()} /><main id="main"><Hero register={() => register()} />
+  return <><div className="rd" data-redesign-home><FunnelBeacon /><a className="rd-skip" href="#main">본문으로 바로가기</a><Header register={() => register()} /><main id="main"><Hero register={() => register()} />
     <section className="rd-location rd-section" id="location" aria-labelledby="rd-location-title"><div className="rd-container"><div className="rd-section-top"><p className="rd-kicker">01 / THE ADDRESS</p><span>청라국제도시 · M5블록</span></div><div className="rd-location-grid"><div><h2 id="rd-location-title">입지는 청라,<br /><em>일상은 더 넓게.</em></h2><p className="rd-lead">살 곳을 고를 때,<br />집 밖의 하루까지 함께 생각합니다.</p><p>청라동 86-1번지. 교통과 생활 인프라를 함께 살펴보는 청라 아크원 푸르지오의 자리입니다.</p><a className="rd-text-link" href="/contact">현장·견본주택 위치 확인<Arrow /></a></div><div className="rd-address-panel"><span className="rd-address-code" aria-hidden="true">M<span>5</span></span><p className="rd-address-name">청라국제도시<br />주상복합용지</p><div className="rd-address-rule" /><p>인천광역시 서해구<br />청라동 86-1번지</p><a href="https://naver.me/xSBYFSR0" target="_blank" rel="noopener noreferrer">네이버 지도에서 보기 ↗</a></div></div>
       <div className="rd-location-lines"><div><span>생활</span><h3>코스트코 청라 · 하나드림타운</h3><p>주변 생활·업무 인프라를 함께 확인하세요.</p></div><div><span>예정</span><h3>돔구장·스타필드 청라 · 서울아산청라병원</h3><p>예정 사업이며 추진 과정에서 변경될 수 있습니다.</p></div><div><span>교통</span><h3>서울 7호선 청라연장선 — 건설 중 · 개통시기 미정</h3></div></div><div className="rd-section-end"><p>교통·개발계획은 관계기관 사정으로 변경·지연·취소될 수 있습니다.</p><button className="rd-text-link" onClick={() => register()}>입지 상담 등록<Arrow /></button></div></div></section>
     <section className="rd-space" aria-labelledby="rd-space-title"><figure><picture><source media="(max-width:760px)" srcSet="/redesign/coastal-lounge-768.webp" /><img src="/redesign/coastal-lounge.webp" alt="아이보리 석재와 햇살, 먼 바다를 표현한 가상의 주거 라운지 연출 이미지" width="1536" height="1024" loading="lazy" decoding="async" /></picture><figcaption>AI 연출 이미지 · 실제 단지·조망·시설과 다릅니다.</figcaption></figure><div className="rd-space-copy"><p className="rd-kicker">A DIFFERENT EVERYDAY</p><h2 id="rd-space-title">나에게 맞는 공간,<br />그 안의 새로운 일상.</h2><p>오피스텔, 상가, 아파트.<br />목적에 맞는 상품부터 살펴보세요.</p><a href="#products" className="rd-text-link">상품 구성 살펴보기<Arrow /></a></div></section>
