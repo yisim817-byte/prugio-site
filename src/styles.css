@@ -6139,6 +6139,7 @@ body.prereg-lock { overflow: hidden; }
   .vr-cta, .vr-gold { width: 100%; }
   .vr-hero { padding-top: 28px; }
   body:has(.vr) .ak-mbar { display: none; }
+  html:has(.vr) { scroll-padding-bottom: 96px; }
   body:has(.vr) { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
   .vr-dock {
     display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1050;
