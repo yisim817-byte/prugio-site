@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { OtFeature } from "@/components/ot-official";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PLACES, PROJECT_PHONE_TEL, img } from "@/data/content";
+import { PROJECT_PHONE_TEL, img } from "@/data/content";
 import { ROLE } from "@/data/role";
 import { PlansBanner } from "@/components/notice-sections";
 
@@ -976,20 +976,15 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
           <div className="om-contact__maps">
             <article className="om-contact__map_group">
               <figure className="om-contact__map">
-                <img src={asset("contact_map_01.v4.png")} alt="청라 아크원 푸르지오 현장과 견본주택 약도" loading="lazy" decoding="async" />
+                <img src={asset("contact_map_01.v4.png")} alt="청라 아크원 푸르지오 모델하우스 약도" loading="lazy" decoding="async" />
               </figure>
               <div className="om-contact__location_card">
-                {["견본주택", "현장"].map((title) => PLACES.filter((p) => p.title === title).map((p) => <ContactPlace key={p.title} place={p} />))}
-              </div>
-            </article>
-            <article className="om-contact__map_group">
-              <figure className="om-contact__map">
-                <img src={asset("contact_map_02.v4.png")} alt="청라 아크원 푸르지오 홍보관 약도" loading="lazy" decoding="async" />
-              </figure>
-              <div className="om-contact__location_card">
-                {PLACES.filter((p) => p.title === "홍보관").map((p) => (
-                  <ContactPlace key={p.title} place={p} />
-                ))}
+                <article className="om-contact__location">
+                  <div className="om-contact__location_content">
+                    <h3>모델하우스(견본주택)</h3>
+                    <p>방문 전 대표번호로 예약해 주세요</p>
+                  </div>
+                </article>
               </div>
             </article>
           </div>
@@ -1002,24 +997,5 @@ export function OfficialMain({ children }: { children?: React.ReactNode }) {
       </section>
 
     </div>
-  );
-}
-
-function ContactPlace({ place }: { place: (typeof PLACES)[number] }) {
-  return (
-    <article className="om-contact__location">
-      <div className="om-contact__location_content">
-        <h3>{place.title}</h3>
-        <address>{place.address}</address>
-      </div>
-      <div className="om-contact__location_links" aria-label={`${place.title} 지도 바로가기`}>
-        <a href={place.naver} target="_blank" rel="noopener noreferrer" aria-label={`네이버 지도에서 ${place.title} 보기`}>
-          <img src={common("ico_naver.svg")} alt="" />
-        </a>
-        <a href={place.kakao} target="_blank" rel="noopener noreferrer" aria-label={`카카오 지도에서 ${place.title} 보기`}>
-          <img src={common("ico_kko_map.svg")} alt="" />
-        </a>
-      </div>
-    </article>
   );
 }

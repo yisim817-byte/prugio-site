@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Nb, PageFaq, QuickAnswer } from "@/components/chrome";
 import { OfficialMain } from "@/components/official-main";
-import { DEPOSIT, OVERVIEW_ROWS, PLACES, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
+import { DEPOSIT, OVERVIEW_ROWS, PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { ROLE } from "@/data/role";
 import type { Chip, RoleFigure, RoleMain as RoleMainData, SourceItem } from "@/data/role-types";
 
@@ -112,29 +112,9 @@ export function DepositTable() {
   );
 }
 
-/** 현장·견본주택·홍보관 목록. 값은 content.ts 의 PLACES. */
 /** 오시는 길 세 곳의 목록(역할 본문의 상태표 아래에서 쓴다). */
 function PlacesIndex() {
-  return (
-    <div className="ak-index">
-      {PLACES.map((place) => (
-        <div key={place.title} className="ak-index__row">
-          <div>
-            <p className="ak-index__t">{place.title}</p>
-            <p className="ak-index__d">{place.address}</p>
-          </div>
-          <div className="ak-index__links">
-            <a className="ak-link" href={place.naver} target="_blank" rel="noreferrer">
-              네이버 지도
-            </a>
-            <a className="ak-link" href={place.kakao} target="_blank" rel="noreferrer">
-              카카오 지도
-            </a>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  return <p>모델하우스(견본주택) 위치는 약도를 참고해 주시고, 방문 전 대표번호로 예약해 주세요.</p>;
 }
 
 // ── 아치 창 안의 도해 ────────────────────────────────────────────────────────

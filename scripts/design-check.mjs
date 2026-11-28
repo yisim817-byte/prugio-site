@@ -103,7 +103,6 @@ const OFFICIAL_FILES = new Set([
   "pages/main/brand_visual_img.v4.jpg",
   "pages/main/contact_bg.v4.jpg",
   "pages/main/contact_map_01.v4.png",
-  "pages/main/contact_map_02.v4.png",
   "pages/main/hero_bg.v4.jpg",
   "pages/main/hero_bg_m.v4.jpg",
   "pages/main/hero_brand_img.v4.png",

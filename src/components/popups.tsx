@@ -7,7 +7,7 @@ const KEY = "arkone-staff-popup-day";
 const CARDS = [
   {
     src: "/popups/briefing.jpg",
-    alt: `아파트 사업설명회. 토·일 14:00, 16:00. 홍보관. 예약 대표번호 ${PROJECT_PHONE_DISPLAY}. 9월 27일은 일요일만.`,
+    alt: `아파트 사업설명회. 토·일 14:00, 16:00. 예약 대표번호 ${PROJECT_PHONE_DISPLAY}. 9월 27일은 일요일만.`,
     href: "/contact",
     label: "오시는 길",
     phone: true,
@@ -23,7 +23,7 @@ const CARDS = [
     src: "/popups/consult-event.jpg",
     alt: `청약상담센터 이벤트. 문의 대표번호 ${PROJECT_PHONE_DISPLAY}.`,
     href: "/contact",
-    label: "홍보관 위치",
+    label: "방문 안내",
     phone: true,
   },
   {

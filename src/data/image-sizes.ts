@@ -9,7 +9,6 @@ export const IMAGE_SIZES: Record<string, [number, number]> = {
   [img("/resources/img/sub/location_map_img.v4.jpg")]: [1856, 1730],
   [img("/resources/img/sub/brand_content_img.v4.jpg")]: [2600, 2860],
   [img("/resources/img/sub/contact_map_img_1.v4.jpg")]: [1120, 800],
-  [img("/resources/img/sub/contact_map_img_2.v4.jpg")]: [1120, 800],
   [img("/resources/img/sub/03_특별공급.v4.jpg")]: [2000, 2930],
   [img("/resources/img/sub/02_일반공급.v4.jpg")]: [2000, 2750],
   [img("/resources/img/sub/01_변경된_청약제도.v4.jpg")]: [2000, 4790],

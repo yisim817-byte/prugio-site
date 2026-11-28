@@ -83,25 +83,8 @@ export const HISTORY = [
 
 export const PLACES = [
   {
-    title: "현장",
-    address: "인천광역시 서해구 청라동 86-1번지",
-    naver: "https://naver.me/xSBYFSR0",
-    kakao: "https://map.kakao.com/?map_type=TYPE_MAP&q=%EC%9D%B8%EC%B2%9C%20%EC%84%9C%ED%95%B4%EA%B5%AC%20%EC%B2%AD%EB%9D%BC%EB%8F%99%2086-1",
+    title: "모델하우스(견본주택)",
     map: img("/resources/img/sub/contact_map_img_1.v4.jpg"),
-  },
-  {
-    title: "견본주택",
-    address: "인천광역시 서해구 청라동 87-1번지",
-    naver: "https://naver.me/xNpQLQ3L",
-    kakao: "https://map.kakao.com/?map_type=TYPE_MAP&q=%EC%9D%B8%EC%B2%9C%20%EC%84%9C%ED%95%B4%EA%B5%AC%20%EC%B2%AD%EB%9D%BC%EB%8F%99%2087-1",
-    map: img("/resources/img/sub/contact_map_img_1.v4.jpg"),
-  },
-  {
-    title: "홍보관",
-    address: "인천광역시 서해구 중봉대로 586번길 19, 홍익파크 1층 108·109호 (스타벅스 옆)",
-    naver: "https://naver.me/xwmqyGWk",
-    kakao: "https://map.kakao.com/?map_type=TYPE_MAP&q=%EC%9D%B8%EC%B2%9C%20%EC%84%9C%ED%95%B4%EA%B5%AC%20%EC%A4%91%EB%B4%89%EB%8C%80%EB%A1%9C586%EB%B2%88%EA%B8%B8%2019",
-    map: img("/resources/img/sub/contact_map_img_2.v4.jpg"),
   },
 ];
 
