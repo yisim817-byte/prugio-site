@@ -8,7 +8,7 @@
   try { if (sessionStorage.getItem(KEY)) return; } catch (e) {}
   var s = document.currentScript;
   var MODE = (s && s.getAttribute('data-mode')) || 'hq';
-  var PHONE = (s && s.getAttribute('data-phone')) || '1833-3872';
+  var PHONE = (s && s.getAttribute('data-phone')) || '1533-9014';
   var TEL = 'tel:' + String(PHONE).replace(/\D/g, '');
   function path() {
     var p = location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
