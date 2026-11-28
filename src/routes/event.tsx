@@ -3,7 +3,7 @@ import { Shell } from "@/components/layout";
 import { PROJECT_PHONE_DISPLAY, PROJECT_PHONE_TEL } from "@/data/content";
 import { SEO_ORIGIN } from "@/data/seo";
 
-const DESC = "청라 아크원 푸르지오 견본주택 안내. 인천광역시 서해구 청라동 87-1. 별도 공지 시까지 운영합니다.";
+const DESC = "청라 아크원 푸르지오 견본주택 안내. 별도 공지 시까지 운영합니다.";
 const TITLE = "견본주택 안내 | 청라 아크원 푸르지오";
 
 export const Route = createFileRoute("/event")({
